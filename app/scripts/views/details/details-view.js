@@ -28,8 +28,8 @@ const OtpQrReader = require('../../comp/otp-qr-reader');
 const Format = require('../../util/format');
 const Locale = require('../../util/locale');
 const Tip = require('../../util/tip');
+const FileSaver = require('../../util/file-saver');
 const Timeouts = require('../../const/timeouts');
-const FileSaver = require('file-saver');
 const FeatureDetector = require('../../util/feature-detector');
 const Copyable = require('../../mixins/copyable');
 
