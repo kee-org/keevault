@@ -19,6 +19,8 @@ module.exports = function(grunt) {
     require('./grunt.entrypoints')(grunt);
 
     const date = new Date();
+    grunt.config.set('date', date);
+
     const dt = date.toISOString().replace(/T.*/, '');
     const year = date.getFullYear();
     const minElectronVersionForUpdate = '1.7.0';
@@ -153,11 +155,11 @@ module.exports = function(grunt) {
             }
         },
         webpack: {
-            js: webpackConfig.config(grunt, date)
+            js: webpackConfig.config(grunt)
         },
         'webpack-dev-server': {
             options: {
-                webpack: webpackConfig.devServerConfig(grunt, date),
+                webpack: webpackConfig.devServerConfig(grunt),
                 contentBase: path.join(__dirname, 'tmp'),
                 publicPath: '/js',
                 progress: false,
