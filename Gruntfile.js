@@ -222,41 +222,4 @@ module.exports = function(grunt) {
             ]
         }
     });
-
-    // compound builder tasks
-
-    grunt.registerTask('build-web-app', [
-        'gitinfo',
-        'clean',
-        'eslint',
-        'copy:html',
-        'copy:icons',
-        'copy:sw',
-        'copy:fonts',
-        'webpack',
-        // 'uglify',
-        'sass',
-        'postcss',
-        'inline',
-        'htmlmin',
-        'copy:dist-icons',
-        'copy:dist-sw',
-        'string-replace',
-        'sign-html'
-    ]);
-
-    // entry point tasks
-
-    grunt.registerTask('default', 'Default: build web app', [
-        'build-web-app'
-    ]);
-
-    grunt.registerTask('dev', 'Build project and start web server and watcher', [
-        'build-web-app',
-        'devsrv'
-    ]);
-
-    grunt.registerTask('devsrv', 'Start web server and watcher', [
-        'concurrent:dev-server'
-    ]);
 };
