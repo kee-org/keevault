@@ -1,0 +1,170 @@
+.footer {
+  display: flex;
+  align-items: stretch;
+  flex-direction: row;
+  justify-content: flex-start;
+
+  &__db {
+    flex-shrink: 100;
+    @include area-selectable(top);
+    position: relative;
+    padding: $medium-padding;
+    padding-right: 1.3em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    &.footer__db--dimmed {
+      @include th {
+        color: th(muted-color);
+        &:hover {
+          color: th(medium-color);
+        }
+      }
+    }
+
+    &--expanded {
+      flex-grow: 100;
+      @include mobile {
+        >.footer__db-text {
+          display: none;
+        }
+      }
+    }
+
+    &-sign {
+      font-size: 8px;
+      vertical-align: top;
+      margin-left: $base-padding-h;
+      position: absolute;
+      right: 0.5em;
+      top: 0.5em;
+      @include th { color: th(action-color); }
+      &--error { @include th { color: th(error-color); } }
+    }
+
+    &-open-title {
+      margin-left: .3em;
+    }
+
+    &-item {
+      @include mobile {
+        > .fa-lock,
+        > .fa-lock-open {
+          display: none;
+        }
+        flex-shrink: 100;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    &-save {
+      align-self: center;
+      overflow: hidden;
+      padding: 0px 10px;
+    }
+  }
+
+  &__btn {
+    flex: 0 0 auto;
+    @include area-selectable(top);
+    padding: $base-padding;
+    font-size: 1.4em;
+    text-align: center;
+    width: 1em;
+
+    &-menu:hover, &-menu &:hover {
+      border-top: 1px solid transparent;
+    }
+
+    .footer > & {
+      &-menu {
+        @include mobile {
+          display: block;
+        }
+        @include nomobile {
+          display: none;
+        }
+      }
+      &-settings, &-account, &-generate, &-help, &-lock {
+        @include mobile {
+          display: none;
+        }
+        @include nomobile {
+          display: block;
+        }
+      }
+    }
+  }
+
+  &__update-icon {
+    @include th { color: th(action-color); }
+    @include animation(shake 50s cubic-bezier(.36,.07,.19,.97) 0s infinite);
+  }
+}
+
+
+#footerSaveButton {
+  transform: translateX(0px) scale(1);
+  transition: transform 0.2s ease-out, min-width 0.2s ease, width 0.2s ease, padding 0.2s ease;
+  min-width: 50px;
+  display: flex;
+  justify-content: center;
+
+  &.minified {
+    transform: translateX(calc(-100% - 20px)) scale(0.8);
+    min-width: 0px;
+    width: 0px;
+    padding: .25em .5em;
+    outline: none;
+
+    .fa-spin {
+      animation: none;
+    }
+  }
+
+  &.active {
+    .content {
+      display: block;
+      visibility: hidden;
+      float: left;
+    }
+    .opening-icon {
+      position: absolute;
+    }
+  }
+}
+
+.narrowMenuPopup {
+  position: absolute;
+  bottom: 50px;
+  z-index: 5;
+  @include th {
+    border: th(text-color) 1px solid;
+    background-color: th(background-color);
+  }
+  right: 5px;
+  border-bottom-width: 0px;
+  transition: transform 0.2s ease-out;
+  transform: scale(1);
+  transform-origin: bottom right;
+
+  & > .footer__btn {
+    width: unset;
+    text-align: left;
+    font-size: unset;
+
+    & > i {
+      width: 1.5em;
+      text-align: center;
+    }
+  }
+
+  &.minified {
+    transform: scale(0);
+  }
+
+  @include nomobile {
+    display: none;
+  }
+}

@@ -1,0 +1,89 @@
+<div class="vault_intro_top hide" id="vault_intro_top">
+    <div id="vault_intro_top_logo"><div class="logo-container">{{{svg 'logo'}}}</div></div>
+    <div id="vault_intro_top_strapline"><span id="initialPageBannerStrapline">{{res 'initialPageBannerStrapline'}}</span><span id="keeAddonBannerStrapline" class="hide"><span class="keeAddonMissing">{{#if extensionLink}}{{res 'introInstallExtensionBecauseEasier'}} <a href="{{extensionLink}}" target="keeExtensionDownload" rel="noopener">{{ res 'installTheExtension'}}</a>{{/if}}</span></span></div>
+    <div id="vault_intro_top_main">
+        <div class="hide" id="demoBlurb">
+            <button class="vault_primary_action" id="demoSignUpCTA">{{res 'signup'}}<br/>{{res 'now'}}</button>
+            <div>{{res 'initialPageBannerInstructions'}}</div>
+        </div>
+    </div>
+    <div id="vault_intro_top_signin" class="existing_user"><div class="account-link-container">{{res 'existingUser'}}<br/><a class="vault_existing_user_login" id="loginLink">{{res 'signin'}}</a></div>
+    </div>
+</div>
+<div class="vault_intro_full">
+    <div class="vault_intro_full_content">
+        <div class="vault_intro_full_content_header hide">
+            <div class="vault_intro_loading_container">
+                <div class="logo-container">{{{svg 'logo'}}}</div>
+                <div class="account-loading">Loading...</div>
+            </div>
+        </div>
+        <div class="vault_intro_full_content_body">
+            <div id="home_side">
+                <section id="home_sec_signin">
+                    <h4>{{res 'existingUsers'}}</h4>
+                    <input id="loginEmail" placeholder="{{res 'emailAddress'}}" type="text">
+                    <button class="vault_existing_user_login" id="vault_existing_user_login_wide">{{res 'signin'}}</button>
+                    <button class="vault_existing_user_login" id="vault_existing_user_login_narrow"><span style="font-size:0.75rem">{{res 'existingUser'}}</span><br>{{res 'signin'}}</button>
+                </section>
+            </div>
+            <div id="home_main">
+                <section id="home_sec_intro">
+                    <h2>{{res 'initialPageTopMessage'}}</h2>
+                    <p><strong>{{res 'initialPageMainPara1'}}</strong></p>
+                    <p><strong>{{res 'initialPageMainPara2'}}</strong></p>
+                    <p>{{res 'initialPageMainPara3'}}</p>
+                    <div class="signupCTAContainer">
+                        <p>{{res 'initialPageMainPara4'}}</p>
+                        <button class="vault_primary_action">{{res 'getStartedNow'}}</button>
+                        <p>{{~#res 'initialPageBetaMessage'}}<a href="https://www.kee.pm/why-beta" target="_blank" rel="noopener">why we're labelling the service as "beta"</a>{{/res}}</p>
+                    </div>
+                </section>
+                <section id="home_sec_benefits">
+                    <h3>{{res 'whyKeeVault'}}</h3>
+                    <dl>
+                        <div><dt>{{res 'initialPageBenefitHeadline1'}}</dt>
+                        <dd>{{res 'initialPageBenefitDetail1'}}</dd></div>
+                        <div><dt>{{res 'initialPageBenefitHeadline4'}}</dt>
+                        <dd>{{res 'initialPageBenefitDetail4'}}</dd></div>
+                        <div><dt>{{res 'initialPageBenefitHeadline2'}}</dt>
+                        <dd>{{res 'initialPageBenefitDetail2'}}</dd></div>
+                        <div><dt>{{res 'initialPageBenefitHeadline8'}}</dt>
+                        <dd>{{res 'initialPageBenefitDetail8'}}</dd></div>
+                        <div><dt>{{res 'initialPageBenefitHeadline3'}}</dt>
+                        <dd>{{res 'initialPageBenefitDetail3'}}</dd></div>
+                        <div><dt>{{res 'initialPageBenefitHeadline5'}}</dt>
+                        <dd>{{res 'initialPageBenefitDetail5'}}</dd></div>
+                        <div><dt>{{res 'initialPageBenefitHeadline6'}}</dt>
+                        <dd>{{res 'initialPageBenefitDetail6'}}</dd></div>
+                        <div><dt>{{res 'initialPageBenefitHeadline7'}}</dt>
+                        <dd>{{res 'initialPageBenefitDetail7'}}</dd></div>
+                        <div><dt>{{res 'initialPageBenefitHeadline13'}}</dt>
+                        <dd>{{res 'initialPageBenefitDetail13'}}</dd></div>
+                        <div><dt>{{res 'initialPageBenefitHeadline14'}}</dt>
+                        <dd>{{res 'initialPageBenefitDetail14'}}</dd></div>
+                        <div><dt>{{res 'initialPageBenefitHeadline10'}}</dt>
+                        <dd>{{res 'initialPageBenefitDetail10'}}</dd></div>
+                        <div><dt>{{res 'initialPageBenefitHeadline9'}}</dt>
+                        <dd>{{res 'initialPageBenefitDetail9'}}</dd></div>
+                    </dl>
+                    <p>{{res 'initialPageBenefitExperience'}}</p>
+                </section>
+                <section id="home_sec_earlyaccess">
+                    <div class="signupCTAContainer">
+                        <p>{{res 'initialPageEarlyAdoptersBenefit'}}</p>
+                        <button class="vault_primary_action">{{res 'getStartedForFree'}}</button>
+                    </div>
+                </section>
+                <section id="home_sec_reviews">
+                    <h3>{{res 'independentOpinions'}}</h3>
+                    <blockquote>{{res 'initialPageOpinion1'}}</blockquote>
+                    <blockquote>{{res 'initialPageOpinion2'}}</blockquote>
+                    <blockquote>{{res 'initialPageOpinion3'}}</blockquote>
+                    <p class="opinionContextExplainer">{{res 'initialPageOpinionsCaveat'}}</p>
+                </section>
+            </div>
+
+        </div>
+    </div>
+</div>

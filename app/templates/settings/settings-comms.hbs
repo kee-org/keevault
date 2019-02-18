@@ -1,0 +1,36 @@
+<div>
+    <label for="settings__messages-firstname">{{res 'firstName'}}:</label>
+    <input type="text" class="settings__input input-base" id="settings__messages-firstname" value="{{firstname}}" />
+    <label for="settings__messages-lastname">{{res 'lastName'}}:</label>
+    <input type="text" class="settings__input input-base" id="settings__messages-lastname" value="{{lastname}}" />
+    <div>
+        <input type="checkbox" class="settings__input input-base" id="settings__messages-useEmail" {{#if useEmail}}checked{{/if}} />
+        <label for="settings__messages-useEmail">{{res 'supportEnableEmails'}}</label>
+    </div>
+    <p><a href="#" id="settings__messages-privacyAlert">{{res 'privacy'}}</a></p>
+    {{#if hasSupportAccount}}
+        <button class="vault_action" id="settings__messages-updateAccount">
+            <div class="content">{{res 'setFileSave'}}</div>
+            <div class="opening-icon"><i class="fa fa-spinner fa-spin"></i></div>
+        </button>
+    {{/if}}
+
+    <h2><i class="fa fa-envelope"></i> {{res 'messages'}}</h2>
+    <div><p>{{res 'messagesExplainer'}}</p></div>
+
+    {{#each messages as |msg|}}
+        <div class="settings__messages-message">
+            <div class="settings__messages-message-at">{{msg.at}}</div>
+            <div class="settings__messages-message-from">{{res 'from'}} {{msg.from}}</div>
+            <div class="settings__messages-message-body">{{{msg.body}}}</div>
+        </div>
+    {{/each}}
+
+    <label class="settings__messages-label" for="settings__messages-newmessage">{{res 'newMessage'}}:</label>
+    <textarea class="settings__input input-base" id="settings__messages-newmessage" maxlength="102400" required></textarea>
+    <div><button class="vault_action" id="settings__messages-sendMessage">
+        <div class="content">{{res 'sendMessage'}}</div>
+        <div class="opening-icon"><i class="fa fa-spinner fa-spin"></i></div>
+    </button>
+    </div>
+</div>

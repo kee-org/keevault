@@ -1,0 +1,32 @@
+<div class="empty-block muted-color">
+    {{#if searchEmpty}}
+    <h1 class="empty-block__title">{{res 'noSearchResults'}}</h1>
+    {{else if vaultEmpty}}
+    <h1 class="empty-block__title">{{res 'detEmpty'}}</h1>
+    <div class="{{#if extensionEnabled}}hide{{/if}}">
+        {{#if extensionAvailable}}
+            <p><a href="{{extensionLink}}" target="_blank" rel="noopener">{{res 'settingsInstallKee'}}</a>{{#res 'settingsInstallKeeWithLink'}}{{browserName}}{{/res~}}{{res 'createEntriesWithKeeReason'}}{{#res 'orAddEntriesManually'}}<i class="fa fa-plus"></i>{{/res}}</p>
+        {{else}}
+            <p>{{res 'createEntriesWithKee'}}{{#res 'orAddEntriesManually'}}<i class="fa fa-plus"></i>{{/res}}</p>
+        {{/if}}
+    </div>
+    {{else if groupEmpty}}
+    <h1 class="empty-block__title">{{res 'groupEmpty'}}</h1>
+    {{else if groupTreeEmpty}}
+    <h1 class="empty-block__title">{{res 'groupTreeEmpty'}}</h1>
+    {{else if binEmpty}}
+    <h1 class="empty-block__title">{{res 'nothingInBin'}}</h1>
+    {{else if colourEmpty}}
+    <h1 class="empty-block__title">{{#res 'noColouredEntries'}}{{colourName}}{{/res}}</h1>
+    <p>{{#res 'colouringInstructions'}}<i class="far fa-bookmark"></i>{{/res}}</p>
+    {{else}}
+    <h1 class="empty-block__title">{{res 'detEmpty'}}</h1>
+    <div class="{{#if extensionEnabled}}hide{{/if}}">
+        {{#if extensionAvailable}}
+            <p><a href="{{extensionLink}}" target="_blank" rel="noopener">{{res 'settingsInstallKee'}}</a>{{#res 'settingsInstallKeeWithLink'}}{{browserName}}{{/res~}}{{res 'createEntriesWithKeeReason'}}{{#res 'orAddEntriesManually'}}<i class="fa fa-plus"></i>{{/res}}</p>
+        {{else}}
+            <p>{{res 'createEntriesWithKee'}}{{#res 'orAddEntriesManually'}}<i class="fa fa-plus"></i>{{/res}}</p>
+        {{/if}}
+    </div>
+    {{/if}}
+</div>

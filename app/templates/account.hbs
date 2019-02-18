@@ -1,0 +1,104 @@
+<div class="open open--file registrationStage2Disabled {{#ifeq mode 'register'}}register{{/ifeq}}" id="accountStartContainer">
+    <div class="logo-container">{{{svg 'logo'}}}</div>
+    {{#if verificationSuccess}}
+        <div class="message">{{res 'verificationSuccess'}}</div>
+    {{/if}}
+    {{#if verificationFailure}}
+        <div class="message">{{res 'verificationFailure'}}</div>
+    {{/if}}
+    {{#if manageAccount}}
+        <div class="message">{{res 'manageAccountAfterLogin'}}</div>
+    {{/if}}
+    {{#if managePayment}}
+        <div class="message">{{res 'managePaymentAfterLogin'}}</div>
+    {{/if}}
+    {{#ifeq mode 'loading'}}
+    <div class="account-loading">{{res 'loadingAccountData'}}</div>
+    {{else ifeq mode 'register'}}
+    <div class="hide">
+        {{!-- we need these inputs to screw browsers passwords autocompletion --}}
+        <input type="text" style="display:none" name="username">
+        <input type="password" style="display:none" name="password">
+    </div>
+    <h2><i class="fas fa-gift"></i> {{res 'registrationCode'}}</h2>
+    <div class="fieldExplainer">{{res 'registrationCodeDetail'}}</div>
+    <input type="text" name="code" id="accountCode" maxlength="10" placeholder="{{res 'typeYourRegistrationCode'}}"
+        tabindex="8" value="{{code}}" spellcheck="false" />
+    <div class="fieldExplainer">{{#res 'noCode'}}<a href="https://www.producthunt.com/upcoming/kee-vault">Product Hunt "coming soon" page</a>{{/res}}</div>
+    <button tabindex="9" class="registrationStage1 emailSubmit vault_action" id="codeNextButton">
+        <div class="content">{{res 'continue'}}</div>
+        <div class="opening-icon"><i class="fa fa-spinner fa-spin"></i></div>
+    </button>
+
+    <h2 class="registrationStage2" id="registrationStage2Start"><i class="fas fa-envelope"></i> {{res 'emailAddress'}}</h2>
+    <div class="registrationStage2 fieldExplainer">{{res 'willNeedToVerifyEmail'}}</div>
+    <input class="registrationStage2" type="text" name="email" id="accountEmail" maxlength="70" placeholder="{{res 'typeYourEmailAddress'}}"
+        tabindex="10" value="{{emailAddress}}" spellcheck="false" />
+
+    <h2 class="registrationStage2"><i class="fas fa-lock"></i> {{res 'openPass'}}</h2>
+    <div class="registrationStage2 fieldExplainer">{{res 'registrationBlurb1'}}</div>
+    <input class="registrationStage2 open__pass-input" id="newPassword1" type="password" autocomplete="new-password" maxlength="1024"
+        placeholder="{{res 'newPassword'}}" tabindex="12" />
+    <input class="registrationStage2 open__pass-input" id="newPassword2" type="password" autocomplete="new-password" maxlength="1024"
+        placeholder="{{res 'newPasswordRepeat'}}" tabindex="13" />
+    <div class="registrationStage2 registration-password-extra-wrap fieldExplainer">
+        <div id="settings__account-master-pass-strength" class="passwordStrengthRating"></div>
+        <div class="open__pass-warning muted-color invisible"><i class="fa fa-exclamation-triangle"></i> {{res 'openCaps'}}</div>
+    </div>
+    <h2 class="registrationStage2"><i class="fas fa-user-secret"></i> {{res 'privacy'}}</h2>
+    <div class="registrationStage2 fieldExplainer"><b>{{res 'privacySummaryExplainer'}}</b></div>
+    <div class="registrationStage2 fieldExplainer">{{res 'registrationBlurb2'}}</div>
+    <div class="registrationStage2 fieldExplainer">{{res 'registrationBlurb3'}}</div>
+    <div class="registrationStage2 fieldExplainer">{{res 'registrationBlurb4'}}</div>
+    <div class="registrationStage2 fieldExplainer">{{res 'registrationBlurb5'}}</div>
+    <div class="registrationStage2 fieldExplainer">{{res 'registrationBlurb6'}}</div>
+    <div class="registrationStage2 fieldExplainer">{{res 'registrationBlurb7'}}</div>
+    <div class="registrationStage2 fieldExplainer">{{res 'registrationEmailUsage1'}}</div>
+    <div class="registrationStage2 registration_extra_space_above fieldExplainer">{{res 'wantToReceive'}}</div>
+    <div class="registrationStage2 fieldExplainer">
+        <input type="checkbox" class="input-base" id="accountEmailOptinIntro" />
+        <label for="accountEmailOptinIntro" tabindex="14">{{res 'introductoryEmails'}}</label>
+    </div>
+    <div class="registrationStage2 fieldExplainer">
+        <input type="checkbox" class="input-base" id="accountEmailOptinMarketing" />
+        <label for="accountEmailOptinMarketing" tabindex="15">{{res 'occasionalNotifications'}}</label>
+    </div>
+    <div class="registrationStage2 registration_extra_space_above fieldExplainer">
+        {{~#res 'registrationPrivacyOverview1'}}<a href="https://www.kee.pm/keevault/tos/" target="_blank" rel="noopener">Terms of Service</a>{{/res}}
+        {{~#res 'registrationPrivacyOverview2'}}<a href="https://www.kee.pm/keevault/privacy/" target="_blank" rel="noopener">Privacy Statement</a>{{/res}}
+    </div>
+    <div class="registrationStage2 fieldExplainer">
+        <input type="checkbox" class="input-base" id="registrationAgree" />
+        <label for="registrationAgree" tabindex="16">{{res 'registrationAgree'}}</label>
+    </div>
+    <button tabindex="17" class="registrationStage2 emailSubmit vault_action" id="registerButton">
+        <div class="content">{{res 'createVault'}}</div>
+        <div class="opening-icon"><i class="fa fa-spinner fa-spin"></i></div>
+    </button>
+    <div class="account-link-container">{{res 'existingUser'}} <a id="loginLink" tabindex="18">{{res 'signin'}}</a></div>
+    {{else}}
+    <div class="open__pass-warn-wrap">
+        <div class="open__pass-warning muted-color invisible"><i class="fa fa-exclamation-triangle"></i> {{res 'openCaps'}}</div>
+    </div>
+    <div class="open__pass-area">
+        <div class="hide">
+            {{!-- we need these inputs to screw browsers passwords autocompletion --}}
+            <input type="text" style="display:none" name="username">
+            <input type="password" style="display:none" name="password">
+        </div>
+        <div class="open__pass-field-wrap">
+            <input type="text" name="email" id="accountEmail" maxlength="256" placeholder="{{res 'typeYourEmailAddress'}}"
+                tabindex="13" value="{{emailAddress}}" spellcheck="false" />
+        </div>
+    </div>
+    <div>
+        <input type="checkbox" class="input-base" id="accountRememberEmail" />
+        <label for="accountRememberEmail" tabindex="14">{{res 'rememberOnThisDevice'}}</label>
+    </div>
+    <button tabindex="15" class="emailSubmit vault_action" id="signinButton">
+        <div class="content">{{res 'signin'}}</div>
+        <div class="opening-icon"><i class="fa fa-spinner fa-spin"></i></div>
+    </button>
+    <div class="account-link-container">{{res 'newUser'}} <a id="registerNowLink" tabindex="16">{{res 'registerNow'}}</a></div>
+    {{/ifeq}}
+</div>

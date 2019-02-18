@@ -1,0 +1,48 @@
+div.settings__messages-message {
+  margin: 10px;
+  @include th { border: 1px solid th(accent-border-color); }
+  padding: 10px;
+
+  &-from {
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+
+  &-at {
+    float: right;
+  }
+}
+
+label.settings__messages-label {
+  display: block;
+}
+
+textarea#settings__messages-newmessage {
+  resize: both;
+  height: 100px;
+  width: 80%;
+  margin-left: 10px;
+}
+
+div.settings button.vault_action {
+  margin-bottom: 10px;
+}
+
+#mitLicenseBlock {
+  font-family: monospace;
+  padding-left: 20px;
+}
+
+.change-account-password-extra-wrap {
+  display: flex;
+  flex-direction: row;
+  width: 60%;
+  @include tablet {
+    width: calc(100% - 20px);
+  }
+
+  & .open__pass-warning {
+    flex: 1;
+    text-align:right;
+  }
+}

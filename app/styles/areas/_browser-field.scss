@@ -1,0 +1,47 @@
+.browser_extension_form_field_settings {
+  position: relative;
+  @include common-dropdown;
+  padding: $base-spacing;
+  overflow-y: auto;
+
+  &.collapsed {
+    padding: 0.5em;
+    position: fixed;
+    z-index: 4;
+    max-width: 66%;
+  }
+
+  & input, & select {
+    width: 100%;
+  }
+}
+
+#browser_extension_form_field_settings_content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
+  grid-gap: 5px;
+  transition: height $base-duration $base-timing;
+
+  & > div {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+
+    & > label {
+      min-width: 100px;
+      text-align: end;
+      padding-right: 1em;
+    }
+
+    &#browser_extension_form_field_settings_placeholders_warning,
+    &.browser_extension_settings_full_width {
+      grid-column: 1 / -1;
+      display: block;
+    }
+  }
+}
+
+#browser_extension_form_field_settings_placeholders_warning {
+  grid-column: 1 / -1;
+  display: block;
+}

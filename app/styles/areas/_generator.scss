@@ -1,0 +1,55 @@
+.gen {
+  position: absolute;
+  @include common-dropdown;
+  padding: $base-spacing;
+  width: 11em;
+  z-index: 5;
+  &__length-range {
+  }
+  &__btn-refresh {
+    float: right;
+    cursor: pointer;
+    position: relative;
+    top: 2px;
+    @include th {
+      color: th(muted-color);
+      &:hover { color: th(text-color); }
+    }
+  }
+  &__sel-tpl {
+    width: 100%;
+    height: 2em;
+    margin-top: $base-padding-v;
+  }
+  &__check {
+    width: 40%;
+    display: inline-block;
+    &:nth-child(even) {
+      margin-left: 15%;
+    }
+  }
+  &__result {
+    @include user-select(text);
+    font-family: $monospace-font-family;
+    margin-top: 6px;
+    margin-bottom: 3px;
+    height: 50px;
+    text-align: center;
+    white-space: pre-wrap;
+    word-break: break-all;
+    overflow: hidden;
+    &--long-pass {
+      font-size: .75em;
+    }
+  }
+  &__btn-wrap {
+    text-align: center;
+  }
+}
+
+@-moz-document url-prefix() {
+  .gen__result {
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+}

@@ -1,0 +1,20 @@
+{
+    "name": "Kee Vault",
+    "short_name": "Kee Vault",
+    "description": "Password manager - secure, private, open source, online and offline, compatible with KeePass",
+    "icons": [
+        {
+            "src": "/icons/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/icons/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#eaeef1",
+    "background_color": "#eaeef1",
+    "display": "standalone"
+}

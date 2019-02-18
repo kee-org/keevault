@@ -1,0 +1,10 @@
+<div class="empty-block muted-color">
+    <div class="empty-block__icon"><i class="fa fa-key"></i></div>
+    <h1 class="empty-block__title">{{res 'listEmptyTitle'}}</h1>
+    <p class="empty-block__text">
+        {{#res 'listEmptyAdd'}} <i class="fa fa-plus"></i>{{/res}}
+    </p>
+    {{#if showAllEntriesLink}}
+        <a id="emptyListShowAllEntriesLink">{{Res 'setShShowAll'}}</a>
+    {{/if}}
+</div>

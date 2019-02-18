@@ -1,0 +1,61 @@
+<div class="details__browser-extension {{#unless isDesktop}}hide{{/unless}}">
+    <div class="details__field">
+        <div class="details__field-label">{{res 'browserExtension'}}</div>
+
+        <div class="details__field-value {{#if extensionEnabled}}hide{{/if}}">
+        {{#if extensionAvailable}}
+            <p><a href="{{extensionLink}}" target="_blank" rel="noopener">{{res 'settingsInstallKee'}}</a>{{#res 'settingsInstallKeeWithLink'}}{{browserName}}{{/res~}}{{res 'settingsInstallKeeReason'}}</p>
+        {{else}}
+            <p>{{res 'settingsInstallKee'}}{{res 'settingsInstallKeeNoLink'}}{{res 'settingsInstallKeeReason'}}</p>
+        {{/if}}
+        </div>
+        <div class="details__field-value {{#unless extensionEnabled}}hide{{/unless}}">
+            <input type="checkbox" class="input-base" id="details__browser-extension-enabled" {{#unless hide}}checked{{/unless}} />
+            <label for="details__browser-extension-enabled">{{res 'enableBrowserIntegration'}}</label>
+            <div><a class="{{#if hide}}hide{{/if}}" id="details__browser-extension-show-settings">{{res 'showMoreIntegrationSettings'}}</a></div>
+            <div class="hide" id="details__browser-extension-settings">
+                <p>{{res 'detailsEntryExtensionExplainer'}}</p>
+                <label for="details__browser-extension-autofill">{{res 'autofill'}}</label>
+                <select class="settings__select settings__select-no-margin input-base" id="details__browser-extension-autofill">
+                    <option value="Always">{{res 'always'}}</option>
+                    <option value="Default">{{res 'useKeeExtensionSetting'}}</option>
+                    <option value="Never">{{res 'never'}}</option>
+                </select>
+
+                <label for="details__browser-extension-autosubmit">{{res 'autosubmit'}}</label>
+                <select class="settings__select settings__select-no-margin input-base" id="details__browser-extension-autosubmit">
+                    <option value="Always">{{res 'always'}}</option>
+                    <option value="Default">{{res 'useKeeExtensionSetting'}}</option>
+                    <option value="Never">{{res 'never'}}</option>
+                </select>
+
+                <label for="details__browser-extension-minURLMatchAccuracy">{{res 'minURLMatchAccuracy'}}:</label><br/>
+                <span>{{res 'matchAccuracyDescription'}}</span><br/>
+                <select class="settings__select settings__select-no-margin input-base" id="details__browser-extension-minURLMatchAccuracy">
+                    <option value="Domain" {{#ifeq minURLMatchAccuracy 'Domain'}}selected{{/ifeq}}>{{res 'domain'}}</option>
+                    <option value="Hostname" {{#ifeq minURLMatchAccuracy 'Hostname'}}selected{{/ifeq}}>{{res 'hostname'}}</option>
+                    <option value="Exact" {{#ifeq minURLMatchAccuracy 'Exact'}}selected{{/ifeq}}>{{res 'exact'}}</option>
+                </select>
+
+
+                <div id="details__browser-extension-extraMatchURLs">
+                    <label>{{res 'extraMatchURLs'}}</label>
+                </div>
+
+                <div id="details__browser-extension-extraBlockURLs">
+                    <label>{{res 'extraBlockURLs'}}</label>
+                </div>
+
+                <label for="details__browser-extension-realm">{{res 'httpRealm'}}</label>
+                <input type="text" id="details__browser-extension-realm" maxlength="512"
+                    value="{{realm}}" placeholder="{{res 'realmPlaceholder'}}" />
+                {{#if displayPriorityField}}
+                <label for="details__browser-extension-priority">{{res 'priority'}}</label><br/>
+                <span>{{res 'priorityWarning'}}</span><br/>
+                <input type="number" id="details__browser-extension-priority" maxlength="10"
+                    value="{{priority}}" placeholder="{{res 'priorityPlaceholder'}}" />
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</div>

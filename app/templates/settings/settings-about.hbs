@@ -1,0 +1,107 @@
+{{!--
+
+This file is important with respect to the open source license conditions for this project. To adhere to the
+license conditions, you will likely need to modify many other files but this one is especially relevant so
+we have included some brief additional advice and reminders to assist you (for the avoidance of doubt,
+none of this guidance overrides the license agreement).
+
+We recommend that when required by the license, you remove all references to Kee, Kee Vault, Vault,
+Kee Vault Ltd and the logo. You should also add suitable attribution by enabling the display of the
+example attribution note marked with ***___*** below.
+
+Unless you are certain that all KeeWeb copyrighted source code has been removed from your modified
+code, you must also adhere to the MIT license requirements for those portions of the source code, in
+addition to the AGPLv3 license which now applies to that code. Practically speaking, that most likely
+entails including the copyright and license notice but you should seek legal advice to confirm this
+detail if in doubt.
+
+Reminder: The license requires that the "sourceCodeLink" href points to the source code for any
+modified version of this software. Failing to maintain this link, or obscuring it (or any nearby
+content that references or relates to it) would breach the AGPLv3 open source license.
+
+--}}
+
+<div>
+    <h1><i class="fa fa-info"></i> {{res 'setAboutTitle'}} Kee Vault v{{version}}</h1>
+    <div class="logo-container">{{{svg 'logo'}}}</div>
+
+    <h2>{{res 'setAboutLic'}}</h2>
+
+    <p>{{#res 'setAboutFirst'}}Kee Vault Ltd {{/res~}}
+        {{~#res 'setAboutSecond'}}<a href="{{licenseLink}}" target="_blank" rel="noopener">AGPL 3.0 with additional permitted terms</a>{{/res}}</p>
+    <p><a href="{{sourceCodeLink}}" target="_blank" rel="noopener">{{res 'accessSourceCode'}}</a></p>
+    <p>{{res 'licenseAGPLlinkRequired'}}</p>
+    {{!-- The text in the preceding paragraph contains a mention of the Kee Vault team. This forms part
+    of the attribution requirement and should not be replaced. Modifying any of the text in the licenseAGPLlinkRequired
+    is likely to breach the AGPLv3 license (with the exception of professional translations to other languages) so
+    seek legal advice if you intend to make a change here. --}}
+
+    {{!-- Between these markers is an example of displaying the attribution you could use when the license for this software requires it --}}
+    {{!-- You may also need to translate this message to ensure legal compliance for all users of localised versions of this software. --}}
+    {{!-- ***___*** --}}
+    {{!-- <p class="keevaultAttribution">
+    This service is based upon the <a href="https://keevault.pm">Kee Vault</a> source code originally released under open source license by <a href="https://www.kee.pm">Kee Vault Ltd</a>
+      </p> --}}
+    {{!-- ***___*** --}}
+
+    <p>{{res 'licenseKeewebMIT'}}</p>
+    <div id="mitLicenseBlock"><p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+        documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+        the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+        and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+    <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+    <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+        THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS
+        OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+        ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+    </div>
+
+    <h2>{{res 'setAboutBuilt'}}</h2>
+    <h3>Libraries</h3>
+    <ul>
+        <li><a href="http://backbonejs.org/" target="_blank" rel="noopener">backbone</a><span class="muted-color">, JavaScript framework</span></li>
+        <li><a href="http://underscorejs.org/" target="_blank" rel="noopener">underscore</a><span class="muted-color">, utility-belt library for JavaScript</span></li>
+        <li><a href="https://jquery.com/" target="_blank" rel="noopener">jQuery</a><span class="muted-color">, fast, small, and feature-rich JavaScript library</span></li>
+        <li><a href="http://handlebarsjs.com/" target="_blank" rel="noopener">handlebars</a><span class="muted-color">, semantic templates</span></li>
+    </ul>
+
+    <h3>Core components</h3>
+    <ul>
+        <li><a href="https://github.com/keeweb/kdbxweb" target="_blank" rel="noopener">kdbxweb</a><span class="muted-color">, web kdbx library</span></li>
+        <li><a href="http://nodeca.github.io/pako/" target="_blank" rel="noopener">pako</a><span class="muted-color">, zlib port to JavaScript, very fast</span></li>
+        <li><a href="https://github.com/inexorabletash/text-encoding" target="_blank" rel="noopener">text-encoding</a><span class="muted-color">, polyfill for the Encoding Living Standard's API</span></li>
+        <li><a href="https://github.com/jindw/xmldom" target="_blank" rel="noopener">xmldom</a><span class="muted-color">, a pure JS W3C Standard based DOMParser and XMLSerializer</span></li>
+    </ul>
+
+    <h3>UI components</h3>
+    <ul>
+        <li><a href="https://github.com/Diokuz/baron" target="_blank" rel="noopener">baron</a><span class="muted-color">, native scroll with custom scrollbar</span></li>
+        <li><a href="http://dbushell.github.io/Pikaday/" target="_blank" rel="noopener">pikaday</a><span class="muted-color">, a refreshing JavaScript datepicker</span></li>
+        <li><a href="https://github.com/eligrey/FileSaver.js" target="_blank" rel="noopener">filesaver.js</a><span class="muted-color">, HTML5 saveAs FileSaver implementation</span></li>
+        <li><a href="https://github.com/TomFrost/node-phonetic" target="_blank" rel="noopener">node-phonetic</a><span class="muted-color">, generates unique, pronounceable names</span></li>
+    </ul>
+
+    <h3>Utils</h3>
+    <ul>
+        <li><a href="https://github.com/LazarSoft/jsqrcode" target="_blank" rel="noopener">jsqrcode</a><span class="muted-color">, QR code scanner,
+            <a href="{{licenseLinkApache}}" class="muted-color" target="_blank" rel="noopener">Apache-2.0 license</a></span></li>
+        <li><a href="https://github.com/lancedikson/bowser" target="_blank" rel="noopener">bowser</a><span class="muted-color">, user agent detection</span></li>
+    </ul>
+
+    <h3>Styles</h3>
+    <ul>
+        <li><a href="http://sass-lang.com/" target="_blank" rel="noopener">sass</a><span class="muted-color">, syntactically awesome stylesheets</span></li>
+        <li><a href="http://bourbon.io/" target="_blank" rel="noopener">bourbon</a><span class="muted-color">, a simple and lightweight mixin library for Sass</span></li>
+        <li><a href="http://bitters.bourbon.io/" target="_blank" rel="noopener">bitters</a><span class="muted-color">, styles, variables and structure for
+            Bourbon projects</span></li>
+        <li><a href="https://necolas.github.io/normalize.css/" target="_blank" rel="noopener">normalize.css</a><span class="muted-color">, a modern, HTML5-ready alternative
+            to CSS resets</span></li>
+    </ul>
+
+    <h3>Graphics</h3>
+    <ul>
+        <li><a href="https://fortawesome.github.io/Font-Awesome/" target="_blank" rel="noopener">fontawesome</a><span class="muted-color">, the iconic font
+            and CSS toolkit</span></li>
+    </ul>
+
+</div>

@@ -1,0 +1,13 @@
+{{#each files.models as |file|}}
+<div class="footer__db footer__db-item {{#unless file.attributes.open}}footer__db--dimmed{{/unless}}" data-file-id="{{file.cid}}">
+    <i class="fas fa-{{#if file.attributes.open}}lock-open{{else}}lock{{/if}}"></i> {{file.attributes.name}}
+    {{#if file.attributes.syncing~}}
+        <i class="fas fa-sync fa-spin footer__db-sign"></i>
+    {{~else if file.attributes.syncError~}}
+        <i class="fas fa-times-circle footer__db-sign footer__db-sign--error"
+            title="{{res 'footerSyncError'}}: {{file.attributes.syncError}}"></i>
+    {{~else if file.attributes.modified~}}
+        <i class="fas fa-circle footer__db-sign"></i>
+    {{~/if}}
+</div>
+{{/each}}

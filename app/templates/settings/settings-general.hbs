@@ -1,0 +1,120 @@
+<div>
+    <h1><i class="fa fa-cog"></i> {{res 'setGenTitle'}}</h1>
+
+    <h2>{{res 'setGenAppearance'}}</h2>
+    {{#if locales}}
+    <div>
+        <label for="settings__general-locale">{{res 'setGenLocale'}}:</label>
+        <select class="settings__general-locale settings__select input-base" id="settings__general-locale">
+            {{#each locales as |name key|}}
+                <option value="{{key}}" {{#ifeq key ../activeLocale}}selected{{/ifeq}}>{{name}}</option>
+            {{/each}}
+        </select>
+    </div>
+    {{/if}}
+    <div>
+        <label for="settings__general-theme">{{res 'setGenTheme'}}:</label>
+        <select class="settings__general-theme settings__select input-base" id="settings__general-theme">
+            {{#each themes as |name key|}}
+            <option value="{{key}}" {{#ifeq key ../activeTheme}}selected{{/ifeq}}>{{name}}</option>
+            {{/each}}
+        </select>
+    </div>
+    <div>
+        <label for="settings__general-font-size">{{res 'setGenFontSize'}}:</label>
+        <select class="settings__general-font-size settings__select input-base" id="settings__general-font-size">
+            <option value="0" {{#ifeq fontSize 0}}selected{{/ifeq}}>{{res 'setGenFontSizeNormal'}}</option>
+            <option value="1" {{#ifeq fontSize 1}}selected{{/ifeq}}>{{res 'setGenFontSizeLarge'}}</option>
+            <option value="2" {{#ifeq fontSize 2}}selected{{/ifeq}}>{{res 'setGenFontSizeLargest'}}</option>
+        </select>
+    </div>
+    {{#if supportsTitleBarStyles}}
+    <div>
+      <label for="settings__general-titlebar-style">{{res 'setGenTitlebarStyle'}}:</label>
+      <select class="settings__general-titlebar-style settings__select input-base" id="settings__general-titlebar-style">
+        <option value="default" {{#ifeq titlebarStyle 'default'}}selected{{/ifeq}}>{{res 'setGenTitlebarStyleDefault'}}</option>
+        <option value="hidden" {{#ifeq titlebarStyle 'hidden'}}selected{{/ifeq}}>{{res 'setGenTitlebarStyleHidden'}}</option>
+        <option value="hidden-inset" {{#ifeq titlebarStyle 'hidden-inset'}}selected{{/ifeq}}>{{res 'setGenTitlebarStyleHiddenInset'}}</option>
+      </select>
+    </div>
+    {{/if}}
+    <div>
+        <input type="checkbox" class="settings__input input-base settings__general-expand" id="settings__general-expand" {{#if expandGroups}}checked{{/if}} />
+        <label for="settings__general-expand">{{res 'setGenShowSubgroups'}}</label>
+    </div>
+    {{#if canSetTableView}}
+    <div>
+        <input type="checkbox" class="settings__input input-base settings__general-table-view" id="settings__general-table-view" {{#if tableView}}checked{{/if}} />
+        <label for="settings__general-table-view">{{res 'setGenTableView'}}</label>
+    </div>
+    {{/if}}
+    <div>
+        <input type="checkbox" class="settings__input input-base settings__general-colorful-icons" id="settings__general-colorful-icons" {{#if colorfulIcons}}checked{{/if}} />
+        <label for="settings__general-colorful-icons">{{res 'setGenColorfulIcons'}}</label>
+    </div>
+
+    <h2>{{res 'setGenFunction'}}</h2>
+    <div>
+        <input type="checkbox" class="settings__input input-base settings__general-auto-save" id="settings__general-auto-save"
+            {{#if autoSave}}checked{{/if}} />
+        <label for="settings__general-auto-save">{{res 'setGenAutoSync'}}</label>
+    </div>
+    <div><i class="fas fa-info-circle"></i> {{res 'autoSyncLimitationWarning'}}</div>
+    {{#if canClearClipboard}}
+    <div>
+        <label for="settings__general-clipboard">{{res 'setGenClearClip'}}:</label>
+        <select class="settings__general-clipboard settings__select input-base" id="settings__general-clipboard">
+            <option value="0" {{#unless clipboardSeconds}}selected{{/unless}}>{{res 'setGenNoClear'}}</option>
+            <option value="5" {{#ifeq clipboardSeconds 5}}selected{{/ifeq}}>{{#res 'setGenClearSeconds'}}5{{/res}}</option>
+            <option value="10" {{#ifeq clipboardSeconds 10}}selected{{/ifeq}}>{{#res 'setGenClearSeconds'}}10{{/res}}</option>
+            <option value="15" {{#ifeq clipboardSeconds 15}}selected{{/ifeq}}>{{#res 'setGenClearSeconds'}}15{{/res}}</option>
+            <option value="60" {{#ifeq clipboardSeconds 60}}selected{{/ifeq}}>{{res 'setGenClearMinute'}}</option>
+        </select>
+    </div>
+    {{/if}}
+    {{#if canMinimize}}
+    <div>
+        <input type="checkbox" class="settings__input input-base settings__general-minimize" id="settings__general-minimize"
+            {{#if minimizeOnClose}}checked{{/if}} />
+        <label for="settings__general-minimize">{{res 'setGenMinInstead'}}</label>
+    </div>
+    {{/if}}
+
+    <h2>{{res 'setGenLock'}}</h2>
+    <div>
+        <label for="settings__general-idle-minutes">{{res 'setGenLockInactive'}}:</label>
+        <select class="settings__general-idle-minutes settings__select input-base" id="settings__general-idle-minutes">
+            <option value="0" {{#cmp idleMinutes 0 '<='}}selected{{/cmp}}>{{res 'setGenNoAutoLock'}}</option>
+            <option value="5" {{#ifeq idleMinutes 5}}selected{{/ifeq}}>{{#res 'setGenLockMinutes'}}5{{/res}}</option>
+            <option value="10" {{#ifeq idleMinutes 10}}selected{{/ifeq}}>{{#res 'setGenLockMinutes'}}10{{/res}}</option>
+            <option value="15" {{#ifeq idleMinutes 15}}selected{{/ifeq}}>{{#res 'setGenLockMinutes'}}15{{/res}}</option>
+            <option value="60" {{#ifeq idleMinutes 60}}selected{{/ifeq}}>{{res 'setGenLockHour'}}</option>
+            <option value="720" {{#ifeq idleMinutes 720}}selected{{/ifeq}}>{{#res 'setGenLockHours'}}12{{/res}}</option>
+            <option value="1440" {{#ifeq idleMinutes 1440}}selected{{/ifeq}}>{{res 'setGenLockDay'}}</option>
+        </select>
+    </div>
+    {{#if canDetectMinimize}}
+    <div>
+        <input type="checkbox" class="settings__input input-base settings__general-lock-on-minimize" id="settings__general-lock-on-minimize"
+               {{#if lockOnMinimize}}checked{{/if}} />
+        <label for="settings__general-lock-on-minimize">{{res 'setGenLockMinimize'}}</label>
+    </div>
+    {{/if}}
+    <div>
+        <input type="checkbox" class="settings__input input-base settings__general-lock-on-copy" id="settings__general-lock-on-copy"
+               {{#if lockOnCopy}}checked{{/if}} />
+        <label for="settings__general-lock-on-copy">{{res 'setGenLockCopy'}}</label>
+    </div>
+    {{#if canDetectOsSleep}}
+        <div>
+            <input type="checkbox" class="settings__input input-base settings__general-lock-on-os-lock" id="settings__general-lock-on-os-lock"
+                   {{#if lockOnOsLock}}checked{{/if}} />
+            <label for="settings__general-lock-on-os-lock">{{res 'setGenLockOrSleep'}}</label>
+        </div>
+    {{/if}}
+
+    <h2>{{res 'advanced'}}</h2>
+    <div class="settings__general-advanced">
+        <button class="btn-silent settings__general-show-logs-link">{{res 'setGenShowAppLogs'}}</button>
+    </div>
+</div>

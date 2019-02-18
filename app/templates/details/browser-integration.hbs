@@ -1,0 +1,65 @@
+<div class="browser_extension_form_field_settings collapsed">
+    <a id="browser_extension_form_field_settings_show_link">{{res 'showBrowserFormSettings'}}</a>
+    <div class="hide" id="browser_extension_form_field_settings_content">
+        {{#if canDisable}}
+        <div class="browser_extension_settings_full_width">
+            {{res 'detailsFieldExtensionExplainerCustom'}}
+        </div>
+        {{else}}
+        <div class="browser_extension_settings_full_width">
+            {{res 'detailsFieldExtensionExplainerStd'}}
+        </div>
+        {{/if}}
+        <div class="browser_extension_settings_full_width">
+            {{res 'detailsFieldExtensionAdvancedNote'}}
+        </div>
+        {{#if canDisable}}
+        <div class="browser_extension_settings_full_width">
+            <input type="checkbox" {{#if enabled}}checked{{/if}} id="browser_extension_form_field_settings_state"/>
+            <label for="browser_extension_form_field_settings_state"> {{res 'enableBrowserIntegration'}}</label>
+        </div>
+        {{/if}}
+        <div>
+            <label for="browser_extension_form_field_settings_name">{{res 'fieldName'}}</label>
+            <input type="text" id="browser_extension_form_field_settings_name" maxlength="512"
+            value="{{name}}" placeholder="{{res 'fieldNamePlaceholder'}}" {{#unless enabled}}disabled="disabled"{{/unless}} />
+        </div>
+
+        <div>
+            <label for="browser_extension_form_field_settings_id">{{res 'fieldId'}}</label>
+            <input type="text" id="browser_extension_form_field_settings_id" maxlength="512"
+            value="{{id}}" placeholder="{{res 'fieldIdPlaceholder'}}" {{#unless enabled}}disabled="disabled"{{/unless}} />
+        </div>
+
+
+        <div class="{{#unless canEditType}}hide{{/unless}}">
+            <label for="browser_extension_form_field_settings_type">{{res 'type'}}</label>
+            <select class="settings__select settings__select-no-margin input-base" id="browser_extension_form_field_settings_type" {{#unless enabled}}disabled="disabled"{{/unless}}>
+                {{#ifeq type 'FFTusername'}}<option value="FFTusername" selected>Username</option>{{/ifeq}}
+                <option value="FFTtext" {{#ifeq type 'FFTtext'}}selected{{/ifeq}}>{{res 'text'}}</option>
+                <option value="FFTpassword" {{#ifeq type 'FFTpassword'}}selected{{/ifeq}}>{{Res 'password'}}</option>
+                <option value="FFTradio" {{#ifeq type 'FFTradio'}}selected{{/ifeq}}>{{res 'radio'}}</option>
+                <option value="FFTcheckbox" {{#ifeq type 'FFTcheckbox'}}selected{{/ifeq}}>{{res 'checkbox'}}</option>
+                <option value="FFTselect" {{#ifeq type 'FFTselect'}}selected{{/ifeq}}>{{res 'select'}}</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="browser_extension_form_field_settings_placeholders">{{res 'placeholders'}}</label>
+            <select class="settings__select settings__select-no-margin input-base" id="browser_extension_form_field_settings_placeholders" {{#unless enabled}}disabled="disabled"{{/unless}}>
+                <option value="Enabled" {{#ifeq placeholderHandling 'Enabled'}}selected{{/ifeq}}>{{res 'enabled'}}</option>
+                {{#if displayGlobalPlaceholderOption}}
+                <option value="Default" {{#ifeq placeholderHandling 'Default'}}selected{{/ifeq}}>{{res 'useDefaultFileSetting'}}</option>
+                <option value="Disabled" {{#ifeq placeholderHandling 'Disabled'}}selected{{/ifeq}}>{{res 'disabled'}}</option>
+                {{else}}
+                <option value="Disabled" {{#ifneq placeholderHandling 'Enabled'}}selected{{/ifneq}}>{{res 'disabled'}}</option>
+                {{/if}}
+            </select>
+        </div>
+
+        <div class="{{#ifneq placeholderHandling 'Enabled'}}hide{{/ifneq}}" id="browser_extension_form_field_settings_placeholders_warning">
+            <span class="fas fa-exclamation-triangle"> </span> {{res 'placeholdersWarning'}}<br/>
+            <a href="https://forum.kee.pm/t/placeholder-handling/1100" target="_blank" rel="noopener">{{res 'placeholderMoreInfo'}}</a>
+        </div>
+    </div>
+</div>

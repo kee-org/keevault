@@ -1,0 +1,11 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+    "git.enabled": true,
+    "cSpell.words": [
+        "kdbxweb",
+        "publicsuffixlist",
+        "transitionend",
+        "zxcvbn"
+    ],
+    "javascript.suggestionActions.enabled": false
+}

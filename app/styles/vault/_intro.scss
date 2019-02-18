@@ -1,0 +1,555 @@
+$intro-duration: 150ms;
+$intro-medium-duration: 250ms;
+$intro-long-duration: 600ms;
+$fade-in-intro-duration: 400ms;
+
+body.enable_native_scroll {
+  margin: 0;
+  overflow: auto;
+}
+
+#app__body_intro.intro_active {
+  z-index: 100001;
+}
+
+.vault_overlay {
+
+  .vault_intro_full {
+    @include position(absolute, 0 null null 0);
+    @include size(100%);
+    @include th { background-color: th(background-color); }
+    z-index: $z-index-modal;
+
+    &_content {
+      @include size(100%);
+      display: flex;
+      align-items: stretch;
+      flex-direction: column;
+      justify-content: flex-start;
+
+      &_header {
+        display: flex;
+        align-items: stretch;
+        flex-direction: row;
+        justify-content: flex-start;
+        overflow: hidden;
+        flex-shrink: 0;
+
+        .vault_intro_loading_container {
+          height:122px;
+
+          & .logo-container {
+            margin-bottom: 0px;
+            margin-top: 0px;
+            & > svg{
+              max-width: 419px;
+            }
+          }
+
+        }
+      }
+
+      &_body {
+        opacity: 0;
+        transition: opacity $fade-in-intro-duration $base-timing;
+
+        &.loaded {
+          opacity: 1;
+        }
+      }
+
+    }
+  }
+
+  &.vault_start {
+    z-index: $z-index-modal+1;
+    .vault_intro {
+      &_top {
+        flex: 1;
+        display: flex;
+        align-self: stretch;
+        align-items: center;
+        flex-direction: row;
+        justify-content: space-between;
+        height: 100px;
+        @include th { border-bottom: 1px solid th(light-border-color); }
+        @include animation(fadeinheader 1000ms linear forwards);
+      }
+      &_full {
+        overflow: hidden;
+        @include th { border-bottom: 1px solid th(light-border-color); }
+        @include animation(shrinkaway 1000ms ease-in-out forwards);
+      }
+    }
+  }
+}
+
+.vault_intro_loading_container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+  flex-direction: column;
+  font-size: calc(10px + 1vmin);
+  height: 100%;
+  margin-top: 15px;
+  transition: height $intro-long-duration $base-timing, margin $intro-long-duration $base-timing;
+
+  .app__body & {
+    margin-top: 0px;
+
+    &.loaded {
+      height:122px;
+      margin-top: 15px;
+
+      & .logo-container {
+        margin-bottom: 0px;
+        margin-top: 0px;
+        & > svg{
+          max-width: 419px; // ratio 4.3682
+        }
+      }
+
+    }
+  }
+
+  & .account-loading {
+    flex:3;
+    opacity: 0;
+
+    .app__body & {
+      opacity: 1;
+      transition: opacity $intro-medium-duration cubic-bezier(.23,1,.32,1);
+    }
+  }
+  .app__body &.loaded .account-loading {
+    opacity: 0;
+  }
+
+  & .logo-container {
+    flex-shrink:0;
+    flex-grow:1;
+    justify-content:flex-end;
+    display:flex;
+    flex-direction:column;
+    margin-bottom:5vmin;
+    margin-top:2vmin;
+    transition: margin $intro-long-duration $base-timing;
+
+    & > svg {
+      width:60vmin;
+      max-width:600px;
+      min-width:200px;
+      height:auto;
+      transition: max-width $intro-long-duration ease;
+    }
+  }
+}
+
+@include keyframes(shrinkaway) {
+  0% {
+    opacity: 1;
+    top: 0%;
+  }
+  99% {
+    opacity: 0;
+    top: 0%;
+  }
+  100% {
+    opacity: 0;
+    top: 100%;
+  }
+}
+
+@include keyframes(fadeinheader) {
+  0% {
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes growModal {
+  0% {
+    transform:scale(0);
+  }
+  100% {
+    transform:scale(1);
+  }
+}
+
+@keyframes shrinkModal {
+  0% {
+    transform:scale(1);
+    @include th { background-color: th(modal-background-color); }
+  }
+  100% {
+    transform:scale(0);
+    @include th { background-color: th(modal-background-color-tr); }
+  }
+}
+
+@include keyframes(introduceMask) {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0.85;
+  }
+}
+
+.vault_mask {
+  @include position(absolute, 0 0 0 0);
+  @include th { background-color: th(background-color); }
+  @include animation(introduceMask 150ms linear forwards);
+
+  &_transparent {
+    @include position(absolute, 0 0 0 0);
+    @include th { background-color: th(background-color); }
+    opacity: 0;
+  }
+}
+
+.vault_modal {
+  @include position(absolute, 0 null null 0);
+  @include size(100%);
+  z-index: $z-index-modal;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  display: flex;
+
+  .vault_modal__content {
+    max-height: 80%;
+    max-width: 80%;
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+    justify-content: center;
+    @include animation(growModal 250ms cubic-bezier(0,0,.62,1.43) forwards);
+    @include th { background-color: th(modal-background-color); }
+    @include th { border: 2px solid th(light-border-color); }
+    font-size: 1.25em;
+
+    .modal__body, .modal__buttons {
+      align-self: center;
+      width: 90%;
+    }
+  }
+
+  &.modal--hidden {
+    .vault_modal__content {
+      @include animation(shrinkModal 150ms ease-in forwards);
+    }
+  }
+}
+
+.vault_modal_fixed {
+  @include position(absolute, 0 null null 0);
+  z-index: $z-index-modal;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  display: flex;
+
+  .vault_modal__content {
+    max-width: 300px;
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+    justify-content: center;
+    @include animation(growModal 250ms cubic-bezier(0,0,.62,1.43) forwards);
+    @include th { background-color: th(modal-background-color); }
+    font-size: 1.25em;
+
+    .modal__body, .modal__buttons {
+      align-self: center;
+      width: 90%;
+    }
+  }
+
+  &.modal--hidden {
+    .vault_modal__content {
+      @include animation(shrinkModal 150ms ease-in forwards);
+    }
+  }
+}
+
+.arrow_box {
+  position: absolute;
+  @include th { background: th(modal-background-color); }
+  @include th { border: 2px solid th(light-border-color); }
+
+  &:after, &:before {
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+  }
+  &:after {
+    border-width: 30px;
+    border-color: rgba(1, 1, 1, 0);
+  }
+  &:before {
+    border-width: 33px;
+    border-color: rgba(1, 1, 1, 0);
+  }
+
+  &.top {
+    &:after, &:before {
+      bottom: 100%;
+      left: 50%;
+    }
+    &:before {
+      @include th { border-bottom-color: th(light-border-color); }
+      margin-left: -33px;
+    }
+    &:after {
+      @include th { border-bottom-color: th(modal-background-color); }
+      margin-left: -30px;
+    }
+  }
+  &.right {
+    &:after, &:before {
+      left: 100%;
+      top: 50%;
+    }
+    &:before {
+      @include th { border-left-color: th(light-border-color); }
+      margin-top: -33px;
+    }
+    &:after {
+      @include th { border-left-color: th(modal-background-color); }
+      margin-top: -30px;
+    }
+  }
+  &.bottom {
+    &:after, &:before {
+      top: 100%;
+      left: 50%;
+    }
+    &:before {
+      @include th { border-top-color: th(light-border-color); }
+      margin-left: -33px;
+    }
+    &:after {
+      @include th { border-top-color: th(modal-background-color); }
+      margin-left: -30px;
+    }
+  }
+  &.left {
+    &:after, &:before {
+      right: 100%;
+      top: 50%;
+    }
+    &:before {
+      @include th { border-right-color: th(light-border-color); }
+      margin-top: -33px;
+    }
+    &:after {
+      @include th { border-right-color: th(modal-background-color); }
+      margin-top: -30px;
+    }
+  }
+}
+
+#home_main {
+  padding: 15px;
+
+  h3 {
+    text-align: center;
+  }
+}
+#home_side {
+  padding: 10px;
+  float: right;
+}
+#home_sec_benefits {
+  dl {
+    flex-wrap: wrap;
+    display: flex;
+
+    & > div {
+      width: calc(25% - 40px);
+      @include th { background-color: th(secondary-background-color); }
+      margin: 10px;
+      padding: 10px;
+
+      @media (max-width: 1200px) {
+        width: calc(33% - 40px);
+        margin: 10px;
+        padding: 10px;
+      }
+      @media (max-width: 900px) {
+        width: calc(50% - 32px);
+        margin: 8px;
+        padding: 8px;
+      }
+      @media (max-width: 500px) {
+        width: calc(100% - 20px);
+        margin: 5px;
+        padding: 5px;
+      }
+    }
+  }
+
+  dt {
+    font-weight: bold;
+    font-size: 1.3em;
+    margin-bottom: .5em;
+    margin-top: 0px;
+  }
+}
+#home_sec_signin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  @include th { background-color: th(secondary-background-color); }
+  padding: 10px;
+
+  & > h4 {
+    margin: 0px;
+  }
+  #vault_existing_user_login_wide {
+    display: none;
+  }
+  #vault_existing_user_login_narrow {
+    display: block;
+    padding: 5px;
+    line-height: 16px;
+  }
+  input, h4 {
+    display: none;
+  }
+}
+#home_sec_reviews {
+  text-align: center;
+
+  blockquote {
+    margin: 10px 0px;
+  }
+  blockquote::before {
+    content: open-quote;
+  }
+  blockquote::after {
+    content: close-quote;
+  }
+  .opinionContextExplainer {
+    font-size: 0.75em
+  }
+}
+#loginEmail {
+  width: 80%;
+  margin: 10px 0px 12px;
+  text-align: center;
+}
+
+#mobileAccountWarningContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin: 15px;
+}
+
+#mobileAccountWarningContainer > * {
+  margin: 10px 5px;
+}
+
+#emailMeALink {
+  margin: 0px 5px 35px;
+}
+
+#vault_intro_top {
+  display: grid;
+  grid-template-areas: "left-top centre-top right" "bottom bottom bottom";
+  grid-template-columns: minmax(185px, 19vw) 2fr minmax(110px, 15vw);
+  grid-template-rows: 65px 25px;
+  grid-gap: 10px;
+  align-items: center;
+  justify-items: center;
+}
+
+#vault_intro_top_logo {
+  grid-area: left-top;
+  align-self: end;
+  justify-self: start;
+  margin-left: 10px;
+}
+#vault_intro_top_strapline {
+  grid-area: bottom;
+  justify-self: left;
+  margin-left: 10px;
+}
+#vault_intro_top_signin {
+  grid-area: right;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+#vault_intro_top_signin > .vault_existing_user_login {
+  margin-top: 5px;
+}
+#vault_intro_top_main {
+  grid-area: centre-top;
+  display: flex;
+  align-items: center;
+  align-self: end;
+}
+
+#vault_intro_top_logo > div.logo-container > svg {
+  max-height: 40px;
+  width: 175px;
+}
+
+#demoBlurb {
+  display: flex;
+  align-items: center;
+  @media (max-width: 750px) {
+    align-items: flex-end;
+  }
+}
+
+#demoSignUpCTA {
+  flex-shrink: 0;
+  margin: 0px 15px 0px 5px;
+  line-height: 1.2;
+  padding: 0.5em 1em;
+
+  @media (max-width: 750px) {
+    padding: 5px;
+    min-width:  60px;
+  }
+}
+
+#demoBlurb > div {
+  flex: 1;
+  font-size: calc(0.8em + 0.1vw);
+  line-height: 15px;
+}
+
+.signupCTAContainer button.vault_primary_action {
+  width: 50%;
+  min-width: 250px;
+  margin: 10px;
+  margin-bottom: calc(.75em + 10px);
+}
+
+.signupCTAContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  @include th { background-color: th(secondary-background-color); }
+  padding: 15px;
+  margin: 20px 0px;
+}

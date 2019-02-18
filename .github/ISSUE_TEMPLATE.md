@@ -1,0 +1,1 @@
+Please discuss and raise issues on https://forum.kee.pm before opening an issue on GitHub in order to receive faster attention. Spurious GitHub issues may be closed with no further comment - if this happens, please discuss on the forum.

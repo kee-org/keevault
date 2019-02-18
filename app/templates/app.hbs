@@ -1,0 +1,24 @@
+
+<div class="app">
+    <div class="vault_overlay vault_landing"></div>
+    {{#if beta}}<div class="app__beta"><i class="fa fa-exclamation-triangle"></i> {{res 'appBeta'}}</div>{{/if}}
+    {{#ifeq titlebarStyle 'hidden'}}<div class="app__titlebar-drag"></div>{{/ifeq}}
+    <div class="app__body" id="app__body_intro">
+        <div class="vault_intro_loading_container">
+            <div class="logo-container">{{{svg 'logo'}}}</div>
+            <div class="account-loading">Loading...</div>
+        </div>
+    </div>
+    <div class="app__body hide" id="app__body_main">
+        <div class="app__menu"></div>
+        <div class="app__menu-drag"></div>
+        <div class="app__list-wrap">
+            <div class="app__list"></div>
+            <div class="app__list-drag"></div>
+            <div class="app__details"></div>
+        </div>
+        <div class="app__panel hide"></div>
+    </div>
+    <div class="app__footer"></div>
+</div>
+<span id="keeVaultMagic_existsHere"></span>

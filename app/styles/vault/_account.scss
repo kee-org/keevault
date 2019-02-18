@@ -1,0 +1,218 @@
+.open {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+  flex-direction: column;
+  font-size: calc(10px + 1vmin);
+
+  & .logo-container {
+    flex-shrink: 0;
+    flex-grow: 1;
+    justify-content: flex-end;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5vmin;
+    margin-top: 2vmin;
+
+    .open--scrollRoot & {
+      align-self: center;
+    }
+
+    & > svg {
+      width: 60vmin;
+      max-width: 600px;
+      min-width: 200px;
+      height: auto;
+    }
+  }
+
+  & .account-link-container {
+    padding-top: 10px;
+    flex: 1;
+
+    .open--scrollRoot & {
+      align-self: center;
+    }
+  }
+
+  & .account-loading {
+    flex: 3;
+  }
+
+  button {
+    font-size: calc(10px + 1.75vmin);
+  }
+
+  label {
+    font-size: calc(10px + 1vmin);
+  }
+
+  &__pass {
+    &-area {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      justify-content: flex-start;
+      position: relative;
+      .open--drag & { display: none; }
+    }
+    &-warn-wrap {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      .open__pass-warning {
+        font-size: calc(10px + 1.5vmin);
+      }
+      .open--scrollRoot .open > & {
+        align-self: center;
+      }
+    }
+    &-field-wrap {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: stretch;
+      flex-shrink: 0;
+      margin-bottom: $base-padding-v;
+    }
+    &-enter-btn, &-opening-icon {
+      padding: .6em $base-spacing;
+      @include th { color: th(muted-color); }
+      >i { font-size: 8vmin; }
+    }
+    .open--show-focus & {
+      &-enter-btn:focus, &-opening-icon:focus {
+        @include th { outline: focused-outline(); }
+      }
+    }
+    &-enter-btn {
+      .open--file & {
+        cursor: pointer;
+        &:hover {
+          @include th { color: th(medium-color); }
+        }
+      }
+      .open--opening & { display: none; }
+    }
+    &-opening-icon {
+      display: none;
+      .open--opening & { display: block; }
+    }
+  }
+
+  input[type=password].open__pass-input,
+  input[type=text]#accountEmail,
+  input[type=text]#accountCode {
+    font-size: $large-pass-font-size;
+    margin-bottom: 0;
+    min-width: 200px;
+    width: calc(75vmin + 100px);
+    max-width: 98vw;
+    &[readonly] { cursor: pointer; }
+  }
+}
+
+.vault_user_welcome {
+  max-width: 100vw;
+  font-size: calc(10px + 3vmin);
+  @include th { color: th(text-color); }
+  word-break: break-all;
+}
+
+.register {
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 90vw;
+  min-width: 300px;
+  align-self: flex-start;
+  overflow: scroll;
+  height: 100vh;
+  justify-content: flex-start;
+
+  & input[type="password"].open__pass-input,
+  & input[type="text"]#accountEmail,
+  & input[type="text"]#accountCode {
+    font-size: calc(10px + 1.5vmin);
+    margin-bottom: 0;
+    min-width: 200px;
+    width: calc(80vw + 20px);
+    max-width: 800px;
+  }
+
+  > * {
+    margin: 0.75vmin 0px;
+  }
+
+  > .registration_extra_space_above {
+    margin-top: 3vmin;
+  }
+
+  > h2 {
+    font-size: 4vmin;
+    margin: 5vmin 0 0.5vmin;
+  }
+
+  > div.fieldExplainer {
+    min-width: 200px;
+    width: calc(80vw + 20px);
+    max-width: 800px;
+    align-self: center;
+  }
+
+  .registration-password-extra-wrap {
+    display: flex;
+    flex-direction: row;
+
+    & .open__pass-warning {
+      flex: 1;
+      text-align:right;
+    }
+  }
+}
+
+.import--scrollRoot {
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 90vw;
+  min-width: 300px;
+  overflow: scroll;
+
+  & input[type="password"].open__pass-input,
+  & input[type="text"]#accountEmail,
+  & input[type="text"]#accountCode {
+    font-size: calc(10px + 1.5vmin);
+    margin-bottom: 0;
+    min-width: 200px;
+    width: calc(80vw + 20px);
+    max-width: 800px;
+  }
+
+  .import > * {
+    margin: 0.75vmin 0px;
+  }
+
+  .import_source > * {
+    margin: 1.75vmin 0px;
+  }
+
+  .import_source > .import__icons {
+    margin: auto;
+  }
+
+  .import > h2 {
+    font-size: 4vmin;
+    margin: 5vmin 0 0.5vmin;
+  }
+}
+
+.registrationStage1Disabled .registrationStage1 {
+  display: none;
+}
+
+.registrationStage2Disabled .registrationStage2 {
+  display: none;
+}

@@ -1,0 +1,85 @@
+.import {
+  justify-items: center;
+  font-size: calc(10px + 1vmin);
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+
+  &_source {
+
+    text-align: left;
+
+    ol {
+      list-style-type: decimal;
+      margin: 10px;
+      padding: 20px;
+    }
+
+    .import--drag & { display: none; }
+  }
+
+  .import__icons {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-content: baseline;
+    max-width: 80%;
+    width: 50vw;
+    min-width: 300px;
+    text-align: center;
+    margin: auto;
+  }
+
+  .import__icon {
+    @include th { color: th(text-color); }
+    font-size: calc(10px + 1vmin);
+    cursor: pointer;
+
+    &.active {
+      cursor: unset;
+      @include th { color: th(action-background-color-focus); }
+      @include th { border-bottom: solid 1px th(action-background-color-focus); }
+      .import__icon-text {
+        @include th { color: th(action-background-color-focus); }
+      }
+    }
+
+    &-i {
+      font-size: calc(10px + 6vmin);
+    }
+  }
+
+  &__dropzone {
+    display: none;
+    .import--drag & {
+      display: flex;
+      flex-direction: column;
+      flex: 1 0 auto;
+      justify-content: center;
+      align-self: center;
+      align-items: center;
+      text-align: center;
+    }
+    &-icon {
+      font-size: 10em;
+    }
+    &-header {
+      margin-top: 1em;
+    }
+  }
+
+  input[type=password].open__pass-input {
+    font-size: 22px;
+  }
+
+  .open > * {
+    margin: 0.75vmin 0px;
+  }
+}
+
+.import.import_mode {
+  margin-top: calc(10px + 2vmin);
+}

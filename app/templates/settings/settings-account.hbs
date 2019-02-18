@@ -1,0 +1,62 @@
+<div>
+    <h1><i class="fa fa-user"></i> {{res 'keeAccount'}}</h1>
+
+{{#if possiblyLoggedIn}}
+    <h3>{{accountEmail}}</h3>
+
+    <button class="vault_action" id="accountSettingsSignout">
+        <div class="content">{{res 'signout'}}</div>
+    </button>
+
+    <h2><i class="fa fa-ellipsis-h"></i> {{res 'accountPassword'}}</h2>
+    <div class="hide">
+        {{!-- we need these inputs to screw browsers passwords autocompletion --}}
+        <input type="text" style="display:none" name="username">
+        <input type="password" style="display:none" name="password">
+    </div>
+    <input type="password" class="settings__input input-base" id="settings__account-master-pass" placeholder="{{res 'newPassword'}}" autocomplete="new-password" />
+    <input type="password" class="settings__input input-base" id="settings__account-master-pass-confirm" placeholder="{{res 'keyChangeRepeatPassword'}}" autocomplete="new-password" />
+    <div class="change-account-password-extra-wrap">
+        <div id="settings__account-master-pass-strength" class="passwordStrengthRating"></div>
+        <div class="open__pass-warning muted-color invisible"><i class="fa fa-exclamation-triangle"></i> {{res 'openCaps'}}</div>
+    </div>
+    <button disabled="disabled" class="vault_action" id="changeAccountPasswordButton">
+        <div class="content">{{res 'changePassword'}}</div>
+        <div class="opening-icon"><i class="fa fa-spinner fa-spin"></i></div>
+    </button>
+    <div id="settings__account-master-pass-result"></div>
+{{else}}
+    <h3>{{res 'notSignedIn'}}</h3>
+
+    <button class="vault_action" id="accountSettingsSignin">
+        <div class="content">{{res 'signin'}}</div>
+    </button>
+{{/if}}
+
+    <h2><i class="fas fa-fingerprint"></i> {{res 'supportInformation'}}</h2>
+    <a class="settings__account-show-support-info">{{res 'revealSupportInformation'}}</a>
+    <div class="settings__account-support-info hide">
+        <h3>{{res 'setHelpAppInfo'}}</h3>
+        <pre class="settings__pre input-base">{{appInfo}}</pre>
+        <h3>{{res 'uniqueUserId'}}</h3>
+        <pre class="settings__pre input-base">{{uniqueUserId}}</pre>
+        <p>{{res 'couldDeanonymise'}}</p>
+        <p>{{res 'couldDeanonymiseRecommendation'}}</p>
+    </div>
+
+{{#if possiblyLoggedIn}}
+    <h2><i class="fa fa-user-circle"></i> {{res 'subscriptionManagementHeading'}}</h2>
+    {{#if emailVerified}}
+        <div><p>{{res 'subscriptionManagementBlurb'}}</p></div>
+        <button class="vault_action" id="manageAccountButton">
+            <div class="content">{{res 'manageMySubscription'}}</div>
+            <div class="opening-icon"><i class="fa fa-spinner fa-spin"></i></div>
+        </button>
+        <div><p>{{res 'subscriptionManagementSecurityExplainer'}}</p></div>
+        <h2><i class="fa fa-id-card"></i> {{res 'customerSupportSettings'}}</h2>
+        <div id="settings__messages-comms-placeholder">{{res 'loadingAccountData'}}</div>
+    {{else}}
+        <div>{{res 'verifyEmailBeforeManageAccount'}}</div>
+    {{/if}}
+{{/if}}
+</div>

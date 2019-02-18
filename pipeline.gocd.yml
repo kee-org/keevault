@@ -1,0 +1,120 @@
+format_version: 3
+pipelines:
+  appkeepm:
+    environment_variables:
+      AWS_PROFILE: "keeBeta"
+      AWS_REGION: "eu-west-2"
+    group: defaultGroup
+    materials:
+      mygit:
+        type: configrepo
+      keeFrontendDependency:
+        pipeline: keeFrontend
+        stage: publish
+      kprpcDependency:
+        pipeline: kprpc
+        stage: publish
+    stages:
+      - installDeps:
+          #clean_workspace: true
+          jobs:
+            defaultJob:
+              tasks:
+                - exec:
+                    command: npm
+                    arguments:
+                      - "ci"
+      - build:
+          jobs:
+            defaultJob:
+              tasks:
+                - exec:
+                    command: grunt
+                    arguments:
+                      - "--skip-sign"
+      - publish:
+          jobs:
+            defaultJob:
+              tasks:
+                - exec:
+                    command: /bin/bash
+                    arguments:
+                      - "-c"
+                      - "aws s3 sync dist/ s3://app-beta.kee.pm"
+                - exec:
+                    command: /bin/bash
+                    arguments:
+                      - "-c"
+                      - "aws cloudfront create-invalidation --distribution-id E3FJWMTO2ETM37 --paths /\\*"
+  appkeepmProduction:
+    environment_variables:
+      AWS_PROFILE: "keeProd"
+      AWS_REGION: "eu-west-2"
+    # secure_variables:
+    #  AZURE_SAS: "AES:QoEhOHrSCRzO6i57EcQAsQ==:UDASdNfjlpqQPIP1puOgPUB9iNmeLZiey6OZ3YgJ8q2+Op1PhWUsgDHnJPIgf0UzUGTNWGtPWXrIDr/WenS/sJpd84grgH59XGLgcbEZhPxlbiPpUWZbnGqmIwwsE+fVAmQWfKmMYj8Z16UrIg3q0ywRrpUmWOKpPtsSETHcVwVrCMIJAU1csCxhXaFnu2ODE8yog0KYQe9ot2iM6L1e+gCPgsb8IOWqybJrtZgOPtI="
+    group: defaultGroup
+    materials:
+      mygit:
+        type: configrepo
+      appkeepmDependency:
+        pipeline: appkeepm
+        stage: publish
+    stages:
+      - installDeps:
+          #clean_workspace: true
+          jobs:
+            defaultJob:
+              tasks:
+                - exec:
+                    command: npm
+                    arguments:
+                      - "ci"
+      - build:
+          jobs:
+            defaultJob:
+              tasks:
+                - exec:
+                    command: grunt
+                    arguments:
+                      - "--skip-sign"
+      - publish:
+          approval: manual
+          jobs:
+            defaultJob:
+              tasks:
+                - exec:
+                    command: /bin/bash
+                    arguments:
+                      - "-c"
+                      - "aws s3 sync dist/ s3://keevault.pm"
+                - exec:
+                    command: /bin/bash
+                    arguments:
+                      - "-c"
+                      - "aws cloudfront create-invalidation --distribution-id E2RDOCYD2M73CI --paths /\\*"
+        # - publish:
+        #   approval: manual
+        #   jobs:
+        #     defaultJob:
+        #       tasks:
+        #         - exec:
+        #             command: npm
+        #             arguments:
+        #               - "run"
+        #               - "prod-deploy"
+        #               - "keevault"
+
+# Encrypted vars in GoCD are very clunky. Recreate as needed by using this hack:
+# curl 'https://cd.kee.pm:8154/go/api/admin/encrypt' --insecure -u 'username:password' -H 'Accept: application/vnd.go.cd.v1+json' -H 'Content-Type: application/json' -X POST -d '{"value": "badger"}'
+# response:
+# {
+#   "_links" : {
+#     "doc" : {
+#       "href" : "https://api.gocd.org/#encryption"
+#     },
+#     "self" : {
+#       "href" : "https://cd.kee.pm:8154/go/api/admin/encrypt"
+#     }
+#   },
+#   "encrypted_value" : "AES:..."
+# }

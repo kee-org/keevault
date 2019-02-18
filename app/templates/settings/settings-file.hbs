@@ -1,0 +1,149 @@
+<div>
+    <h1><i class="fa fa-lock"></i> {{name}} {{resLow 'settings'}}</h1>
+    {{#if storage}}
+    <div>{{res 'setFileLastSync'}}: {{#if syncDate}}{{syncDate}}{{else}}{{res 'setFileLastSyncUnknown'}}{{/if}} {{#if syncing}}({{res 'setFileSyncInProgress'}}...){{/if}}</div>
+    {{#if syncError}}<div>{{res 'setFileSyncError'}}: {{syncError}}</div>{{/if}}
+    {{/if}}
+
+    <div class="settings__file-buttons">
+        <button class="settings__file-button-save-default" {{#if readonly}}disabled{{/if}}>{{res 'setFileSave'}}</button>
+        <button class="settings__file-button-save-choose btn-silent"
+            {{#if syncing}}disabled{{/if}}>{{res 'setFileSaveTo'}}</button>
+        <button class="settings__file-button-close btn-silent">{{res 'setFileClose'}}</button>
+        <button class="settings__file-button-import btn-silent" {{#if readonly}}disabled{{/if}}>{{res 'import'}}</button>
+    </div>
+
+    <div class="settings__file-save-choose hide">
+        <h2>{{res 'setFileSaveTo'}}</h2>
+        {{#ifneq storage 'file'}}
+        <div class="settings__file-save-to settings__file-save-to-file">
+            <i class="fa fa-file-download"></i>{{Res 'file'}}
+        </div>
+        {{/ifneq}}
+        {{#each storageProviders as |prv|}}
+            {{#unless prv.own}}
+            <div class="settings__file-save-to settings__file-save-to-storage svg-btn" data-storage="{{prv.name}}">
+                {{#if prv.icon}}<i class="fa fa-{{prv.icon}}"></i>{{/if}}
+                {{#if prv.iconSvg}}{{{prv.iconSvg}}}{{/if}}
+                <span>{{res prv.name}}</span>
+            </div>
+            {{/unless}}
+        {{/each}}
+        <div class="settings__file-save-to settings__file-save-to-xml">
+            <i class="fa fa-code"></i>{{res 'setFileSaveToXml'}}
+        </div>
+    </div>
+
+    {{!-- Master password change support below will be enabled on all non-primary DBs when multiple DBs are supported
+    "Your vault password is the same as your Kee Vault account. Change Kee Vault account password" --}}
+    <div class="hide">
+        <h2>{{res 'security'}}</h2>
+        <label for="settings__file-master-pass" class="settings__file-master-pass-label input-base">{{res 'setFilePass'}}:
+            <span class="settings__file-master-pass-warning">
+                <i class="fa fa-warning"></i> {{res 'setFilePassChanged'}}
+            </span>
+        </label>
+        <div class="hide">
+            {{!-- we need these inputs to screw browsers passwords autocompletion --}}
+            <input type="text" style="display:none" name="username">
+            <input type="password" style="display:none" name="password">
+        </div>
+        <input type="password" class="settings__input input-base" id="settings__file-master-pass" value="{{password}}" autocomplete="new-password" />
+        <label for="settings__file-key-file">{{res 'setFileKeyFile'}}:</label>
+        <select class="settings__select settings__select-no-margin input-base" id="settings__file-key-file"></select>
+        <a id="settings__file-file-select-link">{{res 'setFileSelKeyFile'}}</a>
+        <input type="file" id="settings__file-file-select" class="hide-by-pos" />
+    </div>
+
+    <h2>{{res 'setFileNames'}}</h2>
+    <label for="settings__file-name">{{Res 'name'}}:</label>
+    <input type="text" class="settings__input input-base" id="settings__file-name" value="{{name}}" required />
+    <label for="settings__file-def-user">{{res 'setFileDefUser'}}:</label>
+    <input type="text" class="settings__input input-base" id="settings__file-def-user" value="{{defaultUser}}" />
+
+    <h2>{{Res 'history'}}</h2>
+    <div>
+        <input type="checkbox" class="settings__input input-base" id="settings__file-trash" {{#if recycleBinEnabled}}checked{{/if}} />
+        <label for="settings__file-trash">{{res 'setFileEnableTrash'}}</label>
+    </div>
+    <label for="settings__file-hist-len">{{res 'setFileHistLen'}}:</label>
+    <input type="text" pattern="\d+" required class="settings__input input-base" id="settings__file-hist-len" value="{{historyMaxItems}}" maxlength="6" />
+    <label for="settings__file-hist-size">{{res 'setFileHistSize'}}:</label>
+    <input type="text" pattern="\d+" required class="settings__input input-base" id="settings__file-hist-size" value="{{historyMaxSize}}" maxlength="3" />
+
+    <h2>{{Res 'browserExtension'}}</h2>
+    <div class="browserExtension {{#if extensionEnabled}}hide{{/if}}">
+    {{#if extensionAvailable}}
+        <p><a href="{{extensionLink}}" target="_blank" rel="noopener">{{res 'settingsInstallKee'}}</a>{{#res 'settingsInstallKeeWithLink'}}{{browserName}}{{/res~}}{{res 'settingsInstallKeeReason'}}</p>
+    {{else}}
+        <p>{{res 'settingsInstallKee'}}{{res 'settingsInstallKeeNoLink'}}{{res 'settingsInstallKeeReason'}}</p>
+    {{/if}}
+    </div>
+    <div class="browserExtension {{#unless extensionEnabled}}hide{{/unless}}">
+        <h3>{{res 'minURLMatchAccuracy'}}</h3>
+        <label for="settings__file-minURLMatchAccuracyDefault">{{res 'defaultForNewEntries'}}:</label>
+        <select class="settings__select settings__select-no-margin input-base" id="settings__file-minURLMatchAccuracyDefault">
+            <option value="Domain" {{#ifeq minURLMatchAccuracyDefault 'Domain'}}selected{{/ifeq}}>{{res 'domain'}}</option>
+            <option value="Hostname" {{#ifeq minURLMatchAccuracyDefault 'Hostname'}}selected{{/ifeq}}>{{res 'hostname'}}</option>
+            <option value="Exact" {{#ifeq minURLMatchAccuracyDefault 'Exact'}}selected{{/ifeq}}>{{res 'exact'}}</option>
+        </select>
+        <label id="settings__file-minURLMatchAccuracyOverrides">{{res 'minURLMatchAccuracyOverrides'}}:</label>
+
+        {{#if displayGlobalPlaceholderOption}}
+        <h3>{{res 'placeholders'}}</h3>
+        <div>
+            <input type="checkbox" class="settings__input input-base" id="settings__file-placeholders-enabled" {{#if placeholdersEnabled}}checked{{/if}} />
+            <label for="settings__file-placeholders-enabled">{{res 'enablePlaceholders'}}</label>
+        </div>
+        <div id="settings__file-placeholders-enabled-warning" class="{{#unless placeholdersEnabled}}hide{{/unless}}">
+            <span class="fas fa-exclamation-triangle"> </span> {{res 'placeholdersWarning'}}<br/>
+            <a href="https://forum.kee.pm/t/placeholder-handling/1100" target="_blank" rel="noopener">{{res 'placeholderMoreInfo'}}</a>
+        </div>
+        {{/if}}
+    </div>
+
+    <h2>{{res 'passwordSecurityBoost'}}</h2>
+    {{#if keyEncryptionRounds}}
+        <label for="settings__file-key-rounds">{{res 'setFileRounds'}}:</label>
+        <input type="text" pattern="\d+" required class="settings__input input-base" id="settings__file-key-rounds" value="{{keyEncryptionRounds}}" maxlength="10" />
+    {{else if kdfParameters}}
+        <div>
+            {{res 'passwordSecurityBoostExplanation'}}
+        </div>
+        <select class="settings__select settings__select-no-margin input-base" id="settings__file-argon2ConfigurationMode">
+            <option value="0" {{#ifeq argon2Configuration 0}}selected{{/ifeq}}>{{res 'custom'}}</option>
+            <option value="1" {{#ifeq argon2Configuration 1}}selected{{/ifeq}}>{{res 'veryHigh'}}</option>
+            <option value="2" {{#ifeq argon2Configuration 2}}selected{{/ifeq}}>{{res 'high'}}</option>
+            <option value="3" {{#ifeq argon2Configuration 3}}selected{{/ifeq}}>{{res 'medium'}}</option>
+            <option value="4" {{#ifeq argon2Configuration 4}}selected{{/ifeq}}>{{res 'low'}}</option>
+            <option value="5" {{#ifeq argon2Configuration 5}}selected{{/ifeq}}>{{res 'veryLow'}}</option>
+        </select>
+        <div id="settings__file-argon2CustomSettingsAutoRandomExplanation" style="{{#if argon2ConfigurationAuto}}display:none;{{/if}}">
+            {{res 'passwordSecurityBoostAutoRandomExplanation'}}
+        </div>
+        <div id="settings__file-argon2CustomSettings" style="{{#ifneq argon2Configuration 0}}display:none;{{/ifneq}}">
+        <label>{{res 'setFileKdfParams'}}: Argon2</label>
+        <div class="settings__row">
+            <div class="settings__col-small">
+                <label class="settings__col-small-label" for="settings__file-kdf-iter">{{res 'setFileKdfParamsIter'}}:</label>
+                <input type="text" pattern="\d+" required class="settings__input input-base settings__input-kdf"
+                    data-field="iterations" id="settings__file-kdf-iter" value="{{kdfParameters.iterations}}" maxlength="10" />
+            </div>
+            <div class="settings__col-small">
+                <label class="settings__col-small-label" for="settings__file-kdf-mem">{{res 'setFileKdfParamsMem'}}:</label>
+                <input type="text" pattern="\d+" required class="settings__input input-base settings__input-kdf"
+                    data-field="memory" data-mul="1024" id="settings__file-kdf-mem" value="{{kdfParameters.memory}}" maxlength="10" />
+            </div>
+            <div class="settings__col-small">
+                <label class="settings__col-small-label" for="settings__file-kdf-par">{{res 'setFileKdfParamsPar'}}:</label>
+                <input type="text" pattern="\d+" required class="settings__input input-base settings__input-kdf"
+                    data-field="parallelism" id="settings__file-kdf-par" value="{{kdfParameters.parallelism}}" maxlength="2" />
+            </div>
+        </div>
+        </div>
+    {{/if}}
+
+    <h2>{{res 'advanced'}}</h2>
+    <label for="settings__file-key-change-force">{{res 'setFileKeyChangeForce'}}:</label>
+    <input type="text" pattern="\d*" class="settings__input input-base" id="settings__file-key-change-force" value="{{keyChangeForce}}" maxlength="6" />
+</div>

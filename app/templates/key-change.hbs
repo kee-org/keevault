@@ -1,0 +1,23 @@
+<div class="key-change">
+    <i class="key-change__icon fa fa-lock"></i>
+    <div class="key-change__header">{{fileName}}: {{title}}</div>
+    <div class="key-change__body">
+        <div class="key-change__message">{{message}}:</div>
+        <div class="key-change__input">
+            <input class="key-change__file hide-by-pos" type="file"  />
+            <input class="key-change__pass" type="password" autocomplete="new-password" maxlength="1024" autofocus
+                placeholder="{{Res 'password'}}" />
+            <div class="key-change__keyfile">
+                <i class="fa fa-key"></i> {{res 'openKeyFile'}}<span class="key-change__keyfile-name"></span>
+            </div>
+            {{#if repeat}}
+            <input class="key-change__pass-repeat" type="password" autocomplete="new-password" maxlength="1024"
+                placeholder="Repeat password" />
+            {{/if}}
+        </div>
+    </div>
+    <div class="key-change__buttons">
+        <button class="key-change__btn-ok" data-result="ok">{{res 'alertOk'}}</button>
+        <button class="btn-error key-change__btn-cancel" data-result="">{{res 'alertCancel'}}</button>
+    </div>
+</div>

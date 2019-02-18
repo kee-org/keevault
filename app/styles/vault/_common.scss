@@ -1,0 +1,68 @@
+.app__list > .list,
+.app__menu,
+.app__footer,
+.app__list-wrap,
+.app__details {
+  position: relative;
+}
+
+button.vault_action {
+  display: flex;
+  justify-content: center;
+  position: relative;
+
+  .content {
+    cursor: pointer;
+  }
+  .opening-icon {
+    display: none;
+  }
+
+  &.active {
+    .opening-icon {
+      display: block;
+      position: absolute;
+    }
+    .content {
+      display: block;
+      visibility: hidden;
+      float: left;
+    }
+  }
+}
+
+.vault_update_available {
+  @include th { border-bottom: 2px solid th(accent-border-color); }
+  padding: 10px 10px 15px;
+  display: flex;
+  justify-content: center;
+  body.intro_active > & {
+    display: none;
+  }
+}
+
+/* CSSGrid with an fr unit on the main app would be much less hacky in future */
+.vault_update_available + .app {
+  height: calc(100% - 60px);
+}
+
+body.intro_active > .vault_update_available + .app {
+  height: 100%;
+}
+
+/* Avoid need to support different prefixes for standard icons */
+i.fa.fa-expeditedssl,
+i.fa.fa-wikipedia-w,
+i.fa.fa-windows,
+i.fa.fa-linux,
+i.fa.fa-apple {
+  font-family: Font Awesome\ 5 Brands;
+  font-weight: 400;
+}
+
+.logo-container > svg {
+  width: 30vw;
+  max-width: 600px;
+  min-width: 150px;
+  height: auto;
+}
