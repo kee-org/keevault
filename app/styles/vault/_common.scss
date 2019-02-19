@@ -10,6 +10,7 @@ button.vault_action {
   display: flex;
   justify-content: center;
   position: relative;
+  flex-shrink: 0;
 
   .content {
     cursor: pointer;
