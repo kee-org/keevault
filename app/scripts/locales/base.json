@@ -695,7 +695,7 @@
   "getHelpFrom": "Join the Kee Vault {} to seek help and offer help to others.",
   "directContactExplainer": "We can't promise personalised support at this time but will provide regular help in the community forum. If you have an issue specific to your user account or want to responsibly disclose a security problem, check out the options in the {} section. We'll review all messages regularly but will prioritise responses to the public forum in most cases.",
   "privateMessageToLuckyrat": "private message to @luckyrat",
-  "licenseKeewebMIT": "Some parts of the front-end Kee Vault code are forked from the open source Keeweb project. Those parts are subject to their own copyright and are used and sublicensed with thanks and acknowledgement according to the MIT license, detailed below:",
+  "licenseKeewebMIT": "Some parts of the front-end Kee Vault code are forked from the open source KeeWeb project. Those parts are subject to their own copyright and are used and sublicensed with thanks and acknowledgement according to the MIT license, detailed below:",
   "licenseAGPLlinkRequired": "If you do not see a link above to the exact source code for the version you are accessing, the service provider is in breach of their license. If you see a link that is not available on the public internet, please consider sharing the source code from the link with the wider community, especially the Kee Vault team.",
   "accessSourceCode": "Access the source code here",
   "resetHeader": "Vault reset",
