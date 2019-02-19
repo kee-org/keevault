@@ -671,6 +671,7 @@
   "closeOtherTabDemo": "To try out the Kee Vault demo and tutorial, please find and close that tab.",
   "closeOtherTabRegister": "To register for Kee Vault, please find and close that tab.",
   "willCloseDemo": "This will close the demo vault and send you to the registration page.",
+  "importNotSupportedDemo": "When you have signed up to get your own Vault, you can import passwords you already have in other password managers. It's not possible in this Demo.",
   "unexpectedError": "Unexpected error",
   "unexpectedServerResponse": "We got an unexpected response from the server. It's probably a bug so please let us know. Try refreshing the app and sign in again.",
   "fileListError": "Problem loading Vault",

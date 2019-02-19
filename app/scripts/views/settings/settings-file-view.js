@@ -238,6 +238,20 @@ const SettingsFileView = Backbone.View.extend({
     showImport: function () {
         if (!this.model.get('demo')) {
             Backbone.trigger('show-import', { firstRun: false });
+        } else {
+            Alerts.info({
+                header: Locale.registerNow,
+                body: Locale.importNotSupportedDemo,
+                buttons: [
+                    { result: 'cancel', title: Locale.alertCancel, error: true },
+                    { result: 'register', title: Locale.registerNow }
+                ],
+                success: (result) => {
+                    if (result === 'register') {
+                        Backbone.trigger('show-registration');
+                    }
+                }
+            });
         }
     },
 
