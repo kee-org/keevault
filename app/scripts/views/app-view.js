@@ -96,6 +96,7 @@ const AppView = Backbone.View.extend({
         this.listenTo(Backbone, 'leave-full-screen', this.leaveFullScreen);
 
         this.listenTo(Backbone, 'show-account', this.showAccountStart);
+        this.listenTo(Backbone, 'show-account-open', this.showAccountOpenFile);
         this.listenTo(Backbone, 'show-registration', this.showRegistration);
         this.listenTo(Backbone, 'show-import', this.showImport);
         this.listenTo(Backbone, 'show-account-mobile-warning', this.showAccountMobileWarning);

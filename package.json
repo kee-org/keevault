@@ -14,7 +14,7 @@
     "bowser": "^2.1.0",
     "broadcast-channel": "^2.1.6",
     "kdbx-placeholders": "^1.1.7",
-    "kee-frontend": "^1.0.22",
+    "kee-frontend": "^1.0.24",
     "kprpc": "^1.0.14",
     "papaparse": "^4.5.0",
     "secure-remote-password": "^0.3.1",

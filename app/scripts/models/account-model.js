@@ -18,25 +18,19 @@ const AccountModel = Backbone.Model.extend({
 
     async loginStart (email) {
         this.set('user', null);
-        const userOrError = await Account.loginStart(email);
-        if (userOrError.emailHashed) {
-            this.set('email', email);
-            this.set('user', userOrError);
-            Backbone.trigger('open-file');
-        } else {
-            // Everything triggers a fresh login attempt - even invalid email addresses should not
-            // hit this branch but we reset everything to protect against a misconfigured server
-            AppSettingsModel.instance.set('rememberedAccountEmail', '');
-            AppSettingsModel.instance.set('directAccountEmail', '');
-            Backbone.trigger('show-account');
-        }
+        const loginStartResult = await Account.loginStart(email);
+
+        // Ignore all errors (maybe we'll want to record them in future though?)
+        this.set('email', email);
+        this.set('user', loginStartResult.user);
+        Backbone.trigger('show-account-open');
     },
 
     async loginRestart () {
         this.set('user', null);
-        const userOrError = await Account.loginStart(this.get('email'));
-        if (userOrError.emailHashed) {
-            this.set('user', userOrError);
+        const loginStartResult = await Account.loginStart(this.get('email'));
+        if (loginStartResult.kms) {
+            this.set('user', loginStartResult.user);
         } else {
             // Everything triggers a fresh login attempt - even invalid email addresses should not
             // hit this branch but we reset everything to protect against a misconfigured server
@@ -47,8 +41,8 @@ const AccountModel = Backbone.Model.extend({
     },
 
     async loginFinish (hashedMasterKey) {
-        const trueOrError = await Account.loginFinish(this.get('user'), hashedMasterKey);
-        this.set('hashedMasterKey', hashedMasterKey);
+        const user = this.get('user');
+        const trueOrError = await Account.loginFinish(user, hashedMasterKey);
         return trueOrError;
     },
 
@@ -72,7 +66,6 @@ const AccountModel = Backbone.Model.extend({
             user.initialSignin = true;
             this.set('email', email);
             this.set('user', user);
-            this.set('hashedMasterKey', hashedMasterKey);
             this.set('introEmailStatus', introEmailStatus);
             this.set('marketingEmailStatus', marketingEmailStatus);
             return { user, si };

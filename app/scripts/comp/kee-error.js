@@ -12,7 +12,8 @@ const KeeError = {
     AlreadyRegistered: 'alreadyRegistered',
     MissingPrimaryDB: 'missingPrimaryDB',
     ExceededQuota: 'exceededQuota',
-    InvalidRequest: 'invalidRequest'
+    InvalidRequest: 'invalidRequest',
+    MaybeOffline: 'maybeOffline'
 };
 
 module.exports = KeeError;

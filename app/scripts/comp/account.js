@@ -7,11 +7,13 @@ const Account = {
     loginStart: async function (email) {
         const user = await KeeService.User.User.fromEmail(email);
         const loginResult = await user.loginStart();
+        const result = { user };
         if (!loginResult.kms) {
-            return loginResult;
+            result.error = loginResult;
+        } else {
+            result.kms = loginResult.kms;
         }
-        // Could add different kms support here one day
-        return user;
+        return result;
     },
     loginFinish: async function (user, hashedMasterKey) {
         const trueOrError = await user.loginFinish(hashedMasterKey);
