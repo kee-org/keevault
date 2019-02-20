@@ -12,11 +12,11 @@
   "dependencies": {
     "backgrid": "^0.3.8",
     "bowser": "^2.1.0",
-    "broadcast-channel": "^2.1.6",
-    "kdbx-placeholders": "^1.1.7",
-    "kee-frontend": "^1.0.24",
+    "broadcast-channel": "^2.1.9",
+    "kdbx-placeholders": "^1.1.8",
+    "kee-frontend": "^1.0.25",
     "kprpc": "^1.0.14",
-    "papaparse": "^4.5.0",
+    "papaparse": "4.6.2",
     "secure-remote-password": "^0.3.1",
     "superagent": "^3.8.3",
     "zxcvbn": "^4.4.2"
