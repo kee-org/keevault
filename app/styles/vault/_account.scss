@@ -179,7 +179,7 @@
   margin-right: auto;
   width: 90vw;
   min-width: 300px;
-  overflow: scroll;
+  overflow-y: scroll;
 
   & input[type="password"].open__pass-input,
   & input[type="text"]#accountEmail,
