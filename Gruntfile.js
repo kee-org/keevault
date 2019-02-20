@@ -194,14 +194,14 @@ module.exports = function(grunt) {
             },
             icons: {
                 cwd: 'app/icons/',
-                src: ['*.png', '*.svg', '*.webmanifest', '*.xml'],
+                src: ['*.png', '*.svg', '*.webmanifest', '*.xml', '*.ico'],
                 dest: 'tmp/icons/',
                 expand: true,
                 nonull: true
             },
             'dist-icons': {
                 cwd: 'app/icons/',
-                src: ['*.png', '*.svg', '*.webmanifest', '*.xml'],
+                src: ['*.png', '*.svg', '*.webmanifest', '*.xml', '*.ico'],
                 dest: 'dist/icons/',
                 expand: true,
                 nonull: true
