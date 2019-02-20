@@ -68,7 +68,7 @@ const StorageVault = StorageBase.extend({
                     if (opts.newName) {
                         this.logger.info('File name changed locally. Will sync to server now.');
                         try {
-                            await KeeService.Storage.StorageManager.update(user, { id: path, emailHashed: user.id, name: opts.newName });
+                            await KeeService.Storage.StorageManager.update(user, { id: path, name: opts.newName });
                         } catch (e) {
                             this.logger.error('Failed to update database name', e);
                         }

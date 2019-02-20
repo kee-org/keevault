@@ -822,6 +822,7 @@ const AppModel = Backbone.Model.extend({
                             path = stat.path;
                         }
                         file.set('syncDate', new Date());
+                        file.set('nameChanged', false);
                         logger.info('Save to storage complete, update sync date');
                         this.scheduleBackupFile(file, data);
                         complete();
