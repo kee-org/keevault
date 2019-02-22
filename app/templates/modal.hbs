@@ -10,7 +10,7 @@
         </div>
         <div class="modal__buttons">
             {{#each buttons as |btn|}}
-                <button class="vault_action {{#unless btn.result}}btn-error{{/unless}} {{#if btn.error}}btn-error{{/if}} {{#if btn.silent}}btn-silent{{/if}}"
+                <button class="vault_action {{#unless btn.result}}{{#unless btn.asyncresult}}btn-error{{/unless}}{{/unless}} {{#if btn.error}}btn-error{{/if}} {{#if btn.silent}}btn-silent{{/if}}"
                         data-result="{{btn.result}}" data-asyncresult="{{btn.asyncresult}}">
                     <div class="content">{{btn.title}}</div>
                     <div class="opening-icon"><i class="fa fa-spinner fa-spin"></i></div>
