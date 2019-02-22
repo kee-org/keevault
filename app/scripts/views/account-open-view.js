@@ -435,7 +435,13 @@ const OpenView = Backbone.View.extend({
                 body: Locale.connectionRequiredLine1 + '<br/><br/>' +
                     Locale.connectionRequiredLine2 + '<br/><br/>' +
                     Locale.connectionRequiredLine3,
-                esc: false, enter: false, click: false
+                esc: false, enter: false, click: false,
+                success: () => {
+                    this.model.settings.set('rememberedAccountEmail', null);
+                    this.model.prefillEmail = this.model.account.get('email');
+                    Backbone.trigger('show-account');
+                    this.model.prefillEmail = null;
+                }
             });
         } else {
             if (latestClientToken.features.indexOf('storage-kee') < 0 ||
