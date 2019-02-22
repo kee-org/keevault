@@ -71,18 +71,28 @@ const ModalView = Backbone.View.extend({
 
     bodyClick: function() {
         if (typeof this.model.click === 'string') {
-            this.closeWithResult(this.model.click);
+            this.closeWithNonButtonResult(this.model.click);
         }
     },
 
     escPressed: function() {
-        this.closeWithResult(this.model.esc);
+        this.closeWithNonButtonResult(this.model.esc);
     },
 
     enterPressed: function(e) {
         e.stopImmediatePropagation();
         e.preventDefault();
-        this.closeWithResult(this.model.enter);
+        this.closeWithNonButtonResult(this.model.enter);
+    },
+
+    closeWithNonButtonResult: function(result) {
+        if (!result) this.closeWithResult(result);
+        const asyncButton = this.$el.find(`.vault_action[data-asyncresult="${result}"]`);
+        if (asyncButton && asyncButton.length > 0 && asyncButton[0]) {
+            this.closeWithAsyncResult(result, asyncButton[0]);
+        } else {
+            this.closeWithResult(result);
+        }
     },
 
     closeWithAsyncResult: function(result, button) {
