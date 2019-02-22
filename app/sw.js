@@ -10,8 +10,15 @@ const cacheFiles = [
     '/icons/mstile-150x150.png',
     '/icons/mstile-310x150.png',
     '/icons/mstile-310x310.png',
-    '/icons/safari-pinned-tab.svg'
+    '/icons/safari-pinned-tab.svg',
+    '/icons/favicon.ico'
 ];
+
+function stripFragment(urlString) {
+    const url = new URL(urlString);
+    url.hash = '';
+    return url.toString();
+}
 
 self.addEventListener('install', (event) => {
     event.waitUntil(
@@ -41,7 +48,7 @@ self.addEventListener('activate', (event) => {
 // from the server.
 self.addEventListener('fetch', (evt) => {
     // Only handle our static files
-    if (!cacheFiles.some(file => location.origin + file === evt.request.url)) {
+    if (!cacheFiles.some(file => location.origin + file === stripFragment(evt.request.url))) {
         return evt.request;
     }
 
@@ -70,7 +77,7 @@ self.addEventListener('fetch', (evt) => {
 function fromCache(request) {
     return caches.open(cacheName).then(async (cache) => {
         const response = await cache.match(request);
-        if (request.url === location.origin + '/') {
+        if (stripFragment(request.url) === location.origin + '/') {
             latestMainPageEtag = response.headers.get('Etag');
             try {
                 latestMainPageModifiedDate = new Date(response.headers.get('last-modified'));
@@ -93,7 +100,7 @@ function update(request) {
 
     return fetch(request).then((response) => {
         try {
-            if (request.url === location.origin + '/' &&
+            if (stripFragment(request.url) === location.origin + '/' &&
             ((response.headers.has('Etag') &&
             response.headers.get('Etag') !== latestMainPageEtag) ||
             (response.headers.has('last-modified') &&
