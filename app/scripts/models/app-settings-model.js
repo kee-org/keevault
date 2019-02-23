@@ -54,7 +54,8 @@ const AppSettingsModel = Backbone.Model.extend({
 
         rememberedAccountEmail: null,
         vaultIntroCompleted: false,
-        saveAdviceAlertDismissed: false
+        saveAdviceAlertDismissed: false,
+        recentClientTokens: {}
     },
 
     initialize: function() {

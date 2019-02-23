@@ -407,7 +407,8 @@ const OpenView = Backbone.View.extend({
         // token is from a previous session
         let latestClientToken;
         let localCacheFileInfo = false;
-        const jwt = AppSettingsModel.instance.get('latestClientToken');
+        const jwts = AppSettingsModel.instance.get('recentClientTokens');
+        const jwt = jwts[this.model.account.get('email')];
         if (jwt) {
             const {audience, claim} = await KeeFrontend.User.UserManager.verifyJWT(jwt);
             if (audience === 'client' && claim !== undefined) {
@@ -571,9 +572,14 @@ const OpenView = Backbone.View.extend({
             return false;
         }
 
-        // Record the latest client token to help us decide on the best action to
-        // take if the next time the user loads the app it is in offline mode
-        AppSettingsModel.instance.set('latestClientToken', this.model.account.get('user').tokens.client);
+        // Record the client tokens to help us decide on the best action to
+        // take if the next time the user loads the app it is in offline
+        // mode or they're not logged in yet
+        const clientToken = this.model.account.get('user').tokens.client;
+        AppSettingsModel.instance.set('latestClientToken', clientToken);
+        const jwts = AppSettingsModel.instance.get('recentClientTokens') || {};
+        jwts[this.model.account.get('email')] = clientToken;
+        AppSettingsModel.instance.set('recentClientTokens', jwts);
 
         // Notify any connected browser-addon that we have new account credentials
         KPRPCHandler.sendServiceAccessTokens(this.model.account.latestTokens());
