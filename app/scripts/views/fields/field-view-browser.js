@@ -116,8 +116,8 @@ const FieldViewBrowser = FieldViewText.extend({
         }).render();
 
         this.$el.find('.details__field-value')
-        .append($('<div class="details__field-value-autocomplete-space"></div>'))
-        .append(this.browserFieldView.el);
+            .append($('<div class="details__field-value-autocomplete-space"></div>'))
+            .append(this.browserFieldView.el);
 
         this.browserFieldView.once('remove', this.browserFieldViewClosed.bind(this));
         this.listenTo(this.browserFieldView, 'changeToCheckbox', this.onBrowserFieldTypeChangedToCheckbox);

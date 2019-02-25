@@ -1,6 +1,7 @@
 /* eslint-env node */
 
 const fs = require('fs');
+const path = require('path');
 
 const sass = require('node-sass');
 
@@ -12,7 +13,6 @@ module.exports = function(grunt) {
     require('time-grunt')(grunt);
     require('load-grunt-tasks')(grunt);
 
-    grunt.loadTasks('build/tasks');
     grunt.loadNpmTasks('grunt-string-replace');
 
     require('./grunt.tasks')(grunt);
@@ -20,13 +20,6 @@ module.exports = function(grunt) {
 
     const date = new Date();
     grunt.config.set('date', date);
-
-    const dt = date.toISOString().replace(/T.*/, '');
-    const year = date.getFullYear();
-    const minElectronVersionForUpdate = '1.7.0';
-    const zipCommentPlaceholderPart = 'zip_comment_placeholder_that_will_be_replaced_with_hash';
-    const zipCommentPlaceholder = zipCommentPlaceholderPart + '.'.repeat(512 - zipCommentPlaceholderPart.length);
-    const electronVersion = pkg.dependencies.electron.replace(/^\D/, '');
 
     grunt.initConfig({
         gitinfo: {
@@ -170,7 +163,8 @@ module.exports = function(grunt) {
                     }
                     : true,
                 public: 'app-dev.kee.pm',
-                host: '0.0.0.0'
+                host: '0.0.0.0',
+                disableHostCheck: true
             },
             js: {
                 keepalive: true,
@@ -204,14 +198,6 @@ module.exports = function(grunt) {
             indexhtml: {
                 files: 'app/index.html',
                 tasks: ['copy:html']
-            }
-        },
-        'sign-html': {
-            'app': {
-                options: {
-                    file: 'dist/index.html',
-                    skip: grunt.option('skip-sign')
-                }
             }
         },
         'concurrent': {

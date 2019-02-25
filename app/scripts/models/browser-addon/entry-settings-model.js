@@ -50,8 +50,8 @@ const EntrySettingsModel = Backbone.Model.extend({
         obj.formFieldList = new FormFieldCollection(
             obj.formFieldList &&
             obj.formFieldList.length > 0
-            ? obj.formFieldList.map(ff => { ff.fieldId = ff.id; delete ff.id; return ff; })
-            : null);
+                ? obj.formFieldList.map(ff => { ff.fieldId = ff.id; delete ff.id; return ff; })
+                : null);
 
         obj.mam = this.getMAM(obj);
         obj.behaviour = this.getBehaviour(obj);

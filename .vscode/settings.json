@@ -7,5 +7,6 @@
         "transitionend",
         "zxcvbn"
     ],
-    "javascript.suggestionActions.enabled": false
+    "javascript.suggestionActions.enabled": false,
+    "eslint.enable": true
 }

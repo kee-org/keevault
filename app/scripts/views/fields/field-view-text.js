@@ -97,7 +97,7 @@ const FieldViewText = FieldView.extend({
             const gen = this.gen;
             delete this.gen;
             gen.remove();
-          //  this.input.focus();
+            //  this.input.focus();
         }
     },
 

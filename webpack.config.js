@@ -3,7 +3,7 @@ const path = require('path');
 const webpack = require('webpack');
 
 const StringReplacePlugin = require('string-replace-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const pkg = require('./package.json');
@@ -23,7 +23,7 @@ function config(grunt) {
             path: path.resolve('.', 'tmp/js'),
             filename: '[name].js'
         },
-        target: 'web',
+        // target: 'web',
         performance: {
             hints: false
         },
@@ -72,8 +72,23 @@ function config(grunt) {
                 {test: /pikaday\.js$/, loader: 'uglify-loader'},
                 {test: /handlebars/, loader: 'strip-sourcemap-loader'},
                 {
+                    test: /(kee-frontend|kprpc|kdbx-placeholders)\/dist\/.+\.js$/,
+                    use: ['source-map-loader'],
+                    enforce: 'pre'
+                },
+                {
                     test: /\.js$/, exclude: /(node_modules)/, loader: 'babel-loader',
-                    query: {presets: ['@babel/preset-env'], cacheDirectory: true}
+                    query: {presets: [['@babel/preset-env', {
+                        // 'targets': {
+                        //     'browsers': [
+                        //         'chrome >= 60'
+                        //     ]
+                        // },
+                        'useBuiltIns': false,
+                        'modules': 'cjs' // the default value is auto
+                    }]],
+                    plugins: ['@babel/plugin-transform-runtime'], cacheDirectory: true}
+                    // test: /\.js$/, exclude: /(node_modules|kee-frontend|kprpc|kdbx-placeholders)/, loader: 'babel-loader',
                 },
                 {test: /argon2\.wasm/, type: 'javascript/auto', loader: 'base64-loader'},
                 {test: /argon2(\.min)?\.js/, loader: 'raw-loader'},
@@ -92,10 +107,10 @@ function config(grunt) {
                 }
             },
             minimizer: [
-                new UglifyJsPlugin({
-                    cache: true,
-                    parallel: true
-                }),
+                // new UglifyJsPlugin({
+                //     cache: true,
+                //     parallel: true
+                // }),
                 new BundleAnalyzerPlugin({
                     openAnalyzer: false,
                     analyzerMode: 'static',
@@ -106,8 +121,8 @@ function config(grunt) {
             ]
         },
         plugins: [
-            new webpack.BannerPlugin('keeweb v' + pkg.version + ', (c) ' + year + ' ' + pkg.author.name +
-                ', opensource.org/licenses/' + pkg.license),
+            new webpack.BannerPlugin('kee vault v' + pkg.version + ', (c) ' + year + ' ' + pkg.author.name +
+                ', AGPLv3 with supplemental terms'),
             new webpack.ProvidePlugin({_: 'underscore', $: 'jquery'}),
             new webpack.IgnorePlugin(/^(moment)$/),
             new StringReplacePlugin()
@@ -144,8 +159,7 @@ function devServerConfig(grunt) {
         _: 'underscore/underscore.js',
         jquery: 'jquery/dist/jquery.js',
         baron: 'baron/baron.js',
-        qrcode: 'jsqrcode/dist/qrcode.js',
-        argon2: 'argon2-browser/dist/argon2.js'
+        qrcode: 'jsqrcode/dist/qrcode.js'
     });
     return devServerConfig;
 }

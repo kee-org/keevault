@@ -12,10 +12,9 @@ module.exports = function(grunt) {
         'sass',
         'postcss',
         'inline',
-        'htmlmin',
+        // 'htmlmin',
         'copy:dist-icons',
         'copy:dist-sw',
-        'string-replace',
-        'sign-html'
+        'string-replace'
     ]);
 };
