@@ -3,7 +3,7 @@ const path = require('path');
 const webpack = require('webpack');
 
 const StringReplacePlugin = require('string-replace-webpack-plugin');
-// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const pkg = require('./package.json');
@@ -23,7 +23,6 @@ function config(grunt) {
             path: path.resolve('.', 'tmp/js'),
             filename: '[name].js'
         },
-        // target: 'web',
         performance: {
             hints: false
         },
@@ -107,10 +106,15 @@ function config(grunt) {
                 }
             },
             minimizer: [
-                // new UglifyJsPlugin({
-                //     cache: true,
-                //     parallel: true
-                // }),
+                new TerserPlugin({
+                    cache: true,
+                    parallel: true,
+                    terserOptions: {
+                        compress: {
+                            comparisons: false
+                        }
+                    }
+                }),
                 new BundleAnalyzerPlugin({
                     openAnalyzer: false,
                     analyzerMode: 'static',

@@ -8,11 +8,10 @@ module.exports = function(grunt) {
         'copy:sw',
         'copy:fonts',
         'webpack',
-        // 'uglify',
         'sass',
         'postcss',
         'inline',
-        // 'htmlmin',
+        'htmlmin',
         'copy:dist-icons',
         'copy:dist-sw',
         'string-replace'

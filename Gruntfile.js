@@ -103,7 +103,6 @@ module.exports = function(grunt) {
         },
         eslint: {
             app: ['app/scripts/**/*.js'],
-            desktop: ['desktop/**/*.js', '!desktop/node_modules/**'],
             grunt: ['Gruntfile.js', 'grunt/**/*.js']
         },
         sass: {
@@ -171,21 +170,21 @@ module.exports = function(grunt) {
                 port: 8087
             }
         },
-        uglify: {
-            options: {
-                preserveComments: false
-            },
-            app: {
-                files: { 'tmp/js/app.js': ['tmp/js/app.js'] }
-            },
-            vendor: {
-                options: {
-                    mangle: false,
-                    compress: false
-                },
-                files: { 'tmp/js/vendor.js': ['tmp/js/vendor.js'] }
-            }
-        },
+        // uglify: {
+        //     options: {
+        //         preserveComments: false
+        //     },
+        //     app: {
+        //         files: { 'tmp/js/app.js': ['tmp/js/app.js'] }
+        //     },
+        //     vendor: {
+        //         options: {
+        //             mangle: false,
+        //             compress: false
+        //         },
+        //         files: { 'tmp/js/vendor.js': ['tmp/js/vendor.js'] }
+        //     }
+        // },
         watch: {
             options: {
                 interrupt: true,

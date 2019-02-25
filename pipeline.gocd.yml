@@ -29,9 +29,10 @@ pipelines:
             defaultJob:
               tasks:
                 - exec:
-                    command: grunt
+                    command: npm
                     arguments:
-                      - "--skip-sign"
+                      - "run"
+                      - "prod"
       - publish:
           jobs:
             defaultJob:
@@ -74,9 +75,10 @@ pipelines:
             defaultJob:
               tasks:
                 - exec:
-                    command: grunt
+                    command: npm
                     arguments:
-                      - "--skip-sign"
+                      - "run"
+                      - "prod"
       - publish:
           approval: manual
           jobs:
