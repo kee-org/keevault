@@ -54,7 +54,7 @@ const ImportKeePassView = Backbone.View.extend({
             }
             passwordEl.selectionStart = 0;
             passwordEl.selectionEnd = passwordEl.val().length;
-            InputFx.shake(this.passwordEl);
+            InputFx.shake(passwordEl);
         } else {
             Backbone.trigger('show-entries');
         }
