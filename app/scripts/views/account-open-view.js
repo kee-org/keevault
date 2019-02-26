@@ -607,7 +607,7 @@ const OpenView = Backbone.View.extend({
 
         const user = this.model.account.get('user');
         const tokens = user.tokens;
-        if (!tokens || !tokens.identity) {
+        if (!tokens || !tokens.identity || !tokens.sso) {
             Alerts.error({
                 header: Locale.unexpectedError,
                 body: Locale.unexpectedServerResponse
@@ -617,11 +617,11 @@ const OpenView = Backbone.View.extend({
 
         if (this.model.destinationFeature === 'manageAccount') {
             Backbone.trigger('progress-open-end');
-            window.location = 'https://account.kee.pm/#stage=' + RuntimeInfo.stage + ',dest=manageAccount,id=' + tokens.identity;
+            window.location = 'https://account.kee.pm/#stage=' + RuntimeInfo.stage + ',dest=manageAccount,id=' + tokens.sso;
             return;
         } else if (this.model.destinationFeature === 'managePayment') {
             Backbone.trigger('progress-open-end');
-            window.location = 'https://account.kee.pm/#stage=' + RuntimeInfo.stage + ',dest=managePayment,id=' + tokens.identity;
+            window.location = 'https://account.kee.pm/#stage=' + RuntimeInfo.stage + ',dest=managePayment,id=' + tokens.sso;
             return;
         }
         this.model.destinationFeature = null;
@@ -640,7 +640,7 @@ const OpenView = Backbone.View.extend({
                     if (result === 'manage') {
                         const otherWindow = window.open();
                         otherWindow.opener = null;
-                        otherWindow.location = 'https://account.kee.pm/#stage=' + RuntimeInfo.stage + ',dest=manageAccount,id=' + tokens.identity;
+                        otherWindow.location = 'https://account.kee.pm/#stage=' + RuntimeInfo.stage + ',dest=manageAccount,id=' + tokens.sso;
                         Alerts.info({
                             header: Locale.keeAccount,
                             icon: 'redo',

@@ -59,7 +59,7 @@ const Account = {
 
     getNewAuthToken: async function (user) {
         const tokensOrError = await user.refresh();
-        return tokensOrError.identity;
+        return tokensOrError.sso;
     }
 };
 
