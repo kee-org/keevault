@@ -832,6 +832,7 @@ const DetailsView = Backbone.View.extend({
     showHistory: function() {
         this.removeSubView();
         const subView = new DetailsHistoryView({ el: this.scroller, model: this.model });
+        subView.appModel = this.appModel;
         this.listenTo(subView, 'close', this.historyClosed.bind(this));
         subView.render();
         this.pageResized();
