@@ -1,14 +1,14 @@
 const FieldViewText = require('./field-view-text');
 
 const FieldViewUrl = FieldViewText.extend({
-    displayUrlRegex: /^http:\/\//i,
+    displayUrlRegex: /^https?:\/\//i,
 
     renderValue: function(value) {
         return value ? '<a href="' + _.escape(this.fixUrl(value)) + '" rel="noreferrer noopener" target="_blank">' + _.escape(this.displayUrl(value)) + '</a>' : '';
     },
 
     fixUrl: function(url) {
-        return url.indexOf(':') < 0 ? 'http://' + url : url;
+        return this.displayUrlRegex.test(url) ? url : 'http://' + url;
     },
 
     displayUrl: function(url) {
