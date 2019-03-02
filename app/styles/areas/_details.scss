@@ -273,6 +273,9 @@
         overflow: hidden;
         text-overflow: ellipsis;
         display: inline-block;
+        &.insecureLink {
+          @include th { border-bottom-color: th(error-color); }
+        }
       }
       .details__body-aside & {
         @include th { color: th(muted-color); }
