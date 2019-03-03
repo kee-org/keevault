@@ -4,7 +4,7 @@ pipelines:
     environment_variables:
       AWS_PROFILE: "keeBeta"
       AWS_REGION: "eu-west-2"
-    group: defaultGroup
+    group: frontend
     materials:
       mygit:
         type: configrepo
@@ -53,7 +53,7 @@ pipelines:
       AWS_REGION: "eu-west-2"
     # secure_variables:
     #  AZURE_SAS: "AES:QoEhOHrSCRzO6i57EcQAsQ==:UDASdNfjlpqQPIP1puOgPUB9iNmeLZiey6OZ3YgJ8q2+Op1PhWUsgDHnJPIgf0UzUGTNWGtPWXrIDr/WenS/sJpd84grgH59XGLgcbEZhPxlbiPpUWZbnGqmIwwsE+fVAmQWfKmMYj8Z16UrIg3q0ywRrpUmWOKpPtsSETHcVwVrCMIJAU1csCxhXaFnu2ODE8yog0KYQe9ot2iM6L1e+gCPgsb8IOWqybJrtZgOPtI="
-    group: defaultGroup
+    group: frontend
     materials:
       mygit:
         type: configrepo
