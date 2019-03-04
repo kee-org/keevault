@@ -334,16 +334,22 @@ const AppModel = Backbone.Model.extend({
         return Math.round(count / 5000) * 5000;
     },
 
+    detectTheme: function() {
+        let theme = 'ot';
+        if (document.body.classList.contains('th-lt')) theme = 'lt';
+        if (document.body.classList.contains('th-dk')) theme = 'dk';
+        return theme;
+    },
+
     trackOpenAction: function(file) {
         if (!file) return;
         const time = file.loadStartTime ? Date.now() - file.loadStartTime : 0;
         setImmediate(() => {
             const count = this.reduceNumberAccuracy(file.entryCountAtLoadTime);
             const configLength = this.reduceNumberAccuracy(file.getConfigLength());
-            const theme = 'unknown';
             window.trackMatomoAction(['setCustomVariable', 1, 'entryCount', count, 'page']);
             window.trackMatomoAction(['setCustomVariable', 2, 'configLength', configLength, 'page']);
-            window.trackMatomoAction(['setCustomVariable', 2, 'vaultTheme', theme, 'visit']);
+            window.trackMatomoAction(['setCustomVariable', 2, 'vaultTheme', this.detectTheme(), 'visit']);
             window.trackMatomoAction(['trackEvent', 'Vault', 'Open', 'primary', time]);
         });
     },
