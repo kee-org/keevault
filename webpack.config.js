@@ -112,6 +112,9 @@ function config(grunt) {
                     terserOptions: {
                         compress: {
                             comparisons: false
+                        },
+                        output: {
+                            comments: false
                         }
                     }
                 }),
