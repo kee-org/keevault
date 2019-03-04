@@ -181,6 +181,16 @@
         }
     </script>
     <script>
+        function isPWAStandalone() {
+            if (matchMedia('(display-mode: standalone)').matches) {
+                // Android and iOS 11.3+
+                return true;
+            } else if ('standalone' in navigator) {
+                // useful for iOS < 11.3
+                return !!navigator.standalone;
+            }
+            return false;
+        }
         var _matomoLocalQueue = [];
         var matomoInitialPageViewTracked = false;
         var onRandomIdRetrievedFromStorage = function(val) {
@@ -197,6 +207,7 @@
             if (matomoInitialPageViewTracked) {
                 _paq.push(['trackEvent', 'Account', 'SignIn', 'ExistingSession']);
             } else {
+                _paq.push(['setCustomVariable', 3, 'standalone', isPWAStandalone(), 'visit']);
                 _paq.push(['trackPageView']);
                 _paq.push(['enableLinkTracking']);
                 _paq.push(['enableHeartBeatTimer']);
@@ -399,6 +410,20 @@
             var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
             g.type='text/javascript'; g.async=true; g.defer=true; g.src=u; s.parentNode.insertBefore(g,s);
         })();
+
+        window.addEventListener('appinstalled', function(event) {
+            window.trackMatomoAction(['trackEvent', 'PWA', 'Installed']);
+        });
+        window.addEventListener('beforeinstallprompt', function(event) {
+            window.trackMatomoAction(['trackEvent', 'PWA', 'Prompted']);
+            event.userChoice.then(function(result) {
+                if (result.outcome === 'accepted') {
+                    window.trackMatomoAction(['trackEvent', 'PWA', 'Accepted']);
+                } else {
+                    window.trackMatomoAction(['trackEvent', 'PWA', 'Denied']);
+                }
+            });
+        });
     </script>
     <noscript>
         <h1>Kee Vault</h1>
