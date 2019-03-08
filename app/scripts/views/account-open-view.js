@@ -19,8 +19,6 @@ const FileInfoCollection = require('../collections/file-info-collection');
 const AppSettingsModel = require('../models/app-settings-model');
 const KeeFrontend = require('kee-frontend');
 const RuntimeInfo = require('../comp/runtime-info');
-const FileModel = require('../models/file-model');
-const IdGenerator = require('../util/id-generator');
 
 const logger = new Logger('account-open-view');
 
@@ -713,15 +711,7 @@ const OpenView = Backbone.View.extend({
                 } else if (err === 'storage item not found') {
                     logger.error('No files were found. Probably something went wrong with the initial signup');
                     try {
-                        const chosenPassword = this.params.password;
-                        const primaryFile = new FileModel({ id: IdGenerator.uuid() });
-                        primaryFile.create('My Kee Vault', 'vault');
-                        primaryFile.db.upgrade();
-                        primaryFile.db.header.keyEncryptionRounds = undefined; // This should be part of kdbx upgrade really?
-                        primaryFile.configureArgon2ParamsAuto(chosenPassword);
-                        const emptyVault = primaryFile.db;
-                        await primaryFile.setPassword(chosenPassword);
-                        const siOrError = await this.model.account.createInitialVault(user, emptyVault);
+                        const siOrError = await this.model.account.uploadInitialVault(user, this.params.password);
                         if (!siOrError.emailHashed) {
                             return siOrError;
                         }

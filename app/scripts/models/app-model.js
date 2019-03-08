@@ -15,6 +15,7 @@ const Logger = require('../util/logger');
 const AccountModel = require('./account-model');
 const Format = require('../util/format');
 const UrlUtil = require('../util/url-util');
+const EmailUtil = require('../util/email');
 const RuntimeInfo = require('../comp/runtime-info');
 
 require('../mixins/protected-value-ex');
@@ -49,10 +50,12 @@ const AppModel = Backbone.Model.extend({
     handleHashItem: function(key, val) {
         switch (key) {
             case 'dest': this.destinationFeature = val; break;
-            case 'pfEmail': if (/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(val)) {
+            case 'pfEmail': if (EmailUtil.validate(val)) {
                 this.prefillEmail = val;
             } break;
             case 'pfRegCode': if (/^[a-zA-Z0-9]{3,30}$/.test(val)) { this.prefillCode = val; } break;
+            case 'resetEmail': if (EmailUtil.validate(val)) { this.resetEmail = val; } break;
+            case 'resetAuthToken': this.resetAuthToken = val; break;
         }
     },
 

@@ -1,0 +1,28 @@
+<div class="open register" id="accountStartContainer">
+    <div class="logo-container">{{{svg 'logo'}}}</div>
+
+    <div class="hide">
+        {{!-- we need these inputs to screw browsers passwords autocompletion --}}
+        <input type="text" style="display:none" name="username">
+        <input type="password" style="display:none" name="password">
+    </div>
+    <h2><i class="fas fa-exclamation-triangle"></i> {{res 'accResetVaultReset'}}</h2>
+    <div class="fieldExplainer">{{#res 'accResetTimeLimit'}}{{minutesRemaining}}{{/res}}</div>
+    <div class="fieldExplainer">{{res 'accResetChooseNewPassword'}}</div>
+    <input class="open__pass-input" id="newPassword1" type="password" autocomplete="new-password" maxlength="1024"
+        placeholder="{{res 'newPassword'}}" tabindex="12" />
+    <input class="open__pass-input" id="newPassword2" type="password" autocomplete="new-password" maxlength="1024"
+        placeholder="{{res 'newPasswordRepeat'}}" tabindex="13" />
+    <div class="registration-password-extra-wrap fieldExplainer">
+        <div id="settings__account-master-pass-strength" class="passwordStrengthRating"></div>
+        <div class="open__pass-warning muted-color invisible"><i class="fa fa-exclamation-triangle"></i> {{res 'openCaps'}}</div>
+    </div>
+    <div class="fieldExplainer">
+        <input type="checkbox" class="input-base" id="resetAgree" />
+        <label for="resetAgree" tabindex="16">{{res 'accResetIKnow'}}</label>
+    </div>
+    <button tabindex="17" class="emailSubmit vault_action" id="resetButton">
+        <div class="content">{{res 'accResetResetMyVault'}}</div>
+        <div class="opening-icon"><i class="fa fa-spinner fa-spin"></i></div>
+    </button>
+</div>

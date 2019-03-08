@@ -1,6 +1,7 @@
 const Backbone = require('backbone');
 const VaultIntro = require('../comp/vault-intro');
 const FeatureDetector = require('../util/feature-detector');
+const EmailUtils = require('../util/email');
 
 const VaultOverlayView = Backbone.View.extend({
     template: require('templates/vault-overlay.hbs'),
@@ -35,7 +36,7 @@ const VaultOverlayView = Backbone.View.extend({
     },
 
     login: function() {
-        const loginEmail = this.canonicaliseEmail($('#loginEmail').val());
+        const loginEmail = EmailUtils.canonicalise($('#loginEmail').val());
         if (loginEmail) {
             this.model.settings.set('directAccountEmail', loginEmail);
         }
@@ -62,10 +63,6 @@ const VaultOverlayView = Backbone.View.extend({
         const contentToRemove = this.$el[0].querySelectorAll('.keeAddonMissing');
         $(contentToRemove).remove();
         VaultIntro.onKeeAddonActivated();
-    },
-
-    canonicaliseEmail: function(email) {
-        return email.toLowerCase();
     },
 
     smoothScroll: function (startX, startY, endX, endY) {

@@ -13,6 +13,8 @@ const KeyChangeView = require('../views/key-change-view');
 const AccountView = require('../views/account-view');
 const AccountOpenView = require('../views/account-open-view');
 const AccountMobileWarningView = require('../views/account-mobile-view');
+const AccountResetView = require('../views/account-reset-view');
+const AccountResetConfirmView = require('../views/account-reset-confirm-view');
 const VaultOverlayView = require('../views/vault-overlay');
 const ImportView = require('../views/import/import-view');
 const DropdownView = require('../views/dropdown-view');
@@ -171,6 +173,10 @@ const AppView = Backbone.View.extend({
             $('#app__body_main')[0].classList.remove('hide');
             if (this.model.destinationFeature === 'registerWithoutWalkthrough') {
                 this.showRegistration();
+            } else if (this.model.destinationFeature === 'resetPassword') {
+                this.showResetPassword();
+            } else if (this.model.destinationFeature === 'resetPasswordConfirm') {
+                this.showResetPasswordConfirm();
             } else {
                 this.showAccountStart();
             }
@@ -263,6 +269,20 @@ const AppView = Backbone.View.extend({
     showAccountMobileWarning: function() {
         this.prepareForNewView(true);
         this.views.account = new AccountMobileWarningView();
+        this.views.account.setElement(this.$el.find('#app__body_main')).render();
+        this.views.account.on('close', this.showEntries, this);
+    },
+
+    showResetPassword: function() {
+        this.prepareForNewView(true);
+        this.views.account = new AccountResetView();
+        this.views.account.setElement(this.$el.find('#app__body_main')).render();
+        this.views.account.on('close', this.showEntries, this);
+    },
+
+    showResetPasswordConfirm: function() {
+        this.prepareForNewView(true);
+        this.views.account = new AccountResetConfirmView({ model: this.model });
         this.views.account.setElement(this.$el.find('#app__body_main')).render();
         this.views.account.on('close', this.showEntries, this);
     },

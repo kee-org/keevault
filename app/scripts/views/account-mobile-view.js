@@ -23,10 +23,6 @@ const AccountMobileView = Backbone.View.extend({
     register: function() {
         $('body')[0].classList.remove('enable_native_scroll');
         Backbone.trigger('show-registration');
-    },
-
-    canonicaliseEmail: function(email) {
-        return email.toLowerCase();
     }
 });
 

@@ -2,6 +2,8 @@ const Backbone = require('backbone');
 const KeeService = require('kee-frontend');
 const KeeError = require('./kee-error');
 const kdbxweb = require('kdbxweb');
+const FileModel = require('../models/file-model');
+const IdGenerator = require('../util/id-generator');
 
 const Account = {
     loginStart: async function (email) {
@@ -33,7 +35,7 @@ const Account = {
             return trueOrError;
         }
 
-        const siOrError = await this.createInitialVault(user, emptyVault);
+        const siOrError = await this.uploadInitialVault(user, emptyVault);
         if (!siOrError.emailHashed) {
             return siOrError;
         }
@@ -41,7 +43,22 @@ const Account = {
         return { user, siOrError };
     },
 
-    createInitialVault: async function (user, emptyVault) {
+    allegedRemainingMinutes: function (resetAuthToken) {
+        return KeeService.Reset.ResetManager.allegedRemainingMinutes(resetAuthToken);
+    },
+
+    createFileWithEmptyVault: async function (password) {
+        const chosenPassword = password;
+        const primaryFile = new FileModel({ id: IdGenerator.uuid() });
+        primaryFile.create('My Kee Vault', 'vault');
+        primaryFile.db.upgrade();
+        primaryFile.db.header.keyEncryptionRounds = undefined; // This should be part of kdbx upgrade really?
+        primaryFile.configureArgon2ParamsAuto(chosenPassword);
+        await primaryFile.setPassword(chosenPassword);
+        return primaryFile;
+    },
+
+    uploadInitialVault: async function (user, emptyVault) {
         const emptyVaultArray = await emptyVault.save();
         const emptyVaultB64 = kdbxweb.ByteUtils.bytesToBase64(emptyVaultArray);
         const siOrError = await KeeService.Storage.StorageManager.create(user, 'My Kee Vault', emptyVaultB64);
@@ -60,6 +77,26 @@ const Account = {
     getNewAuthToken: async function (user) {
         const tokensOrError = await user.refresh();
         return tokensOrError.sso;
+    },
+
+    resetStart: async function (email) {
+        const user = await KeeService.User.User.fromEmail(email);
+        return user.resetStart();
+    },
+
+    resetFinish: async function (email, jwt, password, emptyVault) { // TODO: what type is password? should be ProtectedValue I think
+        const userOrFalse = await KeeService.Reset.ResetManager.resetUser(email, jwt, await password.getHash());
+
+        if (userOrFalse === false) {
+            return false;
+        }
+
+        const siOrError = await this.uploadInitialVault(userOrFalse, emptyVault);
+        if (!siOrError.emailHashed) {
+            return siOrError;
+        }
+
+        return { user: userOrFalse, si: siOrError };
     }
 };
 

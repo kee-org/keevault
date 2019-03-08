@@ -46,8 +46,9 @@ const AccountModel = Backbone.Model.extend({
         return trueOrError;
     },
 
-    createInitialVault: async function (user, emptyVault) {
-        return Account.createInitialVault(user, emptyVault);
+    uploadInitialVault: async function (user, password) {
+        const primaryFile = await Account.createFileWithEmptyVault(password);
+        return Account.uploadInitialVault(user, primaryFile.db);
     },
 
     latestTokens () {
@@ -56,8 +57,31 @@ const AccountModel = Backbone.Model.extend({
         return Object.values(user.tokens);
     },
 
-    async register (email, hashedMasterKey, introEmailStatus, marketingEmailStatus, emptyVault, code) {
+    allegedRemainingMinutes (resetAuthToken) {
+        return Account.allegedRemainingMinutes(resetAuthToken);
+    },
+
+    async createNewPrimaryFile(password) {
+        return Account.createFileWithEmptyVault(password);
+    },
+
+    async resetFinish(email, jwt, password, emptyVault) {
+        const userSIOrError = await Account.resetFinish(email, jwt, password, emptyVault);
+        const user = userSIOrError.user;
+        const si = userSIOrError.si;
+
+        if (user && si) {
+            user.initialSignin = true;
+            this.set('email', email);
+            this.set('user', user);
+            return { user, si };
+        }
+        return userSIOrError;
+    },
+
+    async register (email, password, introEmailStatus, marketingEmailStatus, emptyVault, code) {
         this.set('user', null);
+        const hashedMasterKey = await password.getHash();
         const userSIOrError = await Account.register(email, hashedMasterKey, introEmailStatus, marketingEmailStatus, emptyVault, code);
         const user = userSIOrError.user;
         const si = userSIOrError.siOrError;

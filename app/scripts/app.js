@@ -112,6 +112,7 @@ ready(() => {
         KeeFrontend.User.UserManager.init(RuntimeInfo.stage, appModel.account.tokensChanged);
         KeeFrontend.Storage.StorageManager.init(RuntimeInfo.stage);
         KeeFrontend.Messages.MessagesManager.init(RuntimeInfo.stage);
+        KeeFrontend.Reset.ResetManager.init(RuntimeInfo.stage);
         appModel.prepare();
         // later: display nicer "loading" message / animation - maybe different to HTML one? or not
         await MultiInstanceComms.init(appModel.destinationFeature, cedePolitely, cedeForcefully, getRecentAuthToken);

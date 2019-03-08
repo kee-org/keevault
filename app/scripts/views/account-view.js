@@ -2,8 +2,6 @@ const Backbone = require('backbone');
 const SecureInput = require('../comp/secure-input');
 const KeyHandler = require('../comp/key-handler');
 const Keys = require('../const/keys');
-const FileModel = require('../models/file-model');
-const IdGenerator = require('../util/id-generator');
 const Alerts = require('../comp/alerts');
 const AppSettingsModel = require('../models/app-settings-model');
 const Scrollable = require('../mixins/scrollable');
@@ -11,6 +9,7 @@ const FeatureDetector = require('../util/feature-detector');
 const PasswordStrength = require('../util/password-strength');
 const Locale = require('../util/locale');
 const InputFx = require('../util/input-fx');
+const EmailUtils = require('../util/email');
 
 const AccountView = Backbone.View.extend({
     template: require('templates/account.hbs'),
@@ -128,9 +127,9 @@ const AccountView = Backbone.View.extend({
     },
 
     loginStart: async function() {
-        const email = this.canonicaliseEmail($('#accountEmail')[0].value);
+        const email = EmailUtils.canonicalise($('#accountEmail')[0].value);
         if (!email) return null;
-        if (!this.validateEmail(email)) return null;
+        if (!EmailUtils.validate(email)) return null;
 
         const signinButton = $('#signinButton')[0];
         signinButton.classList.add('active');
@@ -176,9 +175,9 @@ const AccountView = Backbone.View.extend({
         $('#newPassword2').toggleClass('input--error', false);
         $('#registrationAgree').toggleClass('input--error', false);
         const emailField = $('#accountEmail');
-        const email = this.canonicaliseEmail(emailField[0].value);
+        const email = EmailUtils.canonicalise(emailField[0].value);
         if (!email) return this.errorOnField(emailField);
-        if (!this.validateEmail(email)) return this.errorOnField(emailField);
+        if (!EmailUtils.validate(email)) return this.errorOnField(emailField);
         const code = $('#accountCode')[0].value;
         if (!code) return this.errorOnField($('#accountCode'));
         if (!this.passwordInput1 || this.passwordInput1.length <= 0) return this.errorOnField($('#newPassword1'));
@@ -195,14 +194,8 @@ const AccountView = Backbone.View.extend({
         const registerButton = $('#registerButton')[0];
         registerButton.classList.add('active');
         registerButton.setAttribute('disabled', 'disabled');
-        const primaryFile = new FileModel({ id: IdGenerator.uuid() });
-        primaryFile.create('My Kee Vault', 'vault');
-        primaryFile.db.upgrade();
-        primaryFile.db.header.keyEncryptionRounds = undefined; // This should be part of kdbx upgrade really?
-        primaryFile.configureArgon2ParamsAuto(chosenPassword);
-        const emptyVault = primaryFile.db;
-        await primaryFile.setPassword(chosenPassword);
-        const userSIOrError = await this.model.account.register(email, await chosenPassword.getHash(), optinIntro, optinMarketing, emptyVault, code);
+        const primaryFile = await this.model.account.createNewPrimaryFile(chosenPassword);
+        const userSIOrError = await this.model.account.register(email, chosenPassword, optinIntro, optinMarketing, primaryFile.db, code);
         registerButton.classList.remove('active');
         registerButton.removeAttribute('disabled');
 
@@ -319,14 +312,6 @@ const AccountView = Backbone.View.extend({
         }
         this.model.account.set('mode', 'login');
         this.render();
-    },
-
-    canonicaliseEmail: function(email) {
-        return email.toLowerCase().trim();
-    },
-
-    validateEmail: function(email) {
-        return /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(email);
     }
 });
 

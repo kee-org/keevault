@@ -1,0 +1,25 @@
+<div class="open register" id="accountStartContainer">
+    <div class="logo-container">{{{svg 'logo'}}}</div>
+
+    <h2><i class="fas fa-exclamation-triangle"></i> {{res 'accResetForgotPassword'}}</h2>
+    <div class="fieldExplainer">{{res 'accResetOhNo'}}</div>
+    <div class="fieldExplainer">{{res 'accResetDesc1'}}</div>
+    <div class="fieldExplainer">{{res 'accResetDesc2'}}</div>
+    <div class="fieldExplainer">{{res 'accResetDesc3'}}</div>
+    <div class="fieldExplainer">{{res 'accResetDesc4'}}</div>
+    <div class="fieldExplainer">{{res 'accResetDesc5'}}</div>
+
+    <input class="" type="text" name="email" id="accountEmail" maxlength="70" placeholder="{{res 'typeYourEmailAddress'}}"
+        tabindex="10" value="{{emailAddress}}" spellcheck="false" />
+
+    <div class="fieldExplainer">{{res 'accResetDesc6'}}</div>
+
+    <div class="fieldExplainer">
+        <input type="checkbox" class="input-base" id="resetAgree" />
+        <label for="resetAgree" tabindex="16">{{res 'accResetIUnderstand'}}</label>
+    </div>
+    <button tabindex="17" class="emailSubmit vault_action" id="resetButton">
+        <div class="content">{{res 'accResetSendEmail'}}</div>
+        <div class="opening-icon"><i class="fa fa-spinner fa-spin"></i></div>
+    </button>
+</div>
