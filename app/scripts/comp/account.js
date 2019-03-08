@@ -4,6 +4,7 @@ const KeeError = require('./kee-error');
 const kdbxweb = require('kdbxweb');
 const FileModel = require('../models/file-model');
 const IdGenerator = require('../util/id-generator');
+const FeatureDetector = require('../util/feature-detector');
 
 const Account = {
     loginStart: async function (email) {
@@ -30,7 +31,7 @@ const Account = {
     },
     register: async function (email, hashedMasterKey, introEmailStatus, marketingEmailStatus, emptyVault, code) {
         const user = await KeeService.User.User.fromEmailAndKey(email, hashedMasterKey);
-        const trueOrError = await user.register(introEmailStatus, marketingEmailStatus, code);
+        const trueOrError = await user.register(introEmailStatus, marketingEmailStatus, FeatureDetector.isMobile, code);
         if (trueOrError !== true) {
             return trueOrError;
         }
