@@ -22,23 +22,6 @@ const UrlUtil = {
 
     fileToDir: function(url) {
         return url.replace(this.lastPartRegex, '') || '/';
-    },
-
-    // TODO: Next four functions seem to be dead weight. If not, they need fixing!
-    b64urlTob64: function(input) {
-        return input.replace(/\+/g, '-').replace(/\//g, '_').replace(/\./g, '=');
-    },
-
-    b64Tob64url: function(input) {
-        return input.replace(/\//g, '_').replace(/\+/g, '-').replace(/\=/g, '.');
-    },
-
-    base64urlEncode: function(input) {
-        return btoa(input).replace(/\+/g, '-').replace(/\//g, '_');
-    },
-
-    base64urlDecode (input) {
-        return atob(input.replace(/\-/g, '+').replace(/\_/g, '/'));
     }
 };
 

@@ -84,7 +84,7 @@ const Account = {
         return user.resetStart();
     },
 
-    resetFinish: async function (email, jwt, password, emptyVault) { // TODO: what type is password? should be ProtectedValue I think
+    resetFinish: async function (email, jwt, password, emptyVault) {
         const userOrFalse = await KeeService.Reset.ResetManager.resetUser(email, jwt, await password.getHash());
 
         if (userOrFalse === false) {
