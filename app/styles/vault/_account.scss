@@ -26,6 +26,11 @@
       min-width: 200px;
       height: auto;
     }
+
+  }
+
+  &.reset .logo-container {
+    flex-grow: 0;
   }
 
   & .account-link-container {
