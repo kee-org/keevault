@@ -257,7 +257,6 @@ const FileModel = Backbone.Model.extend({
 
     //         // Convert the imported kdbx file to v4 with suitable argon2 params
     //         this.db.upgrade();
-    //         this.db.header.keyEncryptionRounds = undefined; // This should be part of kdbx upgrade really?
     //         this.configureArgon2ParamsAuto(protectedPassword, emailAddrParts);
 
     //         this.reload();

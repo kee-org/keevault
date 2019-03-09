@@ -53,7 +53,6 @@ const Account = {
         const primaryFile = new FileModel({ id: IdGenerator.uuid() });
         primaryFile.create('My Kee Vault', 'vault');
         primaryFile.db.upgrade();
-        primaryFile.db.header.keyEncryptionRounds = undefined; // This should be part of kdbx upgrade really?
         primaryFile.configureArgon2ParamsAuto(chosenPassword, emailAddrParts);
         primaryFile.setPassword(chosenPassword, emailAddrParts);
         return primaryFile;
