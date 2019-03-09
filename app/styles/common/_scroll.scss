@@ -23,15 +23,6 @@
   }
 }
 
-@media screen and (-moz-windows-theme) {
-  .scroller {
-    @-moz-document url-prefix() {
-      margin-right: 0 !important;
-      padding-right: 0 !important;
-    }
-  }
-}
-
 @mixin scrollbar-on-hover {
   .scroller__bar-wrapper {
     >.scroller__bar {

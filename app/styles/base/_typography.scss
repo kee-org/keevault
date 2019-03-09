@@ -15,10 +15,6 @@ body {
   line-height: $base-line-height;
 }
 
-@-moz-document url-prefix() {
-  body { text-shadow: 0 0; }
-}
-
 h1,
 h2,
 h3,
