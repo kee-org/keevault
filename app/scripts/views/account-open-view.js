@@ -771,6 +771,9 @@ const OpenView = Backbone.View.extend({
 
     openDbComplete: function(err) {
         this.busy = false;
+        const tempRemoteSyncPassword = this.params.tempRemoteSyncPassword;
+        this.params.tempRemoteSyncPassword = null;
+
         const openButton = $('#openButton')[0];
         if (openButton) {
             openButton.classList.remove('active');
@@ -785,7 +788,22 @@ const OpenView = Backbone.View.extend({
             this.inputEl[0].selectionStart = 0;
             this.inputEl[0].selectionEnd = this.inputEl.val().length;
             if (err.code === 'InvalidKey') {
-                InputFx.shake(this.inputEl);
+                // If user logged in within past minute, chances are this is due to a cached
+                // version of the file having an outdated master key. NB: existing auth tokens
+                // are invalidated and expired token refresh operations always check for revocation.
+                if (this.model.account.get('lastSuccessfulLogin') > (Date.now() - 60000)) {
+                    Alerts.info({
+                        header: Locale.keyChangeTitleRemote,
+                        body: Locale.recentPasswordChange
+                    });
+                    this.params.tempRemoteSyncPassword = this.params.password;
+                } else {
+                    if (tempRemoteSyncPassword) {
+                        // User got the old password wrong so this lets them retry
+                        this.params.tempRemoteSyncPassword = tempRemoteSyncPassword;
+                    }
+                    InputFx.shake(this.inputEl);
+                }
             } else {
                 if (err.notFound) {
                     err = Locale.openErrorFileNotFound;

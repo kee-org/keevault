@@ -422,7 +422,9 @@ const AppModel = Backbone.Model.extend({
             this.openFileFromCache(params, (err, file) => {
                 if (!err && file) {
                     logger.info('Sync just opened modified file');
-                    _.defer(() => this.syncFile(file));
+                    const remotePassword = params.tempRemoteSyncPassword ? { remoteKey: {
+                        password: params.tempRemoteSyncPassword.clone() } } : undefined;
+                    _.defer(() => this.syncFile(file, remotePassword));
                 }
                 callback(err);
             }, fileInfo);
@@ -482,7 +484,9 @@ const AppModel = Backbone.Model.extend({
             this.openFileFromCache(params, (err, file) => {
                 if (!err && file) {
                     logger.info('Sync just opened file');
-                    _.defer(() => this.syncFile(file));
+                    const remotePassword = params.tempRemoteSyncPassword ? { remoteKey: {
+                        password: params.tempRemoteSyncPassword.clone() } } : undefined;
+                    _.defer(() => this.syncFile(file, remotePassword));
                 }
                 callback(err);
             }, fileInfo);

@@ -88,21 +88,45 @@ const SettingsAccountView = Backbone.View.extend({
         const changeButton = this.$el.find('#changeAccountPasswordButton')[0];
         changeButton.classList.add('active');
         changeButton.setAttribute('disabled', 'disabled');
-        const p = kdbxweb.ProtectedValue.fromString(this.$el.find('#settings__account-master-pass').val());
-        const trueOrError = await this.appModel.updateMasterPassword(p);
+        let newPassword = this.$el.find('#settings__account-master-pass').val();
+        if (!newPassword || newPassword.length <= 0) return;
+        const p = kdbxweb.ProtectedValue.fromString(newPassword);
+        newPassword = '';
 
-        if (trueOrError === true) {
-            this.$el.find('#settings__account-master-pass').val('');
-            this.$el.find('#settings__account-master-pass-confirm').val('');
-            PasswordStrength.renderPasswordStrength(0, this.$el);
-            this.$el.find('#settings__account-master-pass-result')[0].innerText = Locale.detHistorySaved;
-            changeButton.classList.remove('active');
-        } else {
-            this.$el.find('#settings__account-master-pass-result')[0].innerText = Locale.appSaveError;
-            logger.error('Error changing account password', trueOrError);
-            changeButton.classList.remove('active');
-            changeButton.removeAttribute('disabled');
-        }
+        Alerts.warn({
+            body: Locale.savedOnAllDevicesQuestion + '<br><br>' +
+                Locale.unsavedChangesOnOtherDevicesMayBeLost + '<br><br>' +
+                Locale.readyToChangePassword,
+            buttons: [
+                { result: 'cancel', title: Locale.alertCancel, error: true },
+                { asyncresult: 'change', title: Locale.changePassword }
+            ],
+            esc: false, enter: false, click: false,
+            success: async (asyncResult) => {
+                let clearForm = false;
+                if (asyncResult === 'change') {
+                    const trueOrError = await this.appModel.updateMasterPassword(p);
+
+                    if (trueOrError === true) {
+                        Alerts.info({
+                            body: Locale.passwordChanged
+                        });
+                        clearForm = true;
+                    } else {
+                        this.$el.find('#settings__account-master-pass-result')[0].innerText = Locale.appSaveError;
+                        logger.error('Error changing account password', trueOrError);
+                    }
+                }
+                if (clearForm) {
+                    this.$el.find('#settings__account-master-pass').val('');
+                    this.$el.find('#settings__account-master-pass-confirm').val('');
+                    PasswordStrength.renderPasswordStrength(0, this.$el);
+                } else {
+                    changeButton.removeAttribute('disabled');
+                }
+                changeButton.classList.remove('active');
+            }
+        });
     },
 
     inputKeydown: function(e) {

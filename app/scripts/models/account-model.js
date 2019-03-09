@@ -9,7 +9,8 @@ const AccountModel = Backbone.Model.extend({
         password: 'fake password',
         errorTimeout: false,
         user: null,
-        mode: 'login'
+        mode: 'login',
+        lastSuccessfulLogin: 0
     },
 
     initialize: function() {
@@ -31,6 +32,7 @@ const AccountModel = Backbone.Model.extend({
         const loginStartResult = await Account.loginStart(this.get('email'));
         if (loginStartResult.kms) {
             this.set('user', loginStartResult.user);
+            this.set('lastSuccessfulLogin', Date.now());
         } else {
             // Everything triggers a fresh login attempt - even invalid email addresses should not
             // hit this branch but we reset everything to protect against a misconfigured server
@@ -43,6 +45,9 @@ const AccountModel = Backbone.Model.extend({
     async loginFinish (hashedMasterKey) {
         const user = this.get('user');
         const trueOrError = await Account.loginFinish(user, hashedMasterKey);
+        if (trueOrError === true) {
+            this.set('lastSuccessfulLogin', Date.now());
+        }
         return trueOrError;
     },
 
@@ -72,6 +77,7 @@ const AccountModel = Backbone.Model.extend({
 
         if (user && si) {
             user.initialSignin = true;
+            this.set('lastSuccessfulLogin', Date.now());
             this.set('email', email);
             this.set('user', user);
             return { user, si };
@@ -88,6 +94,7 @@ const AccountModel = Backbone.Model.extend({
 
         if (user && si) {
             user.initialSignin = true;
+            this.set('lastSuccessfulLogin', Date.now());
             this.set('email', email);
             this.set('user', user);
             this.set('introEmailStatus', introEmailStatus);

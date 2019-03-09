@@ -47,15 +47,21 @@ const Alerts = {
         return view;
     },
 
-    notImplemented: function() {
-        this.alert({
-            header: Locale.notImplemented,
+    warn: function(config) {
+        this.alert(_.extend({
+            header: '',
             body: '',
             icon: 'exclamation-triangle',
             buttons: [this.buttons.ok],
             esc: '',
             click: '',
             enter: ''
+        }, config));
+    },
+
+    notImplemented: function() {
+        this.warn({
+            header: Locale.notImplemented
         });
     },
 
