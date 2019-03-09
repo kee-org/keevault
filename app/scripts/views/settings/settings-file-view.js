@@ -45,8 +45,6 @@ const SettingsFileView = Backbone.View.extend({
         'change #settings__file-trash': 'changeTrash',
         'input #settings__file-hist-len': 'changeHistoryLength',
         'input #settings__file-hist-size': 'changeHistorySize',
-        'input #settings__file-key-rounds': 'changeKeyRounds',
-        'input #settings__file-key-change-force': 'changeKeyChangeForce',
         'input .settings__input-kdf': 'changeKdfParameter',
         'change #settings__file-minURLMatchAccuracyDefault': 'minURLMatchAccuracyDefaultChanged',
         'change #settings__file-placeholders-enabled': 'placeholderEnabledDefaultChanged',
@@ -97,7 +95,6 @@ const SettingsFileView = Backbone.View.extend({
             historyMaxItems: this.model.get('historyMaxItems'),
             historyMaxSize: Math.round(this.model.get('historyMaxSize') / 1024 / 1024),
             keyEncryptionRounds: this.model.get('keyEncryptionRounds'),
-            keyChangeForce: this.model.get('keyChangeForce') > 0 ? this.model.get('keyChangeForce') : null,
             kdfParameters: this.kdfParametersToUi(this.model.get('kdfParameters')),
             storageProviders: storageProviders,
             canBackup: canBackup,
@@ -629,29 +626,6 @@ const SettingsFileView = Backbone.View.extend({
             return;
         }
         this.model.setHistoryMaxSize(value * 1024 * 1024);
-    },
-
-    changeKeyRounds: function(e) {
-        if (!e.target.validity.valid) {
-            return;
-        }
-        const value = +e.target.value;
-        if (isNaN(value)) {
-            e.target.value = this.model.get('keyEncryptionRounds');
-            return;
-        }
-        this.model.setKeyEncryptionRounds(value);
-    },
-
-    changeKeyChangeForce: function(e) {
-        if (!e.target.validity.valid) {
-            return;
-        }
-        let value = Math.round(e.target.value);
-        if (isNaN(value) || value <= 0) {
-            value = -1;
-        }
-        this.model.setKeyChange(true, value);
     },
 
     changeKdfParameter: function(e) {

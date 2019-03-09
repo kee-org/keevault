@@ -656,9 +656,6 @@ const AppModel = Backbone.Model.extend({
                 this.syncFile(file);
             }, Timeouts.FileChangeSync));
         }
-        if (file.isKeyChangePending(true)) {
-            Backbone.trigger('key-change-pending', { file: file });
-        }
         const backup = file.get('backup');
         if (data && backup && backup.enabled && backup.pending) {
             this.scheduleBackupFile(file, data);

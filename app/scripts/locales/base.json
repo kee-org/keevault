@@ -419,7 +419,6 @@
   "setFileKdfParamsIter": "Iterations",
   "setFileKdfParamsMem": "Memory, KB",
   "setFileKdfParamsPar": "Parallelism",
-  "setFileKeyChangeForce": "Ask to change key after (days)",
   "setFileUseKeyFile": "Use key file",
   "setFileUseGenKeyFile": "Use generated key file",
   "setFileUseOldKeyFile": "Use old key file",

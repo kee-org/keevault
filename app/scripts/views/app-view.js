@@ -79,7 +79,6 @@ const AppView = Backbone.View.extend({
         this.listenTo(Backbone, 'open-file', this.toggleOpenFile);
         this.listenTo(Backbone, 'save-all', this.saveAll);
         this.listenTo(Backbone, 'remote-key-changed', this.remoteKeyChanged);
-        this.listenTo(Backbone, 'key-change-pending', this.keyChangePending);
         this.listenTo(Backbone, 'toggle-settings', this.toggleSettings);
         this.listenTo(Backbone, 'toggle-menu', this.toggleMenu);
         this.listenTo(Backbone, 'toggle-details', this.toggleDetails);
@@ -676,28 +675,15 @@ const AppView = Backbone.View.extend({
         this.showKeyChange(e.file, { remote: true });
     },
 
-    keyChangePending: function(e) {
-        this.showKeyChange(e.file, { expired: true });
-    },
-
     keyChangeAccept: function(e) {
         this.showEntries();
-        if (e.expired) {
-            e.file.setPassword(e.password, []);
-            if (e.keyFileData && e.keyFileName) {
-                e.file.setKeyFile(e.keyFileData, e.keyFileName);
-            } else {
-                e.file.removeKeyFile();
+        this.model.syncFile(e.file, {
+            remoteKey: {
+                password: e.password,
+                keyFileName: e.keyFileName,
+                keyFileData: e.keyFileData
             }
-        } else {
-            this.model.syncFile(e.file, {
-                remoteKey: {
-                    password: e.password,
-                    keyFileName: e.keyFileName,
-                    keyFileData: e.keyFileData
-                }
-            });
-        }
+        });
     },
 
     toggleSettings: function(page) {
