@@ -46,8 +46,8 @@ const AccountModel = Backbone.Model.extend({
         return trueOrError;
     },
 
-    uploadInitialVault: async function (user, password) {
-        const primaryFile = await Account.createFileWithEmptyVault(password);
+    uploadInitialVault: async function (user, password, emailAddrParts) {
+        const primaryFile = await Account.createFileWithEmptyVault(password, emailAddrParts);
         return Account.uploadInitialVault(user, primaryFile.db);
     },
 
@@ -61,8 +61,8 @@ const AccountModel = Backbone.Model.extend({
         return Account.allegedRemainingMinutes(resetAuthToken);
     },
 
-    async createNewPrimaryFile(password) {
-        return Account.createFileWithEmptyVault(password);
+    async createNewPrimaryFile(password, emailAddrParts) {
+        return Account.createFileWithEmptyVault(password, emailAddrParts);
     },
 
     async resetFinish(email, jwt, password, emptyVault) {

@@ -111,9 +111,9 @@ const FileModel = Backbone.Model.extend({
         this.set({ open: true, created: true, name: name });
     },
 
-    configureArgon2ParamsAuto: function(protectedPassword) {
+    configureArgon2ParamsAuto: function(protectedPassword, emailAddrParts) {
         let password = protectedPassword.getText();
-        const strength = PasswordStrength.fuzzyStrength(password);
+        const strength = PasswordStrength.fuzzyStrength(password, emailAddrParts);
         password = undefined;
         this.configureArgon2ParamsManual(strength);
     },
@@ -235,41 +235,41 @@ const FileModel = Backbone.Model.extend({
     },
 
     // deprecated. Remove in 2020 if no use case found.
-    importNewFromData: async function(fileData, password) {
-        let delayWarning;
-        try {
-            const ts = logger.ts();
-            const protectedPassword = kdbxweb.ProtectedValue.fromString(password);
-            password = undefined;
-            const existingPasswordHash = this.db.credentials.passwordHash;
-            const existingPasswordLength = this.get('passwordLength');
-            const credentials = new kdbxweb.Credentials(protectedPassword);
-            delayWarning = setTimeout(() => Alerts.info({ body: Locale.slowImport, icon: 'exclamation-triangle' }), 3000);
-            const db = await kdbxweb.Kdbx.load(fileData, credentials);
-            clearTimeout(delayWarning);
+    // importNewFromData: async function(fileData, password) {
+    //     let delayWarning;
+    //     try {
+    //         const ts = logger.ts();
+    //         const protectedPassword = kdbxweb.ProtectedValue.fromString(password);
+    //         password = undefined;
+    //         const existingPasswordHash = this.db.credentials.passwordHash;
+    //         const existingPasswordLength = this.get('passwordLength');
+    //         const credentials = new kdbxweb.Credentials(protectedPassword);
+    //         delayWarning = setTimeout(() => Alerts.info({ body: Locale.slowImport, icon: 'exclamation-triangle' }), 3000);
+    //         const db = await kdbxweb.Kdbx.load(fileData, credentials);
+    //         clearTimeout(delayWarning);
 
-            // Make sure the imported kdbx file password matches the user's login password
-            this.db = db;
-            this.db.meta.keyChanged = new Date();
-            this.set({ passwordLength: existingPasswordLength, passwordChanged: true });
-            this.db.credentials.passwordHash = existingPasswordHash;
-            this.set({ open: true, dirty: true, modified: true });
+    //         // Make sure the imported kdbx file password matches the user's login password
+    //         this.db = db;
+    //         this.db.meta.keyChanged = new Date();
+    //         this.set({ passwordLength: existingPasswordLength, passwordChanged: true });
+    //         this.db.credentials.passwordHash = existingPasswordHash;
+    //         this.set({ open: true, dirty: true, modified: true });
 
-            // Convert the imported kdbx file to v4 with suitable argon2 params
-            this.db.upgrade();
-            this.db.header.keyEncryptionRounds = undefined; // This should be part of kdbx upgrade really?
-            this.configureArgon2ParamsAuto(protectedPassword);
+    //         // Convert the imported kdbx file to v4 with suitable argon2 params
+    //         this.db.upgrade();
+    //         this.db.header.keyEncryptionRounds = undefined; // This should be part of kdbx upgrade really?
+    //         this.configureArgon2ParamsAuto(protectedPassword, emailAddrParts);
 
-            this.reload();
-            logger.info('Imported file to ' + this.get('name') + ': ' + logger.ts(ts));
-            Backbone.trigger('save-all');
-            return;
-        } catch (e) {
-            logger.error('Error importing file', e, e.code, e.message, e);
-            clearTimeout(delayWarning);
-            return e;
-        }
-    },
+    //         this.reload();
+    //         logger.info('Imported file to ' + this.get('name') + ': ' + logger.ts(ts));
+    //         Backbone.trigger('save-all');
+    //         return;
+    //     } catch (e) {
+    //         logger.error('Error importing file', e, e.code, e.message, e);
+    //         clearTimeout(delayWarning);
+    //         return e;
+    //     }
+    // },
 
     importFromDataRows: async function(dataRows, fieldMapping) {
         try {
@@ -720,10 +720,10 @@ const FileModel = Backbone.Model.extend({
         this.forEachEntry({}, entry => entry.setSaved());
     },
 
-    setPassword: function(password) {
+    setPassword: function(password, emailAddrParts) {
         this.db.credentials.setPassword(password);
         this.db.meta.keyChanged = new Date();
-        this.configureArgon2ParamsAuto(password);
+        this.configureArgon2ParamsAuto(password, emailAddrParts);
         this.set({ passwordLength: password.textLength, passwordChanged: true });
         this.setModified();
     },

@@ -240,8 +240,9 @@ const AppModel = Backbone.Model.extend({
     updateMasterPassword: async function(newPassword) {
         const hashedNewPassword = await newPassword.getHash();
         return this.account.changePassword(hashedNewPassword, async () => {
+            const emailAddrParts = EmailUtil.split(this.account.get('email'));
             const file = this.files.first();
-            file.setPassword(newPassword);
+            file.setPassword(newPassword, emailAddrParts);
             this.syncFile(file, { skipValidation: true, startedByUser: false });
             return true;
         });

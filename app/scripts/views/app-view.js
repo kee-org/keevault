@@ -683,7 +683,7 @@ const AppView = Backbone.View.extend({
     keyChangeAccept: function(e) {
         this.showEntries();
         if (e.expired) {
-            e.file.setPassword(e.password);
+            e.file.setPassword(e.password, []);
             if (e.keyFileData && e.keyFileName) {
                 e.file.setKeyFile(e.keyFileData, e.keyFileName);
             } else {

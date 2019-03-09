@@ -10,6 +10,7 @@ const AppSettingsModel = require('../../models/app-settings-model');
 const RuntimeInfo = require('../../comp/runtime-info');
 const SettingsCommsView = require('./settings-comms-view');
 const MessagesService = require('../../comp/messages-service');
+const EmailUtils = require('../../util/email');
 
 const logger = new Logger('settings-account-view');
 
@@ -30,6 +31,7 @@ const SettingsAccountView = Backbone.View.extend({
     },
 
     views: null,
+    emailAddrParts: [],
 
     initialize: function() {
         this.views = {};
@@ -43,6 +45,7 @@ const SettingsAccountView = Backbone.View.extend({
         const user = AccountModel.instance.get('user');
         const possiblyLoggedIn = this.appModel.account.latestTokens().length > 0;
         const emailVerified = this.appModel.account.isUserEmailVerified();
+        this.emailAddrParts = EmailUtils.split(this.appModel.account.get('email'));
         this.renderTemplate({
             accountEmail: this.appModel.account.get('email'),
             possiblyLoggedIn,
@@ -50,35 +53,14 @@ const SettingsAccountView = Backbone.View.extend({
             appInfo: _.escape(appInfo),
             uniqueUserId: user ? user.emailHashed : 'not signed in'
         });
-        this.renderPasswordStrength(0);
+        PasswordStrength.renderPasswordStrength(0, this.$el);
         if (possiblyLoggedIn && emailVerified) this.loadSupportAccountData();
         return this;
-    },
-
-    renderPasswordStrength: function(strength) {
-        const div = this.$el.find('#settings__account-master-pass-strength')[0];
-        if (!div) return;
-
-        div.title = Locale.strength + ': ' + (strength || '-');
-        while (div.firstChild) div.removeChild(div.firstChild);
-
-        for (let i = strength; i >= 1; i--) {
-            const star = document.createElement('i');
-            star.className = 'fa fa-star';
-            div.appendChild(star);
-        }
-        for (let i = 5 - strength; i >= 1; i--) {
-            const star = document.createElement('i');
-            star.className = 'far fa-star';
-            div.appendChild(star);
-        }
     },
 
     passwordTyped: function(e) {
         const newValue = this.$el.find('#settings__account-master-pass').val();
         if (newValue) {
-            const strength = PasswordStrength.exactStrength(newValue);
-            this.renderPasswordStrength(strength);
             const confirmValue = this.$el.find('#settings__account-master-pass-confirm').val();
             if (confirmValue === newValue) {
                 this.$el.find('#changeAccountPasswordButton').removeAttr('disabled');
@@ -87,9 +69,10 @@ const SettingsAccountView = Backbone.View.extend({
                 this.$el.find('#changeAccountPasswordButton').attr('disabled', 'disabled');
                 this.$el.find('#settings__account-master-pass-confirm').addClass('input--error');
             }
+            PasswordStrength.updateAndRender(newValue, this.emailAddrParts, this.$el);
             return;
         } else {
-            this.renderPasswordStrength(0);
+            PasswordStrength.renderPasswordStrength(0, this.$el);
         }
         this.$el.find('#changeAccountPasswordButton').attr('disabled', 'disabled');
     },
@@ -111,7 +94,7 @@ const SettingsAccountView = Backbone.View.extend({
         if (trueOrError === true) {
             this.$el.find('#settings__account-master-pass').val('');
             this.$el.find('#settings__account-master-pass-confirm').val('');
-            this.renderPasswordStrength(0);
+            PasswordStrength.renderPasswordStrength(0, this.$el);
             this.$el.find('#settings__account-master-pass-result')[0].innerText = Locale.detHistorySaved;
             changeButton.classList.remove('active');
         } else {

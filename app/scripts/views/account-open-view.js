@@ -10,6 +10,7 @@ const StorageFileListView = require('../views/storage-file-list-view');
 const Logger = require('../util/logger');
 const Locale = require('../util/locale');
 const UrlUtil = require('../util/url-util');
+const EmailUtils = require('../util/email');
 const InputFx = require('../util/input-fx');
 const Comparators = require('../util/comparators');
 const Storage = require('../storage');
@@ -711,7 +712,8 @@ const OpenView = Backbone.View.extend({
                 } else if (err === 'storage item not found') {
                     logger.error('No files were found. Probably something went wrong with the initial signup');
                     try {
-                        const siOrError = await this.model.account.uploadInitialVault(user, this.params.password);
+                        const emailAddrParts = EmailUtils.split(this.model.account.get('email'));
+                        const siOrError = await this.model.account.uploadInitialVault(user, this.params.password, emailAddrParts);
                         if (!siOrError.emailHashed) {
                             return siOrError;
                         }

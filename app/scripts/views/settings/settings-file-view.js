@@ -499,7 +499,7 @@ const SettingsFileView = Backbone.View.extend({
         if (masterPassword === confirmPassword) {
             this.$el.find('#settings__file-master-pass-warning-text').text(Locale.setFilePassChanged);
             this.$el.find('.settings__file-confirm-master-pass-warning').hide();
-            this.model.setPassword(kdbxweb.ProtectedValue.fromString(confirmPassword));
+            this.model.setPassword(kdbxweb.ProtectedValue.fromString(confirmPassword, []));
         } else {
             this.$el.find('#settings__file-master-pass-warning-text').text(Locale.setFilePassChange);
             this.$el.find('.settings__file-confirm-master-pass-warning').show();

@@ -48,14 +48,14 @@ const Account = {
         return KeeService.Reset.ResetManager.allegedRemainingMinutes(resetAuthToken);
     },
 
-    createFileWithEmptyVault: async function (password) {
+    createFileWithEmptyVault: function (password, emailAddrParts) {
         const chosenPassword = password;
         const primaryFile = new FileModel({ id: IdGenerator.uuid() });
         primaryFile.create('My Kee Vault', 'vault');
         primaryFile.db.upgrade();
         primaryFile.db.header.keyEncryptionRounds = undefined; // This should be part of kdbx upgrade really?
-        primaryFile.configureArgon2ParamsAuto(chosenPassword);
-        await primaryFile.setPassword(chosenPassword);
+        primaryFile.configureArgon2ParamsAuto(chosenPassword, emailAddrParts);
+        primaryFile.setPassword(chosenPassword, emailAddrParts);
         return primaryFile;
     },
 

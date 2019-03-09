@@ -72,42 +72,22 @@ const AccountView = Backbone.View.extend({
         this.passwordInput1.setElement(this.inputElPassword1);
         this.inputElPassword2 = this.$el.find('#newPassword2');
         this.passwordInput2.setElement(this.inputElPassword2);
-        this.renderPasswordStrength(0);
+        PasswordStrength.renderPasswordStrength(0, this.$el);
         this.focusInput();
         return this;
-    },
-
-    renderPasswordStrength: function(strength) {
-        const div = this.$el.find('#settings__account-master-pass-strength')[0];
-        if (!div) return;
-
-        div.title = Locale.strength + ': ' + (strength || '-');
-        while (div.firstChild) div.removeChild(div.firstChild);
-
-        for (let i = strength; i >= 1; i--) {
-            const star = document.createElement('i');
-            star.className = 'fa fa-star';
-            div.appendChild(star);
-        }
-        for (let i = 5 - strength; i >= 1; i--) {
-            const star = document.createElement('i');
-            star.className = 'far fa-star';
-            div.appendChild(star);
-        }
     },
 
     passwordTyped: function(e) {
         $('#newPassword1').toggleClass('input--error', false);
         if (this.passwordInput1.value && this.passwordInput1.value.byteLength > 0) {
-            const strength = PasswordStrength.exactStrength(this.passwordInput1.value.getText());
-            this.renderPasswordStrength(strength);
             if (this.passwordInput1.value.equals(this.passwordInput2.value)) {
                 this.$el.find('#newPassword2').removeClass('input--error');
             } else {
                 this.$el.find('#newPassword2').addClass('input--error');
             }
+            PasswordStrength.updateAndRender(this.passwordInput1.value.getText(), $('#accountEmail')[0].value, this.$el);
         } else {
-            this.renderPasswordStrength(0);
+            PasswordStrength.renderPasswordStrength(0, this.$el);
         }
     },
 
@@ -189,12 +169,13 @@ const AccountView = Backbone.View.extend({
         const agreed = $('#registrationAgree')[0].checked;
         if (!agreed) return this.errorOnField($('label[for=registrationAgree]'), true);
 
+        const emailAddrParts = EmailUtils.split(email);
         const chosenPassword = this.passwordInput1.value.clone();
 
         const registerButton = $('#registerButton')[0];
         registerButton.classList.add('active');
         registerButton.setAttribute('disabled', 'disabled');
-        const primaryFile = await this.model.account.createNewPrimaryFile(chosenPassword);
+        const primaryFile = await this.model.account.createNewPrimaryFile(chosenPassword, emailAddrParts);
         const userSIOrError = await this.model.account.register(email, chosenPassword, optinIntro, optinMarketing, primaryFile.db, code);
         registerButton.classList.remove('active');
         registerButton.removeAttribute('disabled');
