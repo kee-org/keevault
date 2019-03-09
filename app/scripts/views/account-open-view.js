@@ -791,10 +791,10 @@ const OpenView = Backbone.View.extend({
                 // If user logged in within past minute, chances are this is due to a cached
                 // version of the file having an outdated master key. NB: existing auth tokens
                 // are invalidated and expired token refresh operations always check for revocation.
-                if (this.model.account.get('lastSuccessfulLogin') > (Date.now() - 60000)) {
+                if (!tempRemoteSyncPassword && this.model.account.get('lastSuccessfulLogin') > (Date.now() - 60000)) {
                     Alerts.info({
                         header: Locale.keyChangeTitleRemote,
-                        body: Locale.recentPasswordChange
+                        body: Locale.recentPasswordChangeOld
                     });
                     this.params.tempRemoteSyncPassword = this.params.password;
                 } else {

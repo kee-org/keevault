@@ -837,8 +837,9 @@
   "accResetResetMyVault": "Reset my Kee Vault",
   "accResetLinkExpired": "Link expired",
   "accResetLinkExpiredDetails": "Sorry, the reset link you followed has expired so you will need to start the reset process again. Next time please complete the process within one hour.",
-  "recentPasswordChange": "It looks like your password has been changed recently. Please enter your old password next.",
-  "passwordChanged": "Your password has been changed. To log in to your other devices, you may need to refresh the app and enter your old password when prompted.",
+  "recentPasswordChangeOld": "It looks like your password has been changed recently. Please enter your old password next.",
+  "recentPasswordChangeNew": "It looks like your password has been changed recently. Please enter your new password.",
+  "passwordChanged": "Your password has been changed.",
   "savedOnAllDevicesQuestion": "Have you saved your Kee Vault on all other devices?",
   "unsavedChangesOnOtherDevicesMayBeLost": "If you have unsaved changes on other devices they may be lost if you change your password now.",
   "readyToChangePassword": "Ready to change your password?"
