@@ -519,6 +519,8 @@ const FileModel = Backbone.Model.extend({
                 const promises = [];
                 if (remoteKey.password) {
                     promises.push(credentials.setPassword(remoteKey.password));
+                } else if (remoteKey.passwordHash) {
+                    credentials.passwordHash = remoteKey.passwordHash;
                 } else {
                     credentials.passwordHash = this.db.credentials.passwordHash;
                 }

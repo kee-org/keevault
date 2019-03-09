@@ -242,8 +242,9 @@ const AppModel = Backbone.Model.extend({
         return this.account.changePassword(hashedNewPassword, async () => {
             const emailAddrParts = EmailUtil.split(this.account.get('email'));
             const file = this.files.first();
+            const oldPasswordHash = file.db.credentials.passwordHash.clone(); // Not certain clone is needed
             file.setPassword(newPassword, emailAddrParts);
-            this.syncFile(file, { skipValidation: true, startedByUser: false });
+            this.syncFile(file, { skipValidation: true, startedByUser: false, remoteKey: {passwordHash: oldPasswordHash} });
             return true;
         });
     },
