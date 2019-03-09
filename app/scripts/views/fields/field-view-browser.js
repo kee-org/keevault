@@ -172,13 +172,14 @@ const FieldViewBrowser = FieldViewText.extend({
             .mousedown(this.protectBtnClick.bind(this));
     },
 
-    closeEditor: function (value) {
+    closeEditor: function (value, extra) {
         if (this.browserFieldView) {
             this.browserFieldView.closing();
             this.browserFieldView.remove();
             this.browserFieldView = null;
+            if (extra && extra.tab) this.triggerChange({ tab: extra.tab });
         } else {
-            this.endEdit(value);
+            this.endEdit(value, extra);
         }
     },
 
