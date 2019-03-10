@@ -547,6 +547,11 @@ const FileModel = Backbone.Model.extend({
                                 if (remoteKey.password) {
                                     this.set('passwordLength', remoteKey.password.textLength);
                                 }
+                                // kdbxweb db.header.merge does not merge kdfParameters. Possibly
+                                // should do? Quite an edge case for the general library though so
+                                // maybe not. We must, because we may change them when the key changes
+                                this.db.header.kdfParameters = remoteDb.header.kdfParameters;
+                                this.set('kdfParameters', this.readKdfParams());
                             }
                             this.db.merge(remoteDb);
                         } catch (e) {
