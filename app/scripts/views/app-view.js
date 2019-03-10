@@ -618,7 +618,7 @@ const AppView = Backbone.View.extend({
         const errorFiles = [];
         const that = this;
         this.model.files.forEach(function(file) {
-            if (!file.get('dirty')) {
+            if (!this.fileSaveStatePreventsClose(file)) {
                 return;
             }
             this.model.syncFile(file, null, fileSaved.bind(this, file));
@@ -649,7 +649,8 @@ const AppView = Backbone.View.extend({
         }
     },
 
-    fileSaveStatePreventsClose: function () {
+    fileSaveStatePreventsClose: function (singleFile) {
+        if (singleFile) return singleFile.get('dirty') || singleFile.get('modified');
         return this.model.files.hasDirtyFiles() || this.model.files.hasUnsavedFiles();
     },
 
