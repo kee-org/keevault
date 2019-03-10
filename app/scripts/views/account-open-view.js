@@ -578,6 +578,8 @@ const OpenView = Backbone.View.extend({
         AppSettingsModel.instance.set('latestClientToken', clientToken);
         const jwts = AppSettingsModel.instance.get('recentClientTokens') || {};
         jwts[this.model.account.get('email')] = clientToken;
+        // Have to unset first because Backbone
+        AppSettingsModel.instance.unset('recentClientTokens', { silent: true });
         AppSettingsModel.instance.set('recentClientTokens', jwts);
 
         // Notify any connected browser-addon that we have new account credentials
