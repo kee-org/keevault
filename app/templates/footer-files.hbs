@@ -3,6 +3,9 @@
     <i class="fas fa-{{#if file.attributes.open}}lock-open{{else}}lock{{/if}}"></i> {{file.attributes.name}}
     {{#if file.attributes.syncing~}}
         <i class="fas fa-sync fa-spin footer__db-sign"></i>
+    {{~else if @root.syncWarning~}}
+        <i class="fas fa-square footer__db-sign footer__db-sign--warn"
+            title="{{res 'footerSyncWarning'}}: {{file.attributes.syncError}}"></i>
     {{~else if file.attributes.syncError~}}
         <i class="fas fa-times-circle footer__db-sign footer__db-sign--error"
             title="{{res 'footerSyncError'}}: {{file.attributes.syncError}}"></i>

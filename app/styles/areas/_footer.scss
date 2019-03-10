@@ -40,6 +40,7 @@
       top: 0.5em;
       @include th { color: th(action-color); }
       &--error { @include th { color: th(error-color); } }
+      &--warn { color: #ff4b00; }
     }
 
     &-open-title {

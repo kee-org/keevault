@@ -41,15 +41,17 @@ const FooterView = Backbone.View.extend({
         if (this.$el[0].childElementCount === 0) {
             this.renderTemplate({}, { plain: true });
         }
-        this.$el.find('.footer__db-item').remove();
-        const filesNodes = this.templateFiles({
-            files: this.model.files
-        }, { plain: true });
-        this.$el.find('.footer').prepend(filesNodes);
 
         const syncing = this.model.files.hasSyncingFiles();
         const errors = this.model.files.hasErrorFiles();
         const modified = !syncing && !errors && this.model.files.hasUnsavedFiles();
+
+        this.$el.find('.footer__db-item').remove();
+        const filesNodes = this.templateFiles({
+            syncWarning: errors && !this.model.files.hasDirtyFiles(),
+            files: this.model.files
+        }, { plain: true });
+        this.$el.find('.footer').prepend(filesNodes);
 
         const fsb = $('#footerSaveButton');
         if (syncing) {

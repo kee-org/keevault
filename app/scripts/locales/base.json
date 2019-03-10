@@ -59,7 +59,8 @@
   "appBeta": "WARNING: beta version, only for preview",
 
   "footerOpen": "Open / New",
-  "footerSyncError": "Sync error",
+  "footerSyncWarning": "Saved locally OK; Sync error",
+  "footerSyncError": "Changes NOT saved! Sync error",
   "footerTitleGen": "Generate",
   "footerTitleLock": "Lock",
 
