@@ -9,7 +9,7 @@ const FileInfoCollection = Backbone.Collection.extend({
     },
 
     load: function (userId) {
-        return SettingsStore.load('file-info-' + userId).then(data => {
+        return SettingsStore.load('file-info' + userId).then(data => {
             if (data) {
                 this.reset(data, {silent: true});
             }
@@ -17,7 +17,7 @@ const FileInfoCollection = Backbone.Collection.extend({
     },
 
     save: function (userId) {
-        SettingsStore.save('file-info-' + userId, this.toJSON());
+        SettingsStore.save('file-info' + userId, this.toJSON());
     },
 
     getLast: function () {
