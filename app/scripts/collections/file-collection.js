@@ -13,6 +13,7 @@ const FileCollection = Backbone.Collection.extend({
     },
 
     hasUnsavedFiles: function() {
+        // Unsaved / modified = not saved to network, but might be saved locally
         return this.some(file => file.get('modified'));
     },
 
@@ -25,6 +26,7 @@ const FileCollection = Backbone.Collection.extend({
     },
 
     hasDirtyFiles: function() {
+        // Dirty = not saved at all, even to local cache
         return this.some(file => file.get('dirty'));
     },
 

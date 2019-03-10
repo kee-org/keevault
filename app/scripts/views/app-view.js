@@ -514,13 +514,7 @@ const AppView = Backbone.View.extend({
     },
 
     beforeUnload: function(e) {
-        const exitEvent = { preventDefault() { this.prevented = true; } };
-        Backbone.trigger('main-window-will-close', exitEvent);
-        if (exitEvent.prevented) {
-            return;
-        }
-        // I can't understand the difference between modified and dirty states so
-        // adding a modified check here too for defence against that complexity
+        Backbone.trigger('main-window-will-close');
         if (this.model.files.hasDirtyFiles() || this.model.files.hasUnsavedFiles()) {
             return Locale.appUnsavedWarnBody;
         }
@@ -638,7 +632,7 @@ const AppView = Backbone.View.extend({
                 errorFiles.push(file.get('name'));
             }
             if (--pendingCallbacks === 0) {
-                if (errorFiles.length && that.model.files.hasDirtyFiles()) {
+                if (errorFiles.length && (that.model.files.hasDirtyFiles() || that.model.files.hasUnsavedFiles())) {
                     if (!Alerts.alertDisplayed) {
                         const alertBody = errorFiles.length > 1 ? Locale.appSaveErrorBodyMul : Locale.appSaveErrorBody;
                         Alerts.error({
