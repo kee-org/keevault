@@ -515,7 +515,7 @@ const AppView = Backbone.View.extend({
 
     beforeUnload: function(e) {
         Backbone.trigger('main-window-will-close');
-        if (this.model.files.hasDirtyFiles() || this.model.files.hasUnsavedFiles()) {
+        if (this.fileSaveStatePreventsClose()) {
             return Locale.appUnsavedWarnBody;
         }
     },
@@ -632,7 +632,7 @@ const AppView = Backbone.View.extend({
                 errorFiles.push(file.get('name'));
             }
             if (--pendingCallbacks === 0) {
-                if (errorFiles.length && (that.model.files.hasDirtyFiles() || that.model.files.hasUnsavedFiles())) {
+                if (errorFiles.length && that.fileSaveStatePreventsClose()) {
                     if (!Alerts.alertDisplayed) {
                         const alertBody = errorFiles.length > 1 ? Locale.appSaveErrorBodyMul : Locale.appSaveErrorBody;
                         Alerts.error({
@@ -647,6 +647,10 @@ const AppView = Backbone.View.extend({
                 }
             }
         }
+    },
+
+    fileSaveStatePreventsClose: function () {
+        return this.model.files.hasDirtyFiles() || this.model.files.hasUnsavedFiles();
     },
 
     closeAllFiles: function() {
