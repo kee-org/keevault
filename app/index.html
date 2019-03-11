@@ -352,6 +352,7 @@
             //Init
             if (!_iframe && supported) {
                 _iframe = document.createElement("iframe");
+                _iframe.sandbox = "allow-same-origin allow-scripts";
                 _iframe.style.cssText = "position:absolute;width:1px;height:1px;left:-9999px;";
                 document.body.appendChild(_iframe);
 
