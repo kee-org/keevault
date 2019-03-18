@@ -1,6 +1,7 @@
 const Backbone = require('backbone');
 const CopyPaste = require('../../comp/copy-paste');
 const Tip = require('../../util/tip');
+const Locale = require('../../util/locale');
 
 const FieldView = Backbone.View.extend({
     template: require('templates/details/field.hbs'),
@@ -19,9 +20,13 @@ const FieldView = Backbone.View.extend({
         return 'KdbxFieldOnly';
     },
 
+    getDisplayTitle: function (title) {
+        return title || Locale.unnamedField;
+    },
+
     render: function() {
         this.value = this.getValue();
-        this.renderTemplate({ editable: !this.readonly, multiline: this.model.multiline, title: this.model.title,
+        this.renderTemplate({ editable: !this.readonly, multiline: this.model.multiline, title: this.getDisplayTitle(this.model.title),
             canEditTitle: this.model.newField, protect: this.value && this.value.isProtected });
         this.valueEl = this.$el.find('.details__field-value');
         this.valueEl.html(this.renderValue(this.value));

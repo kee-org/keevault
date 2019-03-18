@@ -117,7 +117,7 @@ const FieldViewCustom = FieldViewBrowser.extend({
             this.model.title = newTitle;
             this.model.titleChanged = true;
         }
-        this.$el.find('.details__field-label').text(this.model.title);
+        this.$el.find('.details__field-label').text(this.getDisplayTitle(this.model.title));
         delete this.labelInput;
         if (this.editing && this.input) {
             this.input.focus();
