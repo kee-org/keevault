@@ -157,16 +157,29 @@ const AppView = Backbone.View.extend({
         this.views.listDrag.setElement(this.$el.find('.app__list-drag')).render();
         this.views.details.setElement(this.$el.find('.app__details')).render();
 
+        const body = $('body')[0];
+        body.classList.remove('enable_native_scroll');
+
         if (this.model.destinationFeature === 'intro' ||
             (!this.model.destinationFeature && !this.model.settings.get('vaultIntroCompleted'))) {
             this.model.settings.set('rememberedAccountEmail', '');
             this.model.settings.set('directAccountEmail', '');
-            this.showInitialVisitView();
+
+            // If this is a forced view of the intro, we'll need to neatly animate
+            // from the main loading screen to the intro feature. Otherwise, an
+            // instant render of what is essentially identical to the default
+            // static HTML content on first page load is required.
+            if (body.classList.contains('firstLoad')) {
+                body.classList.add('enable_native_scroll');
+                this.showInitialVisitView();
+            } else {
+                this.showForcedInitialVisitView();
+            }
         } else if (this.model.destinationFeature === 'demo') {
-            this.showInitialVisitView();
+            this.showForcedInitialVisitView();
             this.showDemo();
         } else if (this.model.destinationFeature === 'register') {
-            this.showInitialVisitView(() => this.views.vaultOverlay.ctaClick());
+            this.showForcedInitialVisitView(() => this.views.vaultOverlay.ctaClick());
         } else {
             $('#app__body_intro')[0].classList.add('hide');
             $('#app__body_main')[0].classList.remove('hide');
@@ -184,6 +197,24 @@ const AppView = Backbone.View.extend({
     },
 
     showInitialVisitView: function(viewReady) {
+        this.views.vaultOverlay.setElement(this.$el.find('.vault_overlay')).render();
+
+        // We never remove this. User doesn't really need to know about new versions
+        // until the next page refresh and the banner complicates a lot of layout issues.
+        $('body')[0].classList.add('intro_active');
+
+        this.$el.find('.vault_overlay .vault_intro_full_content_header')[0].classList.remove('hide');
+        this.$el.find('.vault_overlay .vault_intro_full_content_body')[0].classList.add('loaded');
+        $('.vault_intro_top')[0].classList.remove('hide');
+        $('#app__body_main')[0].classList.remove('hide');
+        $('#app__body_intro')[0].classList.add('hide');
+
+        $('body')[0].classList.add('enable_native_scroll');
+
+        if (viewReady) viewReady();
+    },
+
+    showForcedInitialVisitView: function(viewReady) {
         $('.app__footer')[0].classList.add('hide');
         this.views.vaultOverlay.setElement(this.$el.find('.vault_overlay')).render();
         const mainIntroSection = this.$el.find('.vault_overlay .vault_intro_full_content_body')[0];

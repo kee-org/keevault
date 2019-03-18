@@ -2,7 +2,8 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>Kee Vault</title>
+    <title>Kee Vault | Secure, Open Source Password Management</title>
+    <meta name="description" content="Save time and hassle, sign in easily to websites and avoid forgotten password resets. Use Kee Vault password manager to protect against the nightmare of your accounts being hacked.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Kee Vault">
@@ -28,15 +29,29 @@
         // structure to match whether we will be showing the introduction or the full
         // application / sign-in
         (function() {
+            var firstLoad = true;
             try {
                 var appSettingsJson = window.localStorage.getItem('appSettings');
                 if (appSettingsJson) {
                     var appSettings = JSON.parse(appSettingsJson);
-                    if (appSettings && appSettings.theme && appSettings.theme.length > 0) {
-                        document.body.className = "th-" + appSettings.theme;
+                    if (appSettings) {
+                        if (appSettings.theme && appSettings.theme.length > 0) {
+                            document.body.className = "th-" + appSettings.theme;
+                        }
+                        if (appSettings.vaultIntroCompleted) {
+                            firstLoad = false;
+                        }
                     }
                 }
+
             } catch (e) {
+                console.error(e);
+            }
+            // No point waiting for the full app to initialise if we are just showing
+            // the intro page but we need to make sure that the user action buttons
+            // await the full app. Disabled for MVP but could be improved in future.
+            if (firstLoad) {
+                document.body.classList.add("firstLoad", "enable_native_scroll");
             }
         })();
     </script>
@@ -45,6 +60,154 @@
             <div class="vault_intro_loading_container">
                 <div class="logo-container"><svg xmlns="http://www.w3.org/2000/svg" width="1118.255" height="256" viewBox="0 0 1118.255 256"><g fill="#1a466b"><path d="M450.16 232.071q1.64 4.261 1.64 7.211 0 6.884-4.923 11.8Q441.952 256 434.73 256q-4.925 0-9.52-2.622-4.268-2.95-6.238-7.867l-18.383-45.89H282.74l-18.711 45.89q-2.298 4.917-6.565 7.867-4.268 2.622-9.192 2.622-7.222 0-12.146-4.916-4.596-5.245-4.596-12.128 0-3.278 1.641-7.54l92.245-219.943Q330.34 0 341.5 0q11.818 0 16.086 11.472zm-61.06-60.64L342.159 54.74 294.23 171.43zM503.553 0c-4.814 0-8.863 1.64-12.146 4.917-3.282 3.06-4.923 7.102-4.923 12.128v133.086a105.868 105.868 0 0 0 0 .002A105.868 105.868 0 0 0 592.352 256a105.868 105.868 0 0 0 105.867-105.867 105.868 105.868 0 0 0 0-.002h.002V17.045c0-5.026-1.643-9.069-4.925-12.128C690.232 1.64 686.293 0 681.478 0c-4.814 0-8.863 1.64-12.146 4.917-3.282 3.06-4.925 7.102-4.925 12.128v133.086h-.163a71.891 71.892 0 0 1 0 .002 71.891 71.892 0 0 1-71.892 71.89 71.891 71.892 0 0 1-71.89-71.89 71.891 71.892 0 0 1 0-.002h.163V17.045c0-5.026-1.643-9.069-4.925-12.128C512.636 1.64 508.587 0 503.553 0zM909.915 221.91q7.222 0 12.146 4.917 4.924 4.916 4.924 12.128 0 7.21-4.924 12.128-4.924 4.916-12.146 4.916H774.01q-7.222 0-12.146-4.916-4.596-4.917-4.596-12.128V17.045q0-7.211 4.924-12.128T774.01 0q7.222 0 12.146 4.917t4.924 12.128V221.91zM1088.73 0q6.895 0 11.162 4.589 4.596 4.261 4.596 11.145 0 6.883-4.596 11.472-4.267 4.261-11.161 4.261h-70.579v207.488q0 7.21-4.924 12.128-4.924 4.916-12.146 4.916t-12.146-4.916q-4.924-4.917-4.924-12.128V31.467h-70.907q-6.893 0-11.49-4.26-4.267-4.59-4.267-11.473 0-6.884 4.268-11.145Q906.212 0 913.106 0z"></path><path d="M29.172 0c-4.808 0-8.632 1.31-11.473 3.932-2.622 2.404-3.932 5.793-3.932 10.163 0 3.06.875 6.884 2.623 11.473l96.04 219.613c3.277 7.211 8.413 10.817 15.406 10.817 7.43 0 12.564-3.606 15.405-10.817l97.024-222.565c1.31-3.06 1.967-5.898 1.967-8.52 0-4.152-1.42-7.541-4.261-10.164-2.564-2.564-6.18-3.863-10.833-3.92l.006-.012h-54.57a9.63 9.63 0 0 0-9.232 9.617 9.63 9.63 0 0 0 2.722 6.709c2.882 2.966 5.432 6.264 7.542 9.882l-.34-.778c-.007-.015-.01-.029-.016-.043l.386.882c.127.22.219.46.343.68 2.905 5.167 5.02 10.868 6.061 16.994 4.135 24.506-9.262 48.594-32.34 57.816-.04.023-.077.045-.102.058a4.04 4.04 0 0 0-1.545 1.385 4.044 4.044 0 0 0-.616 1.637l-.02.125v.636a4.082 4.082 0 0 1-.015.325 4.082 4.082 0 0 1-.062.405 4.082 4.082 0 0 1-.102.394 4.082 4.082 0 0 1-.14.383 4.082 4.082 0 0 1-.177.369 4.082 4.082 0 0 1-.213.347 4.082 4.082 0 0 1-.247.324 4.082 4.082 0 0 1-.277.3 4.082 4.082 0 0 1-.307.268 4.082 4.082 0 0 1-.333.238 4.082 4.082 0 0 1-.265.151l-.22.112-7.143 3.571c.007.002-.005.016-.055.05-.392.27-.685.677-.81 1.13a2.039 2.039 0 0 0 .816 2.235c.035.024.049.039.035.038l6.624 3.31.203.102a5.215 5.215 0 0 1 .416.255 5.215 5.215 0 0 1 .415.317 5.215 5.215 0 0 1 .38.355 5.215 5.215 0 0 1 .346.392 5.215 5.215 0 0 1 .302.423 5.215 5.215 0 0 1 .26.452 5.215 5.215 0 0 1 .213.477 5.215 5.215 0 0 1 .163.494 5.215 5.215 0 0 1 .116.508 5.215 5.215 0 0 1 .062.518 5.215 5.215 0 0 1 .014.37 5.215 5.215 0 0 1-.026.52 5.215 5.215 0 0 1-.078.516 5.215 5.215 0 0 1-.13.504 5.215 5.215 0 0 1-.179.49 5.215 5.215 0 0 1-.227.468 5.215 5.215 0 0 1-.271.445 5.215 5.215 0 0 1-.317.417 5.215 5.215 0 0 1-.355.38 5.215 5.215 0 0 1-.39.345 5.215 5.215 0 0 1-.425.303 5.215 5.215 0 0 1-.437.25l-.04.019-11.018 5.509c-.009.008-.018.017-.036.028a2.047 2.047 0 0 0-.963 1.957 2.045 2.045 0 0 0 .995 1.539c.025.015.025.017.024.018l.006.004 10.964 5.481.321.16a5.062 5.062 0 0 1 .385.237 5.062 5.062 0 0 1 .405.307 5.062 5.062 0 0 1 .368.344 5.062 5.062 0 0 1 .335.381 5.062 5.062 0 0 1 .293.41 5.062 5.062 0 0 1 .253.44 5.062 5.062 0 0 1 .206.462 5.062 5.062 0 0 1 .161.48 5.062 5.062 0 0 1 .11.492 5.062 5.062 0 0 1 .061.503 5.062 5.062 0 0 1 .006.179v.297a5.062 5.062 0 0 1-.02.389 5.062 5.062 0 0 1-.075.5 5.062 5.062 0 0 1-.124.49 5.062 5.062 0 0 1-.173.474 5.062 5.062 0 0 1-.221.457 5.062 5.062 0 0 1-.265.43 5.062 5.062 0 0 1-.305.403 5.062 5.062 0 0 1-.345.37 5.062 5.062 0 0 1-.38.334 5.062 5.062 0 0 1-.411.295 5.062 5.062 0 0 1-.435.247l-.014.008-6.695 3.348a.476.476 0 0 1-.052.036 2.042 2.042 0 0 0 .09 3.472c.033.018.038.024.03.024l6.69 3.345.043.022a5.118 5.118 0 0 1 .43.263 5.118 5.118 0 0 1 .409.31 5.118 5.118 0 0 1 .374.35 5.118 5.118 0 0 1 .337.382 5.118 5.118 0 0 1 .297.417 5.118 5.118 0 0 1 .255.444 5.118 5.118 0 0 1 .21.466 5.118 5.118 0 0 1 .161.487 5.118 5.118 0 0 1 .112.498 5.118 5.118 0 0 1 .061.508 5.118 5.118 0 0 1 .012.361 5.118 5.118 0 0 1-.026.512 5.118 5.118 0 0 1-.075.507 5.118 5.118 0 0 1-.126.494 5.118 5.118 0 0 1-.175.48 5.118 5.118 0 0 1-.223.46 5.118 5.118 0 0 1-.268.437 5.118 5.118 0 0 1-.31.409 5.118 5.118 0 0 1-.347.372 5.118 5.118 0 0 1-.385.34 5.118 5.118 0 0 1-.417.296 5.118 5.118 0 0 1-.408.235l-.088.044-6.565 3.283s-.01.008-.024.016a1.91 1.91 0 0 0-.407.317 2.023 2.023 0 0 0-.576 1.692c.045.354.18.689.395.975.152.202.352.38.566.51.052.032.052.034.048.034l.004.002 7.77 3.884a3.157 3.157 0 0 1 .268.166 3.157 3.157 0 0 1 .251.191 3.157 3.157 0 0 1 .232.215 3.157 3.157 0 0 1 .207.236 3.157 3.157 0 0 1 .183.257 3.157 3.157 0 0 1 .158.275 3.157 3.157 0 0 1 .13.287 3.157 3.157 0 0 1 .099.299 3.157 3.157 0 0 1 .07.309 3.157 3.157 0 0 1 .038.313 3.157 3.157 0 0 1 .006.167v.096a3.157 3.157 0 0 1-.014.275 3.157 3.157 0 0 1-.048.313 3.157 3.157 0 0 1-.078.305 3.157 3.157 0 0 1-.108.297 3.157 3.157 0 0 1-.137.285 3.157 3.157 0 0 1-.166.267 3.157 3.157 0 0 1-.191.253 3.157 3.157 0 0 1-.215.229 3.157 3.157 0 0 1-.237.21 3.157 3.157 0 0 1-.258.183 3.157 3.157 0 0 1-.11.061l-.214.118-9.037 4.929c-.005.005 0 .008-.008.012a4.084 4.084 0 0 0-1.913 3.107 3.565 3.565 0 0 1-.015.14l-.002-.004v5.477a2.041 2.041 0 0 1-.01.203 2.041 2.041 0 0 1-.03.203 2.041 2.041 0 0 1-.052.198 2.041 2.041 0 0 1-.07.191 2.041 2.041 0 0 1-.087.183 2.041 2.041 0 0 1-.108.174 2.041 2.041 0 0 1-.123.163 2.041 2.041 0 0 1-.138.15 2.041 2.041 0 0 1-.153.133 2.041 2.041 0 0 1-.168.12 2.041 2.041 0 0 1-.071.042c-.497.112-1.02.145-1.531.215-.771.106-1.505.327-2.306.327a17.556 17.556 0 0 1-17.596-17.596v-81.684c-.006.001-.013.01-.014-.002a4.193 4.193 0 0 0-.293-1.134 4.04 4.04 0 0 0-1.805-1.981.957.957 0 0 1-.086-.048l.054.018c-22.863-9.305-36.332-33.338-32.097-57.865 1.046-6.06 3.153-11.694 6.025-16.812.142-.253.238-.535.385-.785 2.133-3.658 4.718-6.986 7.64-9.978-.033.033-.067.063-.098.096a9.63 9.63 0 0 0 2.722-6.71A9.63 9.63 0 0 0 83.425 0h-54.2v.002L29.173 0zm98.827 8.31c-9.717 0-17.595 7.877-17.595 17.595s7.877 17.597 17.595 17.597c9.72 0 17.598-7.878 17.598-17.597 0-9.719-7.88-17.596-17.598-17.596zM97.97 9.504zm60.06 0zm2.18 1.597zm1.646 1.333c.128.107.261.207.388.315-.127-.108-.26-.208-.388-.315zm.388.315zm1.938 1.728zm-70.037-2.043c-.128.107-.262.207-.389.315.128-.108.26-.208.39-.315z"></path></g></svg></div>
                 <div class="account-loading">Loading...</div>
+            </div>
+        </div>
+    </div>
+    <div class="app firstLoad">
+        <div class="vault_overlay vault_landing">
+            <div class="vault_intro_full">
+                <div class="vault_intro_full_content">
+                    <div class="vault_intro_full_content_header">
+                        <div class="vault_intro_loading_container">
+                            <div class="logo-container"><svg xmlns="http://www.w3.org/2000/svg" width="1118.255"
+                                    height="256" viewBox="0 0 1118.255 256">
+                                    <g fill="#1a466b">
+                                        <path
+                                            d="M450.16 232.071q1.64 4.261 1.64 7.211 0 6.884-4.923 11.8Q441.952 256 434.73 256q-4.925 0-9.52-2.622-4.268-2.95-6.238-7.867l-18.383-45.89H282.74l-18.711 45.89q-2.298 4.917-6.565 7.867-4.268 2.622-9.192 2.622-7.222 0-12.146-4.916-4.596-5.245-4.596-12.128 0-3.278 1.641-7.54l92.245-219.943Q330.34 0 341.5 0q11.818 0 16.086 11.472zm-61.06-60.64L342.159 54.74 294.23 171.43zM503.553 0c-4.814 0-8.863 1.64-12.146 4.917-3.282 3.06-4.923 7.102-4.923 12.128v133.086a105.868 105.868 0 0 0 0 .002A105.868 105.868 0 0 0 592.352 256a105.868 105.868 0 0 0 105.867-105.867 105.868 105.868 0 0 0 0-.002h.002V17.045c0-5.026-1.643-9.069-4.925-12.128C690.232 1.64 686.293 0 681.478 0c-4.814 0-8.863 1.64-12.146 4.917-3.282 3.06-4.925 7.102-4.925 12.128v133.086h-.163a71.891 71.892 0 0 1 0 .002 71.891 71.892 0 0 1-71.892 71.89 71.891 71.892 0 0 1-71.89-71.89 71.891 71.892 0 0 1 0-.002h.163V17.045c0-5.026-1.643-9.069-4.925-12.128C512.636 1.64 508.587 0 503.553 0zM909.915 221.91q7.222 0 12.146 4.917 4.924 4.916 4.924 12.128 0 7.21-4.924 12.128-4.924 4.916-12.146 4.916H774.01q-7.222 0-12.146-4.916-4.596-4.917-4.596-12.128V17.045q0-7.211 4.924-12.128T774.01 0q7.222 0 12.146 4.917t4.924 12.128V221.91zM1088.73 0q6.895 0 11.162 4.589 4.596 4.261 4.596 11.145 0 6.883-4.596 11.472-4.267 4.261-11.161 4.261h-70.579v207.488q0 7.21-4.924 12.128-4.924 4.916-12.146 4.916t-12.146-4.916q-4.924-4.917-4.924-12.128V31.467h-70.907q-6.893 0-11.49-4.26-4.267-4.59-4.267-11.473 0-6.884 4.268-11.145Q906.212 0 913.106 0z">
+                                        </path>
+                                        <path
+                                            d="M29.172 0c-4.808 0-8.632 1.31-11.473 3.932-2.622 2.404-3.932 5.793-3.932 10.163 0 3.06.875 6.884 2.623 11.473l96.04 219.613c3.277 7.211 8.413 10.817 15.406 10.817 7.43 0 12.564-3.606 15.405-10.817l97.024-222.565c1.31-3.06 1.967-5.898 1.967-8.52 0-4.152-1.42-7.541-4.261-10.164-2.564-2.564-6.18-3.863-10.833-3.92l.006-.012h-54.57a9.63 9.63 0 0 0-9.232 9.617 9.63 9.63 0 0 0 2.722 6.709c2.882 2.966 5.432 6.264 7.542 9.882l-.34-.778c-.007-.015-.01-.029-.016-.043l.386.882c.127.22.219.46.343.68 2.905 5.167 5.02 10.868 6.061 16.994 4.135 24.506-9.262 48.594-32.34 57.816-.04.023-.077.045-.102.058a4.04 4.04 0 0 0-1.545 1.385 4.044 4.044 0 0 0-.616 1.637l-.02.125v.636a4.082 4.082 0 0 1-.015.325 4.082 4.082 0 0 1-.062.405 4.082 4.082 0 0 1-.102.394 4.082 4.082 0 0 1-.14.383 4.082 4.082 0 0 1-.177.369 4.082 4.082 0 0 1-.213.347 4.082 4.082 0 0 1-.247.324 4.082 4.082 0 0 1-.277.3 4.082 4.082 0 0 1-.307.268 4.082 4.082 0 0 1-.333.238 4.082 4.082 0 0 1-.265.151l-.22.112-7.143 3.571c.007.002-.005.016-.055.05-.392.27-.685.677-.81 1.13a2.039 2.039 0 0 0 .816 2.235c.035.024.049.039.035.038l6.624 3.31.203.102a5.215 5.215 0 0 1 .416.255 5.215 5.215 0 0 1 .415.317 5.215 5.215 0 0 1 .38.355 5.215 5.215 0 0 1 .346.392 5.215 5.215 0 0 1 .302.423 5.215 5.215 0 0 1 .26.452 5.215 5.215 0 0 1 .213.477 5.215 5.215 0 0 1 .163.494 5.215 5.215 0 0 1 .116.508 5.215 5.215 0 0 1 .062.518 5.215 5.215 0 0 1 .014.37 5.215 5.215 0 0 1-.026.52 5.215 5.215 0 0 1-.078.516 5.215 5.215 0 0 1-.13.504 5.215 5.215 0 0 1-.179.49 5.215 5.215 0 0 1-.227.468 5.215 5.215 0 0 1-.271.445 5.215 5.215 0 0 1-.317.417 5.215 5.215 0 0 1-.355.38 5.215 5.215 0 0 1-.39.345 5.215 5.215 0 0 1-.425.303 5.215 5.215 0 0 1-.437.25l-.04.019-11.018 5.509c-.009.008-.018.017-.036.028a2.047 2.047 0 0 0-.963 1.957 2.045 2.045 0 0 0 .995 1.539c.025.015.025.017.024.018l.006.004 10.964 5.481.321.16a5.062 5.062 0 0 1 .385.237 5.062 5.062 0 0 1 .405.307 5.062 5.062 0 0 1 .368.344 5.062 5.062 0 0 1 .335.381 5.062 5.062 0 0 1 .293.41 5.062 5.062 0 0 1 .253.44 5.062 5.062 0 0 1 .206.462 5.062 5.062 0 0 1 .161.48 5.062 5.062 0 0 1 .11.492 5.062 5.062 0 0 1 .061.503 5.062 5.062 0 0 1 .006.179v.297a5.062 5.062 0 0 1-.02.389 5.062 5.062 0 0 1-.075.5 5.062 5.062 0 0 1-.124.49 5.062 5.062 0 0 1-.173.474 5.062 5.062 0 0 1-.221.457 5.062 5.062 0 0 1-.265.43 5.062 5.062 0 0 1-.305.403 5.062 5.062 0 0 1-.345.37 5.062 5.062 0 0 1-.38.334 5.062 5.062 0 0 1-.411.295 5.062 5.062 0 0 1-.435.247l-.014.008-6.695 3.348a.476.476 0 0 1-.052.036 2.042 2.042 0 0 0 .09 3.472c.033.018.038.024.03.024l6.69 3.345.043.022a5.118 5.118 0 0 1 .43.263 5.118 5.118 0 0 1 .409.31 5.118 5.118 0 0 1 .374.35 5.118 5.118 0 0 1 .337.382 5.118 5.118 0 0 1 .297.417 5.118 5.118 0 0 1 .255.444 5.118 5.118 0 0 1 .21.466 5.118 5.118 0 0 1 .161.487 5.118 5.118 0 0 1 .112.498 5.118 5.118 0 0 1 .061.508 5.118 5.118 0 0 1 .012.361 5.118 5.118 0 0 1-.026.512 5.118 5.118 0 0 1-.075.507 5.118 5.118 0 0 1-.126.494 5.118 5.118 0 0 1-.175.48 5.118 5.118 0 0 1-.223.46 5.118 5.118 0 0 1-.268.437 5.118 5.118 0 0 1-.31.409 5.118 5.118 0 0 1-.347.372 5.118 5.118 0 0 1-.385.34 5.118 5.118 0 0 1-.417.296 5.118 5.118 0 0 1-.408.235l-.088.044-6.565 3.283s-.01.008-.024.016a1.91 1.91 0 0 0-.407.317 2.023 2.023 0 0 0-.576 1.692c.045.354.18.689.395.975.152.202.352.38.566.51.052.032.052.034.048.034l.004.002 7.77 3.884a3.157 3.157 0 0 1 .268.166 3.157 3.157 0 0 1 .251.191 3.157 3.157 0 0 1 .232.215 3.157 3.157 0 0 1 .207.236 3.157 3.157 0 0 1 .183.257 3.157 3.157 0 0 1 .158.275 3.157 3.157 0 0 1 .13.287 3.157 3.157 0 0 1 .099.299 3.157 3.157 0 0 1 .07.309 3.157 3.157 0 0 1 .038.313 3.157 3.157 0 0 1 .006.167v.096a3.157 3.157 0 0 1-.014.275 3.157 3.157 0 0 1-.048.313 3.157 3.157 0 0 1-.078.305 3.157 3.157 0 0 1-.108.297 3.157 3.157 0 0 1-.137.285 3.157 3.157 0 0 1-.166.267 3.157 3.157 0 0 1-.191.253 3.157 3.157 0 0 1-.215.229 3.157 3.157 0 0 1-.237.21 3.157 3.157 0 0 1-.258.183 3.157 3.157 0 0 1-.11.061l-.214.118-9.037 4.929c-.005.005 0 .008-.008.012a4.084 4.084 0 0 0-1.913 3.107 3.565 3.565 0 0 1-.015.14l-.002-.004v5.477a2.041 2.041 0 0 1-.01.203 2.041 2.041 0 0 1-.03.203 2.041 2.041 0 0 1-.052.198 2.041 2.041 0 0 1-.07.191 2.041 2.041 0 0 1-.087.183 2.041 2.041 0 0 1-.108.174 2.041 2.041 0 0 1-.123.163 2.041 2.041 0 0 1-.138.15 2.041 2.041 0 0 1-.153.133 2.041 2.041 0 0 1-.168.12 2.041 2.041 0 0 1-.071.042c-.497.112-1.02.145-1.531.215-.771.106-1.505.327-2.306.327a17.556 17.556 0 0 1-17.596-17.596v-81.684c-.006.001-.013.01-.014-.002a4.193 4.193 0 0 0-.293-1.134 4.04 4.04 0 0 0-1.805-1.981.957.957 0 0 1-.086-.048l.054.018c-22.863-9.305-36.332-33.338-32.097-57.865 1.046-6.06 3.153-11.694 6.025-16.812.142-.253.238-.535.385-.785 2.133-3.658 4.718-6.986 7.64-9.978-.033.033-.067.063-.098.096a9.63 9.63 0 0 0 2.722-6.71A9.63 9.63 0 0 0 83.425 0h-54.2v.002L29.173 0zm98.827 8.31c-9.717 0-17.595 7.877-17.595 17.595s7.877 17.597 17.595 17.597c9.72 0 17.598-7.878 17.598-17.597 0-9.719-7.88-17.596-17.598-17.596zM97.97 9.504zm60.06 0zm2.18 1.597zm1.646 1.333c.128.107.261.207.388.315-.127-.108-.26-.208-.388-.315zm.388.315zm1.938 1.728zm-70.037-2.043c-.128.107-.262.207-.389.315.128-.108.26-.208.39-.315z">
+                                        </path>
+                                    </g>
+                                </svg></div>
+                            <div class="account-loading">Loading...</div> <!-- appears pointless but affects layout so must remain -->
+                        </div>
+                    </div>
+                    <div class="vault_intro_full_content_body loaded">
+                        <div id="home_side">
+                            <section id="home_sec_signin">
+                                <button class="vault_existing_user_login active vault_action" disabled="disabled" id="vault_existing_user_login_narrow">
+                                    <div class="content"><span style="font-size:0.75rem">Existing user?</span><br>Sign in</div>
+                                    <div class="opening-icon"><i class="fa fa-spinner fa-spin"></i></div>
+                                </button>
+                            </section>
+                        </div>
+                        <div id="home_main">
+                            <section id="home_sec_intro">
+                                <h2>Simple and secure password management</h2>
+                                <p><strong>Save time and hassle, sign in easily to the websites you use every day and never
+                                        go through another password reset procedure.</strong></p>
+                                <p><strong>Protect yourself and people you know from the nightmare of your accounts being
+                                        hacked.</strong></p>
+                                <p>One strong password protects all your passwords using the latest secure encryption
+                                    technology.</p>
+                                <div class="signupCTAContainer">
+                                    <p>The Supporter monthly subscription is the easiest way to start securing your online
+                                        world and costs only £2 per month after a free trial with no payment details
+                                        required.</p>
+                                    <button class="vault_action vault_primary_action active" disabled="disabled">
+                                        <div class="content">Get started</div>
+                                        <div class="opening-icon"><i class="fa fa-spinner fa-spin"></i></div>
+                                    </button>
+                                    <p>Kee Vault is currently in a public "beta" phase. We've opened up for public
+                                        subscriptions because we are already confident in the security of Kee Vault but you
+                                        should read more about <a href="https://www.kee.pm/why-beta" target="_blank"
+                                            rel="noopener">why we're labelling the service as "beta"</a> at the moment.</p>
+                                </div>
+                            </section>
+                            <section id="home_sec_benefits">
+                                <h3>Why Kee Vault?</h3>
+                                <dl>
+                                    <div>
+                                        <dt>Protect all your online and offline accounts</dt>
+                                        <dd>Use any modern device or web browser, even when offline (including Windows, Mac,
+                                            iOS, Android, Linux and others)</dd>
+                                    </div>
+                                    <div>
+                                        <dt>Open Source protection</dt>
+                                        <dd>Unlike most password managers you can prove that your data is stored securely
+                                        </dd>
+                                    </div>
+                                    <div>
+                                        <dt>Save time</dt>
+                                        <dd>Avoid typing your passwords and waiting for reset emails; unique passwords for
+                                            all of your accounts means only changing one password if that website suffers a
+                                            security breach</dd>
+                                    </div>
+                                    <div>
+                                        <dt>Generate strong passwords</dt>
+                                        <dd>Every password you use should be long and complicated; because Kee Vault
+                                            remembers them for you, it can create very long and highly secure passwords for
+                                            you</dd>
+                                    </div>
+                                    <div>
+                                        <dt>Unique secure passwords for every website</dt>
+                                        <dd>If one website leaks a password, your other accounts will not be affected</dd>
+                                    </div>
+                                    <div>
+                                        <dt>Web browser integration</dt>
+                                        <dd>Automatically fill and save passwords for each website using the free Kee
+                                            browser extension</dd>
+                                    </div>
+                                    <div>
+                                        <dt>Latest security protection</dt>
+                                        <dd>Added protection from the latest Argon2 technology for greater protection than
+                                            existing PBKDF2-based password managers</dd>
+                                    </div>
+                                    <div>
+                                        <dt>Enhanced master password protection</dt>
+                                        <dd>If your Kee Vault master password is not quite as strong as it could be, we'll
+                                            automatically enable increased security for your Vault</dd>
+                                    </div>
+                                    <div>
+                                        <dt>Protected (encrypted) standard format exports</dt>
+                                        <dd>It's your data so you can take it with you if you leave. Save a backup of your
+                                            Vault whenever and wherever you want</dd>
+                                    </div>
+                                    <div>
+                                        <dt>Import from your old password manager</dt>
+                                        <dd>Including fully encrypted import from KeePass Password Safe 2</dd>
+                                    </div>
+                                    <div>
+                                        <dt>Protection against mistakes</dt>
+                                        <dd>Old versions of each entry allow you to recover from accidents</dd>
+                                    </div>
+                                    <div>
+                                        <dt>Securely attach small files</dt>
+                                        <dd>Up to 10MB total Vault size</dd>
+                                    </div>
+                                </dl>
+                                <p>Kee Vault is a new and unique step forward in password management from a company with
+                                    over 10 years of experience developing secure password management solutions. Combined
+                                    with the careful selection of open source cryptography components to complement the Kee
+                                    Vault service, you can rest assured that despite the "beta" label, there is good reason
+                                    to have confidence in the app today.</p>
+                            </section>
+                            <section id="home_sec_earlyaccess">
+                                <div class="signupCTAContainer">
+                                    <p>Early adopters will get a 2 month free trial before a card payment is required
+                                        (normally 2 weeks). Plus, until the Premium subscription options are launched, all
+                                        Supporters get access to all newly developed features for those tiers (see the Kee
+                                        Vault Ltd home page for full details of our current plans for these future tiers).
+                                    </p>
+                                    <button class="vault_action vault_primary_action active" disabled="disabled">
+                                        <div class="content">Get started for free</div>
+                                        <div class="opening-icon"><i class="fa fa-spinner fa-spin"></i></div>
+                                    </button>
+                                </div>
+                            </section>
+                            <section id="home_sec_reviews">
+                                <h3>Independent opinions</h3>
+                                <blockquote>Saves me a lot of time, and no more lost passwords. Perfect. 11 out of 10.
+                                </blockquote>
+                                <blockquote>Simple to use and configure.</blockquote>
+                                <blockquote>Best password manager ever!</blockquote>
+                                <p class="opinionContextExplainer">* These opinions come from users of the Kee browser
+                                    extension.</p>
+                            </section>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

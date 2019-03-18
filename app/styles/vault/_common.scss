@@ -71,3 +71,20 @@ i.fa.fa-apple {
 div.passwordStrengthRating i.fa-fw {
   width: 1.1em;
 }
+
+div.app.firstLoad {
+  display: none;
+}
+
+body.firstLoad {
+  div.app.firstLoad {
+    display: block;
+  }
+  .vault_overlay .vault_intro_full_content_body {
+    opacity: 1;
+    transition: unset;
+  }
+  #home_sec_signin #vault_existing_user_login_narrow.active {
+    display: flex;
+  }
+}
