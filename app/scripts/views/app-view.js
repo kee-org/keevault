@@ -176,7 +176,12 @@ const AppView = Backbone.View.extend({
                 this.showForcedInitialVisitView();
             }
         } else if (this.model.destinationFeature === 'demo') {
-            this.showForcedInitialVisitView();
+            if (!FeatureDetector.isMobile) {
+                this.showForcedInitialVisitView();
+            } else {
+                $('#app__body_intro')[0].classList.add('hide');
+                $('#app__body_main')[0].classList.remove('hide');
+            }
             this.showDemo();
         } else if (this.model.destinationFeature === 'register') {
             this.showForcedInitialVisitView(() => this.views.vaultOverlay.ctaClick());
