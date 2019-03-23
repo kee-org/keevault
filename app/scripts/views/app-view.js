@@ -160,6 +160,14 @@ const AppView = Backbone.View.extend({
         const body = $('body')[0];
         body.classList.remove('enable_native_scroll');
 
+        if (this.model.destinationFeature === 'register') {
+            if (this.model.settings.get('vaultIntroCompleted')) {
+                this.model.destinationFeature = 'registerWithoutWalkthrough';
+            } else {
+                this.model.destinationFeature = 'registerWithWalkthrough';
+            }
+        }
+
         if (this.model.destinationFeature === 'intro' ||
             (!this.model.destinationFeature && !this.model.settings.get('vaultIntroCompleted'))) {
             this.model.settings.set('rememberedAccountEmail', '');
@@ -183,7 +191,7 @@ const AppView = Backbone.View.extend({
                 $('#app__body_main')[0].classList.remove('hide');
             }
             this.showDemo();
-        } else if (this.model.destinationFeature === 'register') {
+        } else if (this.model.destinationFeature === 'registerWithWalkthrough') {
             this.showForcedInitialVisitView(() => this.views.vaultOverlay.ctaClick());
         } else {
             $('#app__body_intro')[0].classList.add('hide');
