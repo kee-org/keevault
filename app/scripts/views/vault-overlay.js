@@ -36,6 +36,16 @@ const VaultOverlayView = Backbone.View.extend({
     },
 
     login: function() {
+        // No matter how tiny we make the sign-in link, new users keep clicking on
+        // it instead of the massive sign-up button. This solution might cause a little
+        // confusion in edge cases such as users that bookmark an original
+        // "register now" link and use that as their ongoing access to Kee Vault
+        // but this should be very rare and is resolvable by the user more easily
+        // than them thinking the sign-in screen is the registration screen.
+        if (this.model.prefillEmail) {
+            return this.register();
+        }
+
         const loginEmail = EmailUtils.canonicalise($('#loginEmail').val());
         if (loginEmail) {
             this.model.settings.set('directAccountEmail', loginEmail);
