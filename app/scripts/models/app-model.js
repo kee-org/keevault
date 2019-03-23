@@ -1020,6 +1020,11 @@ const AppModel = Backbone.Model.extend({
         if (needBackup) {
             this.backupFile(file, data, _.noop);
         }
+    },
+
+    logout: function() {
+        this.account.logout();
+        this.account = AccountModel.instance;
     }
 });
 

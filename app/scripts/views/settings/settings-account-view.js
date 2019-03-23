@@ -183,8 +183,7 @@ const SettingsAccountView = Backbone.View.extend({
     },
 
     logout: function(e) {
-        this.appModel.account.logout();
-        this.appModel.account = AccountModel.instance;
+        this.appModel.logout();
         AppSettingsModel.instance.set('rememberedAccountEmail', '');
         AppSettingsModel.instance.set('directAccountEmail', '');
         this.appModel.closeAllFiles();
