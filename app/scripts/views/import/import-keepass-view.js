@@ -55,6 +55,10 @@ const ImportKeePassView = Backbone.View.extend({
             passwordEl.selectionStart = 0;
             passwordEl.selectionEnd = passwordEl.val().length;
             InputFx.shake(passwordEl);
+
+            // This won't be needed once we support adding a key file for
+            // importing so it's a quick hack
+            $('#keyfileNotSupported')[0].classList.remove('hide');
         } else {
             Backbone.trigger('show-entries');
         }
@@ -86,6 +90,11 @@ const ImportKeePassView = Backbone.View.extend({
             passwordEl.attr('placeholder', `${Locale.openPassFor} ${file.name}`);
             $('.open__pass-area').removeClass('hide');
             importEl.removeClass('hide');
+
+            // This won't be needed once we support adding a key file for
+            // importing so it's a quick hack
+            $('#keyfileNotSupported')[0].classList.add('hide');
+
             if (!FeatureDetector.isMobile) {
                 passwordEl.focus();
             }
