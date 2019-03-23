@@ -639,13 +639,13 @@ const AppView = Backbone.View.extend({
                             }
                             this.saveAndLock();
                         } else if (result === 'discard') {
-                            this.model.closeAllFiles();
+                            this.finaliseLockWorkspace();
                         }
                     }
                 });
             }
         } else {
-            this.closeAllFiles();
+            this.finaliseLockWorkspace();
         }
     },
 
@@ -661,7 +661,7 @@ const AppView = Backbone.View.extend({
             pendingCallbacks++;
         }, this);
         if (!pendingCallbacks) {
-            this.closeAllFiles();
+            this.finaliseLockWorkspace();
         }
         function fileSaved(file, err) {
             if (err) {
@@ -678,7 +678,7 @@ const AppView = Backbone.View.extend({
                     }
                     if (complete) { complete(true); }
                 } else {
-                    that.closeAllFiles();
+                    that.finaliseLockWorkspace();
                     if (complete) { complete(true); }
                 }
             }
@@ -690,8 +690,17 @@ const AppView = Backbone.View.extend({
         return this.model.files.hasDirtyFiles() || this.model.files.hasUnsavedFiles();
     },
 
-    closeAllFiles: function() {
-        this.model.closeAllFiles();
+    finaliseLockWorkspace: function() {
+        if (!this.model.account.isUserEmailVerified()) {
+            const autoSigninEmail = this.model.account.get('email');
+            this.model.logout();
+            this.model.settings.set('rememberedAccountEmail', '');
+            this.model.settings.set('directAccountEmail', autoSigninEmail);
+            this.model.closeAllFiles();
+            Backbone.trigger('show-account');
+        } else {
+            this.model.closeAllFiles();
+        }
     },
 
     saveAll: function() {
