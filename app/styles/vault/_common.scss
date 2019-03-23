@@ -80,16 +80,10 @@ body.firstLoad {
   div.app.firstLoad {
     display: block;
   }
-  // This makes the big Vault logo not appear in the centre of the screen
-  // after the default intro blurb has been displayed but also breaks demo
-  // and register destinations for new visitors. Probably have to resolve
-  // by inspecting dest at same time as inspecting new visitor status in
-  // index.html? In mean time those two dests end up with a weird animation
-  // effect on load but so far seem to work fine after that slight glitch.
-  // .vault_overlay .vault_intro_full_content_body {
-  //   opacity: 1;
-  //   transition: unset;
-  // }
+  .vault_overlay .vault_intro_full_content_body {
+    opacity: 1;
+    transition: unset;
+  }
   #home_sec_signin #vault_existing_user_login_narrow.active {
     display: flex;
   }

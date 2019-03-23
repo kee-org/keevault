@@ -185,14 +185,14 @@ const AppView = Backbone.View.extend({
             }
         } else if (this.model.destinationFeature === 'demo') {
             if (!FeatureDetector.isMobile) {
-                this.showForcedInitialVisitView();
+                this.showInitialVisitView();
             } else {
                 $('#app__body_intro')[0].classList.add('hide');
                 $('#app__body_main')[0].classList.remove('hide');
             }
             this.showDemo();
         } else if (this.model.destinationFeature === 'registerWithWalkthrough') {
-            this.showForcedInitialVisitView(() => this.views.vaultOverlay.ctaClick());
+            this.showInitialVisitView(() => this.views.vaultOverlay.ctaClick());
         } else {
             $('#app__body_intro')[0].classList.add('hide');
             $('#app__body_main')[0].classList.remove('hide');
