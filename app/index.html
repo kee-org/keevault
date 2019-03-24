@@ -245,8 +245,10 @@
             }
 
             function showReloadPageUI() {
+                console.log("New page found");
                 const button = createRefreshButton();
                 button.addEventListener('click', function () {
+                    console.log("Reloading to get the new page");
                     button.disabled = true;
                     window.location.reload();
                 });
@@ -254,6 +256,7 @@
             };
 
             function showReloadServiceWorkerUI(registration) {
+                console.log("New ServiceWorker found");
                 const button = createRefreshButton();
                 button.addEventListener('click', function () {
                     if (!registration.waiting) {
@@ -261,6 +264,7 @@
                         // calling postMessage()
                         return;
                     }
+                    console.log("Reloading to get new ServiceWorker");
                     button.disabled = true;
                     registration.waiting.postMessage('skipWaiting');
                 });
