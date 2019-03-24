@@ -3,14 +3,14 @@ const AppSettingsModel = require('../models/app-settings-model');
 
 const IdleTracker = {
     actionTime: Date.now(),
-    init: function(isDemoOpen) {
-        this.isDemoOpen = isDemoOpen;
+    init: function(shouldNotify) {
+        this.shouldNotify = shouldNotify;
         setInterval(this.checkIdle.bind(this), 1000 * 60);
     },
     checkIdle: function() {
         const idleMinutes = (Date.now() - this.actionTime) / 1000 / 60;
         const maxIdleMinutes = AppSettingsModel.instance.get('idleMinutes');
-        if (maxIdleMinutes && idleMinutes > maxIdleMinutes && !this.isDemoOpen()) {
+        if (maxIdleMinutes && idleMinutes > maxIdleMinutes && this.shouldNotify()) {
             Backbone.trigger('user-idle');
         }
     },
