@@ -454,7 +454,7 @@ const AppModel = Backbone.Model.extend({
                             callback(err);
                         }
                     } else {
-                        logger.info('Open file from content loaded from storage');
+                        logger.info('Opening file with content loaded from storage');
                         params.fileData = data;
                         params.rev = stat && stat.rev || null;
                         const needSaveToCache = storage.name !== 'file';
@@ -488,8 +488,28 @@ const AppModel = Backbone.Model.extend({
                     const remotePassword = params.tempRemoteSyncPassword ? { remoteKey: {
                         password: params.tempRemoteSyncPassword.clone() } } : undefined;
                     _.defer(() => this.syncFile(file, remotePassword));
+                    callback(err);
+                } else {
+                    // Try to load from storage. Minimal effort (no cache fallback, etc.) in order to avoid loops
+                    // Possibly need to storage.stat(params.path, params.opts, (err, stat) => { too?
+                    const storage = Storage[params.storage];
+                    logger.warn('Load from cache failed. Probably Private browsing mode is enabled? Loading from storage instead');
+                    storage.load(params.path, params.opts, (err, data, stat) => {
+                        if (err) {
+                            logger.error('Storage load error', err);
+                            callback(err);
+                        } else {
+                            logger.info('Opening file with content loaded from storage');
+                            params.fileData = data;
+                            params.rev = stat && stat.rev || null;
+
+                            // Attempts to update cache. Even in Private browsing mode this
+                            // might work, but only until the window is closed.
+                            const needSaveToCache = storage.name !== 'file';
+                            this.openFileWithData(params, callback, fileInfo, data, needSaveToCache);
+                        }
+                    });
                 }
-                callback(err);
             }, fileInfo);
         }
     },
@@ -551,7 +571,15 @@ const AppModel = Backbone.Model.extend({
             }
             if (updateCacheOnSuccess) {
                 logger.info('Save loaded file to cache');
-                Storage.cache.save(file.id, null, params.fileData);
+                Storage.cache.save(file.id, null, params.fileData, (err) => {
+                    if (err) {
+                        logger.warn('Failed to save newly loaded file to cache. Probably caused by Private browsing mode but could be other causes like local disk space full?');
+                    } else {
+                        logger.info('Saved to cache');
+                    }
+                    // Say we're clean even if an error occurred since neither us nor the user can do anything about it.
+                    file.set('dirty', false);
+                });
             }
             const rev = params.rev || fileInfo && fileInfo.get('rev');
             this.setFileOpts(file, params.opts);
@@ -718,7 +746,7 @@ const AppModel = Backbone.Model.extend({
         }
         file.setSyncProgress();
         const complete = (err, savedToCache) => {
-            if (!err) { savedToCache = true; }
+            if (!err && savedToCache === undefined) { savedToCache = true; }
             logger.info('Sync finished', err || 'no error');
             file.setSyncComplete(path, storage, err ? err.toString() : null, savedToCache);
             fileInfo.set({
@@ -803,7 +831,7 @@ const AppModel = Backbone.Model.extend({
                     });
                 });
             };
-            const saveToStorage = (data) => {
+            const saveToStorage = (data, cacheError) => {
                 logger.info('Save data to storage');
                 const storageRev = fileInfo.get('storage') === storage ? fileInfo.get('rev') : undefined;
                 let storageOpts = opts;
@@ -844,7 +872,10 @@ const AppModel = Backbone.Model.extend({
             const saveToCacheAndStorage = () => {
                 logger.info('Getting file data for saving');
                 file.getData((data, err) => {
-                    if (err) { return complete(err); }
+                    if (err) {
+                        logger.warn('Failed to load data for saving to cache. Unsure why/when this might happen! Aborting local and remote save operation. Error: ' + err);
+                        return complete(err);
+                    }
                     if (storage === 'file') {
                         logger.info('Saving to file storage');
                         saveToStorage(data);
@@ -854,10 +885,14 @@ const AppModel = Backbone.Model.extend({
                     } else {
                         logger.info('Saving to cache');
                         Storage.cache.save(fileInfo.id, null, data, (err) => {
-                            if (err) { return complete(err); }
+                            if (err) {
+                                logger.warn('Failed to save to cache, saving to storage. Probably caused by Private browsing mode but could be other causes like local disk space full?');
+                            } else {
+                                logger.info('Saved to cache, saving to storage');
+                            }
+                            // Say we're clean even if an error occurred since neither us nor the user can do anything about it.
                             file.set('dirty', false);
-                            logger.info('Saved to cache, saving to storage');
-                            saveToStorage(data);
+                            saveToStorage(data, err);
                         });
                     }
                 });

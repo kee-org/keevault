@@ -704,10 +704,16 @@ const FileModel = Backbone.Model.extend({
     },
 
     setSyncComplete: function(path, storage, error, savedToCache) {
+        // TODO: savedToCache could be used to report problems
+        // to the user? Not sure what useful action can be taken though.
+        // Remove comment in 2020 if no use identified
+
         if (!error) {
             this.db.removeLocalEditState();
         }
+        // only modified if there was an error and we've not been told we're unmodified yet
         const modified = this.get('modified') && !!error;
+        // Only dirty if save to cache failed and we've not been told we're clean yet
         const dirty = this.get('dirty') && !savedToCache;
         this.set({
             created: false,
