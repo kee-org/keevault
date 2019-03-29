@@ -9,13 +9,15 @@ const DBSettingsModel = Backbone.Model.extend({
     // unexpected properties. They would be deleted by the .plgx plugin but as long as
     // the new properties have sensible defaults in Kee Vault, we don't need to support
     // round-trips.
-    defaults: {
-        version: 3,
-        defaultMatchAccuracy: 'Domain',
-        defaultPlaceholderHandling: 'Disabled',
-        matchedURLAccuracyOverrides: new MatchedURLAccuracyOverrides(null),
-        displayPriorityField: false,
-        displayGlobalPlaceholderOption: false
+    defaults: function() {
+        return {
+            version: 3,
+            defaultMatchAccuracy: 'Domain',
+            defaultPlaceholderHandling: 'Disabled',
+            matchedURLAccuracyOverrides: new MatchedURLAccuracyOverrides(null),
+            displayPriorityField: false,
+            displayGlobalPlaceholderOption: false
+        };
     },
 
     initialize: function(model, options) {

@@ -4,14 +4,16 @@ const FormFieldCollection = require('../../collections/browser-addon/form-field-
 
 const EntrySettingsModel = Backbone.Model.extend({
 
-    defaults: {
-        version: 1,
-        behaviour: 'Default',
-        priority: 0,
-        hide: false,
-        wl: new URLMatchCollection(null),
-        bl: new URLMatchCollection(null),
-        formFieldList: new FormFieldCollection(null)
+    defaults: function() {
+        return {
+            version: 1,
+            behaviour: 'Default',
+            priority: 0,
+            hide: false,
+            wl: new URLMatchCollection(null),
+            bl: new URLMatchCollection(null),
+            formFieldList: new FormFieldCollection(null)
+        };
     },
 
     initialize: function(model, options) {
@@ -88,7 +90,12 @@ const EntrySettingsModel = Backbone.Model.extend({
         delete attrs.bl;
 
         attrs.formFieldList = attrs.formFieldList.toArray()
-            .map(ff => { ff.id = ff.fieldId; delete ff.fieldId; return ff; });
+            .map(ff => {
+                const listItem = _.clone(ff.attributes);
+                listItem.id = listItem.fieldId || '';
+                delete listItem.fieldId;
+                return listItem;
+            });
         this.parseBehaviour(attrs);
         this.parseMAM(attrs);
 

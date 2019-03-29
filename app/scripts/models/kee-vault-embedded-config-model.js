@@ -24,11 +24,13 @@ const CURRENT_ADDON_CONFIG_VERSION = 4;
 
 const KeeVaultEmbeddedConfigModel = Backbone.Model.extend({
 
-    defaults: {
-        version: CURRENT_VERSION,
-        addon: { prefs: {}, version: CURRENT_ADDON_CONFIG_VERSION },
-        vault: { prefs: {} },
-        randomId: IdGenerator.uuid()
+    defaults: function() {
+        return {
+            version: CURRENT_VERSION,
+            addon: { prefs: {}, version: CURRENT_ADDON_CONFIG_VERSION },
+            vault: { prefs: {} },
+            randomId: IdGenerator.uuid()
+        };
     },
 
     settingsToSync: ['theme', 'locale', 'expandGroups', 'clipboardSeconds', 'autoSave',
