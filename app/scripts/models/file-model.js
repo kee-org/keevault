@@ -215,7 +215,12 @@ const FileModel = Backbone.Model.extend({
             group.entries = importSourceDB.groups[0].entries;
             group.groups = importSourceDB.groups[0].groups;
             this.db.createRecycleBin();
-            this.db.remove(this.db.getGroup(importSourceDB.meta.recycleBinUuid));
+            if (importSourceDB.meta.recycleBinUuid) {
+                const importedRecycleBin = this.db.getGroup(importSourceDB.meta.recycleBinUuid);
+                if (importedRecycleBin) {
+                    this.db.remove(importedRecycleBin);
+                }
+            }
             this.set({ open: true, dirty: true, modified: true });
 
             if (group === this.db.getDefaultGroup()) {
@@ -309,7 +314,7 @@ const FileModel = Backbone.Model.extend({
             if (entry) {
                 KdbxPlaceholders.changeUUID(entry, importSourceDB.groups[0], newId);
             } else {
-                if (group.uuid.equals(importSourceDB.meta.recycleBinUuid)) {
+                if (importSourceDB.meta.recycleBinUuid && group.uuid.equals(importSourceDB.meta.recycleBinUuid)) {
                     importSourceDB.meta.recycleBinUuid = newId;
                     group.name = 'Bin imported from KeePass';
                 }
