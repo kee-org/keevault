@@ -20,14 +20,13 @@ class KeeVaultEmbeddedConfig {
 */
 
 const CURRENT_VERSION = 1;
-const CURRENT_ADDON_CONFIG_VERSION = 4;
 
 const KeeVaultEmbeddedConfigModel = Backbone.Model.extend({
 
     defaults: function() {
         return {
             version: CURRENT_VERSION,
-            addon: { prefs: {}, version: CURRENT_ADDON_CONFIG_VERSION },
+            addon: { prefs: {}, version: -1 },
             vault: { prefs: {} },
             randomId: IdGenerator.uuid()
         };
@@ -87,10 +86,6 @@ const KeeVaultEmbeddedConfigModel = Backbone.Model.extend({
     },
 
     updateAddonSettings: function (settings, version) {
-        if (version !== CURRENT_ADDON_CONFIG_VERSION) {
-            // user needs to update either the browser addon or Kee Vault app
-            return;
-        }
         const addonConfig = this.get('addon');
         Object.assign(addonConfig.prefs, settings);
         addonConfig.version = version;
