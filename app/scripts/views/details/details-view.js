@@ -499,7 +499,7 @@ const DetailsView = Backbone.View.extend({
     },
 
     showCopyTip: function() {
-        if (this.appModel.files.hasDemoFile() || this.helpTipCopyShown) {
+        if (this.appModel.files.hasDemoFile() || this.helpTipCopyShown || this.isHidden() || this.moreView.isHidden()) {
             return;
         }
         this.helpTipCopyShown = AppSettingsModel.instance.get('helpTipCopyShown');
