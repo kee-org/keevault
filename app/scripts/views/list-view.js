@@ -161,6 +161,7 @@ const ListView = Backbone.View.extend({
         this.items.unshift(newEntry);
         this.render();
         this.selectItem(newEntry);
+        Backbone.trigger('toggle-details', true);
     },
 
     createGroup: function() {
