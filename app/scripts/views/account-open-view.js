@@ -32,7 +32,8 @@ const OpenView = Backbone.View.extend({
         'keyup .open__pass-input': 'inputKeyup',
         'keypress .open__pass-input': 'inputKeypress',
         'click #openButton': 'openDb',
-        'click #accountChangeUser': 'changeUser'
+        'click #accountChangeUser': 'changeUser',
+        'click #resetAccount': 'resetAccount'
     },
 
     views: null,
@@ -362,6 +363,11 @@ const OpenView = Backbone.View.extend({
     changeUser() {
         this.model.settings.set('rememberedAccountEmail', null);
         Backbone.trigger('show-account');
+    },
+
+    resetAccount() {
+        window.location.hash = '#dest=resetPassword';
+        window.location.reload();
     },
 
     showOpenFileInfo: function(fileInfo) {

@@ -2,6 +2,11 @@ This lists the major changes in each version of Kee Vault.
 
 Many smaller or partially complete changes will be made on a regular basis. To see all changes, look for the commit history in each of our GitHub repositories.
 
+## 0.9.4
+
+* Account Reset feature
+* Fixed bug that prevented addon settings from syncing
+
 ## 0.9.3
 
 * Improved registration experience

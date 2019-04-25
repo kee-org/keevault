@@ -818,6 +818,8 @@
   "unlockToGenerate": "Sign in / unlock your Kee Vault to generate a password. Alternatively, you may be able to generate one from another browser tab.",
   "closeKeePassDetails": "The Kee browser extension has been installed but Kee Vault can't communicate with it yet. Please ensure that the KeePass Password Safe 2 desktop application is not running.",
   "keeExtensionInstalled": "The Kee browser extension is installed and ready to go. Click the button below to continue.",
+  "accResetForgotPasswordQuestion": "Forgot password?",
+  "resetAccount": "Reset Account",
   "accResetForgotPassword": "Forgot password",
   "accResetOhNo": "Oh no!",
   "accResetDesc1": "Unlike most online services, Kee Vault never knows your master password and can never access anything within your Vault so a forgotten password means the data inside your Vault is gone forever.",
