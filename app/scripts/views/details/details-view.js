@@ -158,9 +158,6 @@ const DetailsView = Backbone.View.extend({
             this.fileEditView = new FieldViewSelect({ model: { name: '$File', title: Format.capFirst(Locale.file),
                 value: function() { return fileNames; } } });
             this.fieldViews.push(this.fileEditView);
-        } else {
-            this.fieldViews.push(new FieldViewReadOnly({ model: { name: 'File', title: Format.capFirst(Locale.file),
-                value: function() { return model.fileName; } } }));
         }
         this.userEditView = new FieldViewUsername({
             model: {
