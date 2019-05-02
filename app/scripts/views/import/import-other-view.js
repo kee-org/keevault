@@ -1,5 +1,5 @@
 const Backbone = require('backbone');
-const papaparse = require('papaparse');
+const KdbxImport = require('kdbx-import').KdbxImport;
 const Alerts = require('../../comp/alerts');
 const Locale = require('../../util/locale');
 
@@ -36,27 +36,8 @@ const ImportOtherView = Backbone.View.extend({
     },
 
     processCSV: async function(csv) {
-        const {data, errors, meta} = papaparse.parse(csv, {header: true, skipEmptyLines: true});
-        if (!data || data.length < 1) return 'error';
-        if (errors && errors.length >= 1) return 'error';
-        if (meta && meta.fields < 5) return 'error';
-
-        const mapping = {};
-
-        meta.fields.forEach(field => {
-            switch (field.toLowerCase()) {
-                case 'notes': mapping['Notes'] = field; break;
-                case 'title': mapping['Title'] = field; break;
-                case 'password': mapping['Password'] = field; break;
-                case 'username': mapping['UserName'] = field; break;
-                case 'user name': mapping['UserName'] = field; break;
-                case 'url': mapping['URL'] = field; break;
-            }
-        });
-
-        if (!mapping.Title || !mapping.Password || !mapping.UserName || !mapping.URL) return 'error';
-
-        const error = await this.model.files.first().importFromDataRows(data, mapping);
+        const importResult = await KdbxImport.fromGenericCSV(this.model.files.first().db.meta, csv);
+        const error = this.model.files.first().importFromKdbx(importResult.db);
 
         if (error) {
             return error;
