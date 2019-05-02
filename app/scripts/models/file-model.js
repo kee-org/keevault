@@ -210,7 +210,24 @@ const FileModel = Backbone.Model.extend({
             const importSourceDB = await kdbxweb.Kdbx.load(fileData, credentials);
             clearTimeout(delayWarning);
 
+            // Ensure multiple imports from the same KDBX source don't result
+            // in duplicate UUIDs. Only original KDBX sources need to worry
+            // about this (those generated as part of an import from another
+            // data source will always have new random UUIDs anyway)
             this.generateNewUUIDs(importSourceDB);
+
+            logger.info('Opened kdbx data for importing to ' + this.get('name') + ': ' + logger.ts(ts));
+            return this.importFromKdbx(importSourceDB);
+        } catch (e) {
+            logger.error('Error importing file', e, e.code, e.message, e);
+            clearTimeout(delayWarning);
+            return e;
+        }
+    },
+
+    importFromKdbx: function(importSourceDB) {
+        try {
+            const ts = logger.ts();
             const group = this.getGroupForImport();
             group.entries = importSourceDB.groups[0].entries;
             group.groups = importSourceDB.groups[0].groups;
@@ -234,7 +251,6 @@ const FileModel = Backbone.Model.extend({
             return;
         } catch (e) {
             logger.error('Error importing file', e, e.code, e.message, e);
-            clearTimeout(delayWarning);
             return e;
         }
     },
