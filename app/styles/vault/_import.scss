@@ -26,25 +26,57 @@
     flex-flow: row wrap;
     justify-content: space-around;
     align-content: baseline;
-    max-width: 80%;
-    width: 50vw;
+    width: 60vw;
     min-width: 300px;
     text-align: center;
     margin: auto;
   }
 
   .import__icon {
-    @include th { color: th(text-color); }
+    @include th { color: th(medium-color); }
+    @include th { background-color: th(secondary-background-color); }
+    @include th { border: solid 1px th(muted-color-border); }
     font-size: calc(10px + 1vmin);
     cursor: pointer;
+    font-weight: bold;
+    padding: 10px;
+    margin: 0px 10px 20px 10px;
+
+    .import__icon-text {
+      @include th { border-bottom: solid 2px th(secondary-background-color); }
+    }
+
+    &:hover {
+      @include th { color: th(text-color); }
+      @include th { background-color: th(intermediate-background-color); }
+      @include th { border: solid 1px th(action-color); }
+
+      .import__icon-text {
+        @include th { background-color: th(intermediate-background-color); }
+        @include th { border-bottom: solid 2px th(action-color); }
+      }
+    }
 
     &.active {
-      cursor: unset;
+      cursor: default;
+      @include th { background-color: th(secondary-background-color); }
+      @include th { border: solid 1px th(action-color); }
       @include th { color: th(action-background-color-focus); }
-      @include th { border-bottom: solid 1px th(action-background-color-focus); }
       .import__icon-text {
-        @include th { color: th(action-background-color-focus); }
+        @include th { border-bottom: solid 2px th(action-color); }
+        @include th { color: th(text-color); }
       }
+
+      &:hover {
+        cursor: default;
+        @include th { background-color: th(secondary-background-color); }
+        @include th { border: solid 1px th(action-color); }
+
+        .import__icon-text {
+          @include th { background-color: th(secondary-background-color); }
+        }
+      }
+
     }
 
     &-i {
@@ -82,6 +114,7 @@
 
 .import.import_mode {
   margin-top: calc(10px + 2vmin);
+  @include th { border-top: solid 1px th(muted-color-border); }
 }
 
 #importButton {

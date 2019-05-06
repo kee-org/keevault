@@ -41,7 +41,9 @@ const ImportKeePassView = Backbone.View.extend({
         if (!passwordEl) return;
         const password = passwordEl.val();
 
+        const startTime = Date.now();
         const error = await activeFile.importFromData(this.fileData, password);
+        const time = Date.now() - startTime;
 
         passwordEl.removeAttr('disabled');
         importButton.classList.remove('active');
@@ -59,8 +61,10 @@ const ImportKeePassView = Backbone.View.extend({
             // This won't be needed once we support adding a key file for
             // importing so it's a quick hack
             $('#keyfileNotSupported')[0].classList.remove('hide');
+            window.trackMatomoAction(['trackEvent', 'Import', 'Error', 'keepass', time]);
         } else {
             Backbone.trigger('show-entries');
+            window.trackMatomoAction(['trackEvent', 'Import', 'Success', 'keepass', time]);
         }
     },
 
@@ -98,6 +102,7 @@ const ImportKeePassView = Backbone.View.extend({
             if (!FeatureDetector.isMobile) {
                 passwordEl.focus();
             }
+            window.trackMatomoAction(['trackEvent', 'Import', 'PasswordPromptShown', 'keepass']);
         };
         reader.onerror = () => {
             Alerts.error({ header: Locale.openFailedRead });

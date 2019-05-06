@@ -36,14 +36,16 @@ const ImportLastPassView = Backbone.View.extend({
     },
 
     processCSV: async function(csv) {
+        const startTime = Date.now();
         const importResult = await KdbxImport.fromLastPass(this.model.files.first().db.meta, csv);
         const error = this.model.files.first().importFromKdbx(importResult.db);
+        const time = Date.now() - startTime;
 
         if (error) {
+            window.trackMatomoAction(['trackEvent', 'Import', 'Error', 'lastpass', time]);
             return error;
-        } else {
-            Backbone.trigger('show-entries');
         }
+        window.trackMatomoAction(['trackEvent', 'Import', 'Success', 'lastpass', time]);
     },
 
     processFile: function(file, complete) {

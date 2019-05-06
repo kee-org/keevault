@@ -3,8 +3,8 @@ const KdbxImport = require('kdbx-import').KdbxImport;
 const Alerts = require('../../comp/alerts');
 const Locale = require('../../util/locale');
 
-const ImportOtherView = Backbone.View.extend({
-    template: require('templates/import/other.hbs'),
+const ImportOnePasswordView = Backbone.View.extend({
+    template: require('templates/import/onepassword.hbs'),
 
     events: {
         'change .import__file-ctrl': 'fileSelected',
@@ -30,30 +30,44 @@ const ImportOtherView = Backbone.View.extend({
 
     fileSelected: function(e) {
         const file = e.target.files[0];
-        if (file) {
-            this.processFile(file);
+        if (file && file.name) {
+            if (file.name.endsWith('1pif')) this.processPIFFile(file);
+            else if (file.name.endsWith('csv')) this.processCSVFile(file);
         }
     },
 
     processCSV: async function(csv) {
         const startTime = Date.now();
-        const importResult = await KdbxImport.fromGenericCSV(this.model.files.first().db.meta, csv);
+        const importResult = await KdbxImport.fromOnePasswordCSV(this.model.files.first().db.meta, csv);
         const error = this.model.files.first().importFromKdbx(importResult.db);
         const time = Date.now() - startTime;
 
         if (error) {
-            window.trackMatomoAction(['trackEvent', 'Import', 'Error', 'other', time]);
+            window.trackMatomoAction(['trackEvent', 'Import', 'Error', 'onePasswordCSV', time]);
             return error;
         }
-        window.trackMatomoAction(['trackEvent', 'Import', 'Success', 'other', time]);
+        window.trackMatomoAction(['trackEvent', 'Import', 'Success', 'onePasswordCSV', time]);
     },
 
-    processFile: function(file, complete) {
+    processPIF: async function(pif) {
+        const startTime = Date.now();
+        const importResult = await KdbxImport.fromOnePasswordPIF(this.model.files.first().db.meta, pif);
+        const error = this.model.files.first().importFromKdbx(importResult.db);
+        const time = Date.now() - startTime;
+
+        if (error) {
+            window.trackMatomoAction(['trackEvent', 'Import', 'Error', 'onePasswordPIF', time]);
+            return error;
+        }
+        window.trackMatomoAction(['trackEvent', 'Import', 'Success', 'onePasswordPIF', time]);
+    },
+
+    processCSVFile: function(file, complete) {
         const reader = new FileReader();
         reader.onload = async e => {
             const error = await this.processCSV(e.target.result);
             if (error) {
-                Alerts.error({ header: Locale.openWrongFile, body: Locale.openWrongFileCSV });
+                Alerts.error({ header: Locale.openWrongFile, body: Locale.openWrongFileOnePassword });
             } else {
                 Backbone.trigger('show-entries');
             }
@@ -64,13 +78,20 @@ const ImportOtherView = Backbone.View.extend({
         reader.readAsText(file);
     },
 
-    processText: async function(text) {
-        const error = await this.processCSV(text);
-        if (error) {
-            Alerts.error({ header: Locale.openWrongText, body: Locale.openWrongTextCSV });
-        } else {
-            Backbone.trigger('show-entries');
-        }
+    processPIFFile: function(file, complete) {
+        const reader = new FileReader();
+        reader.onload = async e => {
+            const error = await this.processPIF(e.target.result);
+            if (error) {
+                Alerts.error({ header: Locale.openWrongFile, body: Locale.openWrongFileOnePassword });
+            } else {
+                Backbone.trigger('show-entries');
+            }
+        };
+        reader.onerror = () => {
+            Alerts.error({ header: Locale.openFailedRead });
+        };
+        reader.readAsText(file);
     },
 
     dragover: function(e) {
@@ -104,19 +125,17 @@ const ImportOtherView = Backbone.View.extend({
             clearTimeout(this.dragTimeout);
         }
         this.$el.removeClass('import--drag');
-        const text = e.originalEvent.dataTransfer.getData('Text');
-        if (text) {
-            this.processText(text);
+        const files = e.target.files || e.originalEvent.dataTransfer.files;
+        const csvFile = _.find(files, file => file.name.split('.').pop().toLowerCase() === 'csv');
+        const pifFile = _.find(files, file => file.name.split('.').pop().toLowerCase() === '1pif');
+        if (csvFile) {
+            this.processCSVFile(csvFile);
+        } else if (pifFile) {
+            this.processPIFFile(pifFile);
         } else {
-            const files = e.target.files || e.originalEvent.dataTransfer.files;
-            const csvFile = _.find(files, file => file.name.split('.').pop().toLowerCase() === 'csv');
-            if (csvFile) {
-                this.processFile(csvFile);
-            } else {
-                Alerts.error({ header: Locale.openWrongFile, body: Locale.openWrongFileCSV });
-            }
+            Alerts.error({ header: Locale.openWrongFile, body: Locale.openWrongFileOnePassword });
         }
     }
 });
 
-module.exports = ImportOtherView;
+module.exports = ImportOnePasswordView;

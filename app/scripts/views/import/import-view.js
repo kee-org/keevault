@@ -47,11 +47,10 @@ const ImportView = Backbone.View.extend({
             $('.vault_import_choice').removeClass('active');
             e.currentTarget.classList.add('active');
             this.setImportSource({importSource: e.currentTarget.dataset.importSource});
+            window.trackMatomoAction(['trackEvent', 'Import', 'Select', e.currentTarget.dataset.importSource]);
         } else if (e.currentTarget.dataset.importSource === 'none') {
             InputFx.shake($('#vault_import_skip'));
-        } else if (e.currentTarget.dataset.importSource === 'keepass' ||
-        e.currentTarget.dataset.importSource === 'lastpass' ||
-        e.currentTarget.dataset.importSource === 'other') {
+        } else {
             InputFx.shake($('.import_source .import__icon.import__icon-import'));
         }
     }
