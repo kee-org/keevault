@@ -21,7 +21,7 @@ const FieldViewCustom = FieldViewBrowser.extend({
     },
 
     renderValue: function(value) {
-        if (this.browserFieldModel) {
+        if (this.browserIntegrationConfigured()) {
             if (this.browserFieldModel.get('type') === 'FFTcheckbox') {
                 return this.model.value() === 'KEEFOX_CHECKED_FLAG_TRUE' ? Locale.enabled : Locale.disabled;
             } else if (this.browserFieldModel.get('type') === 'FFTpassword') {

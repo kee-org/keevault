@@ -49,10 +49,11 @@ const FieldViewBrowser = FieldViewText.extend({
         if (!this.browserFieldModel) {
             return false;
         }
-        if (this.browserFieldModel.fieldId === '' &&
-            this.browserFieldModel.name === '' &&
-            this.browserFieldModel.placeholderHandling === 'Default' &&
-            this.browserFieldModel.page === -1) {
+        if (this.browserFieldModel.get('fieldId') === '' &&
+            this.browserFieldModel.get('name') === '' &&
+            this.browserFieldModel.get('placeholderHandling') === 'Default' &&
+            this.browserFieldModel.get('page') === -1 &&
+            this.browserFieldModel.get('type') === this.getBrowserFieldTypeDefault()) {
             return false;
         }
         return true;
