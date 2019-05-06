@@ -93,7 +93,7 @@ body.enable_native_scroll {
   flex-direction: column;
   font-size: calc(10px + 1vmin);
   height: 100%;
-  margin-top: 15px;
+  margin-top: calc(10px + 3vmin);
   transition: height $intro-long-duration $base-timing, margin $intro-long-duration $base-timing;
 
   .app__body & {
@@ -101,7 +101,7 @@ body.enable_native_scroll {
 
     &.loaded {
       height:122px;
-      margin-top: 15px;
+      margin-top: calc(10px + 3vmin);
 
       & .logo-container {
         margin-bottom: 0px;
