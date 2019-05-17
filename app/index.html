@@ -250,7 +250,11 @@
                 button.addEventListener('click', function () {
                     console.log("Reloading to get the new page");
                     button.disabled = true;
-                    window.location.reload();
+                    if (registration.waiting) {
+                        registration.waiting.postMessage('skipWaiting'); // results in controllerchange event firing, hence reload
+                    } else {
+                        window.location.reload();
+                    }
                 });
                 reportNewVersionReady(button);
             };
@@ -266,7 +270,7 @@
                     }
                     console.log("Reloading to get new ServiceWorker");
                     button.disabled = true;
-                    registration.waiting.postMessage('skipWaiting');
+                    registration.waiting.postMessage('skipWaiting'); // results in controllerchange event firing, hence reload
                 });
                 reportNewVersionReady(button);
             };

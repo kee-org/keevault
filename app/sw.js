@@ -62,7 +62,16 @@ self.addEventListener('fetch', (evt) => {
             (await clients.matchAll()).length < 2 //eslint-disable-line
         ) {
             registration.waiting.postMessage('skipWaiting'); //eslint-disable-line
-            return new Response('', {headers: {'Refresh': '0'}});
+
+            // Probable bug in ServiceWorker guidelines?
+            // This, albeit possibly only in a webAPK environment, seems to cause an infinite load loop
+            // I suspect the refresh header in the response is being actioned before the skip waiting
+            // message above has got through so every subsequent fetch hits this branch
+            // return new Response('', {headers: {'Refresh': '0'}});
+
+            // A longer delay will hopefully work around this, although sadly could cause
+            // brief confusion for the user
+            return new Response('', {headers: {'Refresh': '2'}});
         }
         return fromCache(evt.request);
     })());
