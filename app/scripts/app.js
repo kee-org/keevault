@@ -19,6 +19,7 @@ const KPRPCHandler = require('./comp/keepassrpc');
 const RuntimeInfo = require('./comp/runtime-info');
 const KeeFrontend = require('kee-frontend');
 const OpenProgressReporter = require('./comp/open-progress-reporter');
+const Tip = require('./util/tip');
 
 const ready = $;
 
@@ -158,6 +159,7 @@ ready(() => {
         watchForUpdates();
         KPRPCHandler.init(appView);
         Backbone.trigger('app-ready');
+        if (FeatureDetector.exitsOnBack()) handleBackEvent();
         logStartupTime();
     }
 
@@ -168,6 +170,21 @@ ready(() => {
         if (window.updateAvailableElement) {
             window.updateAvailableRenderer(window.updateAvailableElement);
         }
+    }
+
+    function handleBackEvent() {
+        window.history.pushState({}, '');
+
+        window.addEventListener('popstate', () => {
+            const tip = Tip.createTip(document.querySelector('.app'), {title: Locale.pressBackAgainToExit, placement: 'inset-bottom', fast: true, force: true, noInit: true});
+            tip.show();
+            setTimeout(() => {
+                window.history.pushState({}, '');
+                if (tip) {
+                    tip.hide();
+                }
+            }, 2000);
+        });
     }
 
     function logStartupTime() {

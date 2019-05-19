@@ -850,5 +850,6 @@
   "savedOnAllDevicesQuestion": "Have you saved your Kee Vault on all other devices?",
   "unsavedChangesOnOtherDevicesMayBeLost": "If you have unsaved changes on other devices they may be lost if you change your password now.",
   "readyToChangePassword": "Ready to change your password?",
-  "unnamedField": "[No name]"
+  "unnamedField": "[No name]",
+  "pressBackAgainToExit": "Press back again to exit"
 }

@@ -75,6 +75,9 @@ const FeatureDetector = {
     },
     getPlatformType: function() {
         return browserInfo.platform.type;
+    },
+    exitsOnBack: function() {
+        return this.isStandalone && browserInfo.os.name === 'Android';
     }
 };
 

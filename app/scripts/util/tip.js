@@ -70,6 +70,10 @@ Tip.prototype.show = function() {
             top = rect.top + rect.height / 2 - tipRect.height / 2;
             left = rect.right + offset;
             break;
+        case 'inset-bottom':
+            top = rect.bottom - 50;
+            left = rect.left + rect.width / 2 - tipRect.width / 2;
+            break;
     }
     tipEl.css({ top: top, left: left });
 };
