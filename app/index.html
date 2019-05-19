@@ -217,6 +217,7 @@
     <script>
         var updateAvailableElement;
         var updateAvailableRenderer;
+        var keeVaultServiceWorkerRegistration;
 
         if (navigator.serviceWorker) {
             navigator.serviceWorker.addEventListener('message', function(event){
@@ -250,8 +251,8 @@
                 button.addEventListener('click', function () {
                     console.log("Reloading to get the new page");
                     button.disabled = true;
-                    if (registration.waiting) {
-                        registration.waiting.postMessage('skipWaiting'); // results in controllerchange event firing, hence reload
+                    if (keeVaultServiceWorkerRegistration && keeVaultServiceWorkerRegistration.waiting) {
+                        keeVaultServiceWorkerRegistration.waiting.postMessage('skipWaiting'); // results in controllerchange event firing, hence reload
                     } else {
                         window.location.reload();
                     }
@@ -276,6 +277,7 @@
             };
 
             function onNewServiceWorker(registration, callback) {
+                keeVaultServiceWorkerRegistration = registration;
                 if (registration.waiting) {
                     // SW is waiting to activate. Can occur if multiple clients open and
                     // one of the clients is refreshed.
