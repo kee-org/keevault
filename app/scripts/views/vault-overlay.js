@@ -9,7 +9,8 @@ const VaultOverlayView = Backbone.View.extend({
     events: {
         'click .vault_primary_action': 'ctaClick',
         'click .vault_existing_user_login': 'login',
-        'click #demoSignUpCTA': 'register'
+        'click #demoSignUpCTA': 'register',
+        'click #demoSignUpCTAMobile': 'register'
     },
 
     render: function () {
@@ -23,11 +24,7 @@ const VaultOverlayView = Backbone.View.extend({
     },
 
     ctaClick: function() {
-        if (FeatureDetector.isMobile) {
-            Backbone.trigger('show-account-mobile-warning');
-        } else {
-            this.shrink();
-        }
+        this.shrink();
     },
 
     shrink: function() {
@@ -83,7 +80,11 @@ const VaultOverlayView = Backbone.View.extend({
         const wipeDown = function () {
             overlay.$el.parent().removeClass('vault_landing').addClass('vault_start');
             overlay.$el[0].addEventListener('animationend', ev => {
-                VaultIntro.start();
+                if (FeatureDetector.isMobile) {
+                    VaultIntro.mobileMessage();
+                } else {
+                    VaultIntro.start();
+                }
                 $('body')[0].classList.remove('enable_native_scroll');
             }, false);
         };

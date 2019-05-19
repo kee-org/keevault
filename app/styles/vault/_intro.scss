@@ -454,21 +454,6 @@ body.enable_native_scroll {
   text-align: center;
 }
 
-#mobileAccountWarningContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  margin: 15px;
-}
-
-#mobileAccountWarningContainer > * {
-  margin: 10px 5px;
-}
-
-#emailMeALink {
-  margin: 0px 5px 35px;
-}
-
 #vault_intro_top {
   display: grid;
   grid-template-areas: "left-top centre-top right" "bottom bottom bottom";
@@ -477,6 +462,11 @@ body.enable_native_scroll {
   grid-gap: 10px;
   align-items: center;
   justify-items: center;
+  @include mobile {
+    grid-template-areas: "top" "bottom";
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 #vault_intro_top_logo {
@@ -484,17 +474,44 @@ body.enable_native_scroll {
   align-self: end;
   justify-self: start;
   margin-left: 10px;
+  @include mobile {
+    align-self: center;
+    justify-self: center;
+    margin-left: 0px;
+    div.logo-container {
+      padding: 15px 15px 2px;
+    }
+  }
+  & > div.logo-container > svg {
+    max-height: 40px;
+    width: 175px;
+    @include mobile { max-height: 30px; }
+  }
 }
+div#vault_intro_top_mobilebutton {
+  display: none;
+  @include mobile {
+    display: block;
+    grid-area: bottom;
+    justify-self: center;
+  }
+}
+button#demoSignUpCTAMobile {
+    padding: 6px 10px;
+}
+
 #vault_intro_top_strapline {
   grid-area: bottom;
   justify-self: left;
   margin-left: 10px;
+  @include mobile { display: none; }
 }
 #vault_intro_top_signin {
   grid-area: right;
   display: flex;
   flex-direction: column;
   text-align: center;
+  @include mobile { display: none; }
 }
 #vault_intro_top_signin > .vault_existing_user_login {
   margin-top: 5px;
@@ -504,11 +521,6 @@ body.enable_native_scroll {
   display: flex;
   align-items: center;
   align-self: end;
-}
-
-#vault_intro_top_logo > div.logo-container > svg {
-  max-height: 40px;
-  width: 175px;
 }
 
 #demoBlurb {

@@ -12,7 +12,6 @@ const SettingsView = require('../views/settings/settings-view');
 const KeyChangeView = require('../views/key-change-view');
 const AccountView = require('../views/account-view');
 const AccountOpenView = require('../views/account-open-view');
-const AccountMobileWarningView = require('../views/account-mobile-view');
 const AccountResetView = require('../views/account-reset-view');
 const AccountResetConfirmView = require('../views/account-reset-confirm-view');
 const VaultOverlayView = require('../views/vault-overlay');
@@ -100,7 +99,6 @@ const AppView = Backbone.View.extend({
         this.listenTo(Backbone, 'show-account-open', this.showAccountOpenFile);
         this.listenTo(Backbone, 'show-registration', this.showRegistration);
         this.listenTo(Backbone, 'show-import', this.showImport);
-        this.listenTo(Backbone, 'show-account-mobile-warning', this.showAccountMobileWarning);
         this.listenTo(Backbone, 'show-entries', this.showEntries);
         this.listenTo(Backbone, 'show-server-mitm-warning', this.showServerMITMWarning);
         this.listenTo(Backbone, 'show-demo-blurb', this.showTopDemoBlurb);
@@ -297,23 +295,12 @@ const AppView = Backbone.View.extend({
     },
 
     showDemo: function() {
-        if (FeatureDetector.isMobile) {
-            Backbone.trigger('show-account-mobile-warning');
-        } else {
-            this.views.vaultOverlay.model.createDemoFile();
-            this.views.vaultOverlay.$el.parent().removeClass('vault_landing').addClass('vault_start');
-            this.views.vaultOverlay.showTopDemoBlurb();
-            this.views.vaultOverlay.$el[0].addEventListener('animationend', ev => {
-                $('body')[0].classList.remove('enable_native_scroll');
-            }, false);
-        }
-    },
-
-    showAccountMobileWarning: function() {
-        this.prepareForNewView(true);
-        this.views.account = new AccountMobileWarningView();
-        this.views.account.setElement(this.$el.find('#app__body_main')).render();
-        this.views.account.on('close', this.showEntries, this);
+        this.views.vaultOverlay.model.createDemoFile();
+        this.views.vaultOverlay.$el.parent().removeClass('vault_landing').addClass('vault_start');
+        this.views.vaultOverlay.showTopDemoBlurb();
+        this.views.vaultOverlay.$el[0].addEventListener('animationend', ev => {
+            $('body')[0].classList.remove('enable_native_scroll');
+        }, false);
     },
 
     showResetPassword: function() {

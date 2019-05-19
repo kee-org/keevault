@@ -120,6 +120,24 @@ const VaultIntro = {
         }
     },
 
+    mobileMessage: function() {
+        // Display just a single intro message for mobile users and let them work it out themselves.
+
+        this.display({
+            body: `<p>${Locale.introPutSecretsHere}</p>
+            <p>${Locale.introExploreMobile}</p>`,
+            buttons: [this.buttons.continue],
+            esc: '',
+            enter: 'continue',
+            target: '',
+            position: '',
+            masked: ['.app__details', '.app__list > .list', '.app__menu', '.app__footer'],
+            complete: res => {
+                VaultIntro.abort();
+            }
+        });
+    },
+
     start: function() {
         // start a chain reaction of modals for training/intro/etc.
 
