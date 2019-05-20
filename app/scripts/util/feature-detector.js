@@ -14,7 +14,7 @@ const FeatureDetector = {
     isiOS: /iPad|iPhone|iPod/i.test(navigator.userAgent),
     isMobile: MobileRegex.test(navigator.userAgent) || screen.width < MinDesktopScreenWidth,
     isPopup: !!((window.parent !== window.top) || window.opener),
-    isStandalone: !!navigator.standalone,
+    isStandalone: !!navigator.standalone || window.matchMedia('(display-mode: standalone)').matches,
     isFrame: window.top !== window,
     isSelfHosted: !isDesktop && !/^http(s?):\/\/((app-dev.kee.pm:8087)|((app|app-beta)\.kee\.pm))/.test(location.href),
     needFixClicks: /Edge\/14/.test(navigator.appVersion),
