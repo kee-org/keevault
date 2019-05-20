@@ -159,7 +159,7 @@ ready(() => {
         watchForUpdates();
         KPRPCHandler.init(appView);
         Backbone.trigger('app-ready');
-        if (FeatureDetector.exitsOnBack()) handleBackEvent();
+        if (FeatureDetector.exitsOnBack()) handleBackEvents();
         logStartupTime();
     }
 
@@ -172,7 +172,7 @@ ready(() => {
         }
     }
 
-    function handleBackEvent() {
+    function handleBackEvents() {
         window.history.pushState({}, '');
 
         window.addEventListener('popstate', () => {
