@@ -21,7 +21,6 @@ const AccountView = Backbone.View.extend({
         'keyup #accountEmail,#newPassword1,#newPassword2': 'inputKeyup',
         'keypress #accountEmail,#newPassword1,#newPassword2': 'inputKeypress',
         'click #signinButton': 'loginStart',
-        'click #codeNextButton': 'next',
         'click #registerButton': 'register',
         'input #newPassword1,#newPassword2': 'passwordTyped',
         'paste #newPassword1,#newPassword2': 'passwordPasted'
@@ -62,7 +61,6 @@ const AccountView = Backbone.View.extend({
         this.renderTemplate({
             mode: this.model.account.get('mode'),
             emailAddress: this.emailAddress || this.model.prefillEmail,
-            code: this.model.prefillCode || '',
             verificationSuccess: this.model.destinationFeature === 'verificationSuccess',
             verificationFailure: this.model.destinationFeature === 'verificationFailure',
             manageAccount: this.model.destinationFeature === 'manageAccount',
@@ -128,18 +126,6 @@ const AccountView = Backbone.View.extend({
         signinButton.removeAttribute('disabled');
     },
 
-    next: function (field) {
-        const codeField = $('#accountCode');
-        codeField.toggleClass('input--error', false);
-        const code = codeField[0].value;
-        if (!code) return this.errorOnField(codeField);
-        document.getElementById('accountStartContainer').classList.add('registrationStage1Disabled');
-        document.getElementById('accountStartContainer').classList.remove('registrationStage2Disabled');
-        const stage2 = document.getElementById('registrationStage2Start');
-        stage2.scrollIntoView();
-        $('#accountEmail')[0].focus();
-    },
-
     errorOnField: function (field, noFocus) {
         if (!noFocus) field[0].focus();
         field.toggleClass('input--error', true);
@@ -149,7 +135,6 @@ const AccountView = Backbone.View.extend({
     },
 
     register: async function() {
-        $('#accountCode').toggleClass('input--error', false);
         $('#accountEmail').toggleClass('input--error', false);
         $('#newPassword1').toggleClass('input--error', false);
         $('#newPassword2').toggleClass('input--error', false);
@@ -158,8 +143,6 @@ const AccountView = Backbone.View.extend({
         const email = EmailUtils.canonicalise(emailField[0].value);
         if (!email) return this.errorOnField(emailField);
         if (!EmailUtils.validate(email)) return this.errorOnField(emailField);
-        const code = $('#accountCode')[0].value;
-        if (!code) return this.errorOnField($('#accountCode'));
         if (!this.passwordInput1 || this.passwordInput1.length <= 0) return this.errorOnField($('#newPassword1'));
         if (!this.passwordInput2 || this.passwordInput2.length <= 0) return this.errorOnField($('#newPassword2'));
         if (!this.passwordInput1.value.equals(this.passwordInput2.value)) return this.errorOnField($('#newPassword2'));
@@ -176,7 +159,7 @@ const AccountView = Backbone.View.extend({
         registerButton.classList.add('active');
         registerButton.setAttribute('disabled', 'disabled');
         const primaryFile = await this.model.account.createNewPrimaryFile(chosenPassword, emailAddrParts);
-        const userSIOrError = await this.model.account.register(email, chosenPassword, optinIntro, optinMarketing, primaryFile.db, code);
+        const userSIOrError = await this.model.account.register(email, chosenPassword, optinIntro, optinMarketing, primaryFile.db, this.model.couponCode);
         registerButton.classList.remove('active');
         registerButton.removeAttribute('disabled');
 
@@ -205,7 +188,7 @@ const AccountView = Backbone.View.extend({
             Backbone.trigger('show-entries');
         }
         this.model.prefillEmail = null;
-        this.model.prefillCode = null;
+        this.model.couponCode = null;
     },
 
     inputKeydown: function(e) {
@@ -252,11 +235,7 @@ const AccountView = Backbone.View.extend({
         //     el.trigger('click', e);
         // }
         if (this.model.account.get('mode') === 'register') {
-            if (document.getElementById('accountStartContainer').classList.contains('registrationStage2Disabled')) {
-                this.next();
-            } else {
-                this.register();
-            }
+            this.register();
         } else {
             this.loginStart();
         }
@@ -266,22 +245,21 @@ const AccountView = Backbone.View.extend({
         if (this.model.account.get('mode') === 'login') {
             $('#accountEmail')[0].focus();
         } else if (this.model.account.get('mode') === 'register') {
-            $('#accountCode')[0].focus();
-            // const emailField = $('#accountEmail')[0];
-            // if (emailField.value.length > 0) {
-            //     $('#newPassword1')[0].focus();
-            // } else {
-            //     emailField.focus();
-            // }
+            const emailField = $('#accountEmail')[0];
+            if (emailField.value.length > 0) {
+                $('#newPassword1')[0].focus();
+            } else {
+                emailField.focus();
+            }
         }
     },
 
     changeModeRegister: function() {
         const email = this.model.prefillEmail || $('#accountEmail')[0].value;
-        const code = this.model.prefillCode;
+        const code = this.model.couponCode;
         let link = '#dest=register';
         if (email) link += `,pfEmail=${email}`;
-        if (code) link += `,pfRegCode=${code}`;
+        if (code) link += `,couponCode=${code}`;
         window.location.hash = link;
         window.location.reload();
     },

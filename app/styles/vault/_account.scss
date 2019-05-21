@@ -109,8 +109,7 @@
   }
 
   input[type=password].open__pass-input,
-  input[type=text]#accountEmail,
-  input[type=text]#accountCode {
+  input[type=text]#accountEmail{
     font-size: $large-pass-font-size;
     margin-bottom: 0;
     min-width: 200px;
@@ -139,8 +138,7 @@
   justify-content: flex-start;
 
   & input[type="password"].open__pass-input,
-  & input[type="text"]#accountEmail,
-  & input[type="text"]#accountCode {
+  & input[type="text"]#accountEmail {
     font-size: calc(10px + 1.5vmin);
     margin-bottom: 0;
     min-width: 200px;
@@ -188,8 +186,7 @@
   overflow-y: scroll;
 
   & input[type="password"].open__pass-input,
-  & input[type="text"]#accountEmail,
-  & input[type="text"]#accountCode {
+  & input[type="text"]#accountEmail {
     font-size: calc(10px + 1.5vmin);
     margin-bottom: 0;
     min-width: 200px;
@@ -213,12 +210,4 @@
     font-size: 4vmin;
     margin: 5vmin 0 0.5vmin;
   }
-}
-
-.registrationStage1Disabled .registrationStage1 {
-  display: none;
-}
-
-.registrationStage2Disabled .registrationStage2 {
-  display: none;
 }

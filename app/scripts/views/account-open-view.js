@@ -592,7 +592,7 @@ const OpenView = Backbone.View.extend({
         KPRPCHandler.sendServiceAccessTokens(this.model.account.latestTokens());
 
         this.model.prefillEmail = null;
-        this.model.prefillCode = null;
+        this.model.couponCode = null;
 
         return true;
     },

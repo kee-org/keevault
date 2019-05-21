@@ -109,9 +109,7 @@ const Alerts = {
             case KeeError.ServerTimeout: body = Locale.serverTimeout; break;
             case KeeError.ServerUnreachable: body = Locale.serverUnreachable; break;
             case KeeError.AlreadyRegistered: body = Locale.alreadyRegistered; break;
-
-            // TODO: Remove this hack after removing registration code limit
-            case KeeError.ExceededQuota: body = Locale.wrongCode; break;
+            case KeeError.ExceededQuota: body = Locale.unexpectedServerResponse; break;
             default: body = 'Error: ' + error; break;
         }
 

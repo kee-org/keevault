@@ -53,7 +53,7 @@ const AppModel = Backbone.Model.extend({
             case 'pfEmail': if (EmailUtil.validate(val)) {
                 this.prefillEmail = val;
             } break;
-            case 'pfRegCode': if (/^[a-zA-Z0-9]{3,30}$/.test(val)) { this.prefillCode = val; } break;
+            case 'couponCode': if (/^[a-zA-Z0-9]{3,60}$/.test(val)) { this.couponCode = val; } break;
             case 'resetEmail': if (EmailUtil.validate(val)) { this.resetEmail = val; } break;
             case 'resetAuthToken': this.resetAuthToken = val; break;
         }
