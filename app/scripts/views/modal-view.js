@@ -9,6 +9,7 @@ const ModalView = Backbone.View.extend({
 
     events: {
         'click .modal__buttons button': 'buttonClick',
+        'click button.vault_action': 'buttonClick',
         'click': 'bodyClick'
     },
 
@@ -20,6 +21,10 @@ const ModalView = Backbone.View.extend({
             KeyHandler.onKey(Keys.DOM_VK_RETURN, this.enterPressed, this, false, true);
         }
         KeyHandler.setModal('alert');
+
+        if (typeof this.model.template === 'string') {
+            this.template = require('templates/' + this.model.template + '.hbs');
+        }
     },
 
     remove: function() {

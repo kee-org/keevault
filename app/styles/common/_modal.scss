@@ -67,3 +67,32 @@
     white-space: pre-wrap;
   }
 }
+
+.coupon__content {
+  justify-content: flex-start;
+}
+
+.coupon__content .modal__header {
+  margin-top: 20px;
+}
+
+.coupon__content .box {
+  @include th { border: 1px solid th(accent-border-color); }
+  margin: 10px;
+  padding: 10px 20px 20px;
+}
+
+.coupon__content .modal__body {
+  width: 70%;
+  @include tablet {
+    width: 90%;
+  }
+}
+
+.coupon__content > .modal__body > p {
+  text-align: center;
+}
+
+.coupon__content .modal__icon {
+  padding-top: 20px;
+}

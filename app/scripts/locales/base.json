@@ -846,5 +846,15 @@
   "unsavedChangesOnOtherDevicesMayBeLost": "If you have unsaved changes on other devices they may be lost if you change your password now.",
   "readyToChangePassword": "Ready to change your password?",
   "unnamedField": "[No name]",
-  "pressBackAgainToExit": "Press back again to exit"
+  "pressBackAgainToExit": "Press back again to exit",
+  "couponPHWelcome": "Welcome Product Hunter!",
+  "couponPHDiscountStatement": "We will apply an exclusive discount of {} to your yearly subscription.",
+  "couponPHJustClose": "Just close this message and explore Kee Vault. Register within one hour to claim your discount!",
+  "couponPHExplore": "Explore Kee Vault",
+  "couponPHExistingUser": "Existing pre-launch supporter?",
+  "couponPHSignInToClaim": "Sign in to your Kee Vault within one hour to claim your discount.",
+  "couponPHTrialDateUnchanged": "The end date of your free trial will not be changed.",
+  "couponPHChangeToYearly": "Your subscription will be changed to \"Supporter yearly\".",
+  "couponPHCanChangeToMonthlyBut": "You can change back to the monthly subscription plan later but you'll only qualify for the discount if you're subscribed to the yearly option at the time your free trial ends.",
+  "couponPHSignInNow": "Sign in now"
 }

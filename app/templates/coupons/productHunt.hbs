@@ -1,0 +1,28 @@
+<div class="modal modal--hidden {{#if opaque}}modal--opaque{{/if}}">
+    <div class="modal__content coupon__content">
+        <i class="modal__icon fa fa-{{icon}}"></i>
+        <div class="modal__header">{{{header}}}</div>
+        <div class="modal__body">
+            <p>{{#res 'couponPHDiscountStatement'}}<b>{{discount}}%</b>{{/res}}</p>
+            <div class="box">
+                <h3>{{res 'newUser'}}</h3>
+                <p>{{res 'couponPHJustClose'}}</p>
+                <button class="vault_action" data-result="explore">
+                    <div class="content">{{res 'couponPHExplore'}}</div>
+                    <div class="opening-icon"><i class="fa fa-spinner fa-spin"></i></div>
+                </button>
+            </div>
+            <div class="box">
+                <h3>{{res 'couponPHExistingUser'}}</h3>
+                <p>{{res 'couponPHSignInToClaim'}}</p>
+                <p>{{res 'couponPHTrialDateUnchanged'}}</p>
+                <p>{{res 'couponPHChangeToYearly'}}</p>
+                <p>{{res 'couponPHCanChangeToMonthlyBut'}}</p>
+                <button class="vault_action" data-result="signin">
+                    <div class="content">{{res 'couponPHSignInNow'}}</div>
+                    <div class="opening-icon"><i class="fa fa-spinner fa-spin"></i></div>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

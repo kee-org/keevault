@@ -118,6 +118,37 @@ const AppView = Backbone.View.extend({
 
         this.setWindowClass();
         this.fixClicksInEdge();
+
+        if (this.model.couponCode === 'PRODHUNT') {
+            this.model.couponCode = this.codeFromTime();
+        }
+    },
+
+    // This could go wrong if clients have very inaccurate local clocks but they
+    // wouldn't be able to use Kee Vault (or most websites) anyway and since we
+    // check the validity period of each coupon on the server, we'd just ignore
+    // any coupons used at the wrong time.
+    codeFromTime: function () {
+        // const now = Date.now();
+        // Trial-run:
+        const now = Date.now() + 172800000;
+        const PDT0300 = 1559037600000;
+        const PDT0700 = 1559052000000;
+        const PDT1000 = 1559062800000;
+        const PDT1300 = 1559073600000;
+        const PDT1600 = 1559084400000;
+        const PDT1900 = 1559095200000;
+        const PDT0000 = 1559113200000;
+        const end = 1561762800000;
+        if (now < PDT0300) return '';
+        else if (now < PDT0700) return 'PRODHUNT50';
+        else if (now < PDT1000) return 'PRODHUNT45';
+        else if (now < PDT1300) return 'PRODHUNT40';
+        else if (now < PDT1600) return 'PRODHUNT35';
+        else if (now < PDT1900) return 'PRODHUNT30';
+        else if (now < PDT0000) return 'PRODHUNT25';
+        else if (now < end) return 'PRODHUNT20';
+        return '';
     },
 
     setWindowClass: function() {
@@ -177,34 +208,70 @@ const AppView = Backbone.View.extend({
             // static HTML content on first page load is required.
             if (body.classList.contains('firstLoad')) {
                 body.classList.add('enable_native_scroll');
-                this.showInitialVisitView();
+                this.showInitialVisitView(() => this.showCouponAlert());
             } else {
-                this.showForcedInitialVisitView();
+                this.showForcedInitialVisitView(() => this.showCouponAlert());
             }
         } else if (this.model.destinationFeature === 'demo') {
             if (!FeatureDetector.isMobile) {
-                this.showInitialVisitView();
+                this.showInitialVisitView(() => this.showCouponAlert());
             } else {
                 $('#app__body_intro')[0].classList.add('hide');
                 $('#app__body_main')[0].classList.remove('hide');
             }
             this.showDemo();
         } else if (this.model.destinationFeature === 'registerWithWalkthrough') {
-            this.showInitialVisitView(() => this.views.vaultOverlay.ctaClick());
+            this.showInitialVisitView(() => {
+                this.views.vaultOverlay.ctaClick();
+                this.showCouponAlert();
+            });
         } else {
             $('#app__body_intro')[0].classList.add('hide');
             $('#app__body_main')[0].classList.remove('hide');
             if (this.model.destinationFeature === 'registerWithoutWalkthrough') {
-                this.showRegistration();
+                this.showRegistration(() => this.showCouponAlert());
             } else if (this.model.destinationFeature === 'resetPassword') {
                 this.showResetPassword();
             } else if (this.model.destinationFeature === 'resetPasswordConfirm') {
                 this.showResetPasswordConfirm();
             } else {
-                this.showAccountStart();
+                this.showAccountStart(() => this.showCouponAlert());
             }
         }
         return this;
+    },
+
+    couponAmount (regCode) {
+        switch (regCode) {
+            case 'PRODHUNT50': return 50;
+            case 'PRODHUNT45': return 45;
+            case 'PRODHUNT40': return 40;
+            case 'PRODHUNT35': return 35;
+            case 'PRODHUNT30': return 30;
+            case 'PRODHUNT25': return 25;
+            case 'PRODHUNT20': return 20;
+            default: return 0;
+        }
+    },
+
+    showCouponAlert: function() {
+        if (this.model.couponCode && this.model.couponCode.startsWith('PRODHUNT')) {
+            const classList = $('body')[0].classList;
+            let retainNativeScrollOnClose = false;
+            if (classList.contains('enable_native_scroll')) retainNativeScrollOnClose = true;
+            classList.add('enable_native_scroll');
+            Alerts.alert({
+                template: 'coupons/productHunt',
+                discount: this.couponAmount(this.model.couponCode),
+                icon: 'cat',
+                header: Locale.couponPHWelcome,
+                success: () => {
+                    if (!retainNativeScrollOnClose) {
+                        $('body')[0].classList.remove('enable_native_scroll');
+                    }
+                }
+            });
+        }
     },
 
     showInitialVisitView: function(viewReady) {
@@ -317,17 +384,18 @@ const AppView = Backbone.View.extend({
         this.views.account.on('close', this.showEntries, this);
     },
 
-    showAccountStart: function() {
+    showAccountStart: function(viewReady) {
         this.prepareForNewView(true);
         this.views.account = new AccountView({ model: this.model });
         this.views.account.setElement(this.$el.find('#app__body_main')).render();
         this.views.account.on('close', this.showEntries, this);
+        if (viewReady) viewReady();
     },
 
-    showRegistration: function() {
+    showRegistration: function(viewReady) {
         this.model.account.set('mode', 'register');
         this.model.settings.set('vaultIntroCompleted', true);
-        this.showAccountStart();
+        this.showAccountStart(viewReady);
     },
 
     showImport: function(ev) {
