@@ -43,6 +43,10 @@ const Account = {
 
         return { user, siOrError };
     },
+    applyCouponToSubscription: async function (user, code) {
+        const trueOrError = await user.applyCouponToSubscription(code);
+        return trueOrError;
+    },
 
     allegedRemainingMinutes: function (resetAuthToken) {
         return KeeService.Reset.ResetManager.allegedRemainingMinutes(resetAuthToken);

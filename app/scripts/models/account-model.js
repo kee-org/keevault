@@ -51,6 +51,12 @@ const AccountModel = Backbone.Model.extend({
         return trueOrError;
     },
 
+    async applyCouponToSubscription (code) {
+        const user = this.get('user');
+        const trueOrError = await Account.applyCouponToSubscription(user, code);
+        return trueOrError;
+    },
+
     uploadInitialVault: async function (user, password, emailAddrParts) {
         const primaryFile = await Account.createFileWithEmptyVault(password, emailAddrParts);
         return Account.uploadInitialVault(user, primaryFile.db);

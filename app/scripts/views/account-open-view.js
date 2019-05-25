@@ -542,6 +542,14 @@ const OpenView = Backbone.View.extend({
 
     login: async function() {
         const trueOrError = await this.model.account.loginFinish(await this.params.password.getHash());
+        if (trueOrError === true && this.model.couponCode && this.model.couponCode.startsWith('PRODHUNT')) {
+            try {
+                const couponResult = await this.model.account.applyCouponToSubscription(this.model.couponCode);
+                logger.info('Result of applying coupon to subscription account: ' + couponResult);
+            } catch (e) {
+                logger.error('Error applying coupon to subscription account: ' + e);
+            }
+        }
         return trueOrError;
     },
 
