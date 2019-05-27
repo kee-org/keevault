@@ -129,9 +129,7 @@ const AppView = Backbone.View.extend({
     // check the validity period of each coupon on the server, we'd just ignore
     // any coupons used at the wrong time.
     codeFromTime: function () {
-        // const now = Date.now();
-        // Trial-run:
-        const now = Date.now() + 172800000;
+        const now = Date.now();
         const PDT0300 = 1559037600000;
         const PDT0700 = 1559052000000;
         const PDT1000 = 1559062800000;

@@ -2,6 +2,12 @@ This lists the major changes in each version of Kee Vault.
 
 Many smaller or partially complete changes will be made on a regular basis. To see all changes, look for the commit history in each of our GitHub repositories.
 
+## 0.9.6
+
+* Updated content for launch; removed need for registration code
+* Enable "press back twice to exit" for Android app
+* Update process improved, including removal of potential rare page refresh loop bug
+
 ## 0.9.5
 
 * Enhanced import feature for LastPass, 1Password, Dashlane and generic CSV
