@@ -2,6 +2,10 @@ This lists the major changes in each version of Kee Vault.
 
 Many smaller or partially complete changes will be made on a regular basis. To see all changes, look for the commit history in each of our GitHub repositories.
 
+## 0.9.7
+
+* Attempting to workaround possible buggy interaction between Chrome ad-blocker and PH link button
+
 ## 0.9.6
 
 * Updated content for launch; removed need for registration code

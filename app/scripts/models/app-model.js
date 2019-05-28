@@ -76,6 +76,11 @@ const AppModel = Backbone.Model.extend({
             });
             window.location.hash = '';
         }
+
+        // Hack for Product Hunt button. Maybe a Chrome ad blocker bug?
+        if (window.location.search === '?ref=producthunt' || window.location.search === '?ref=producthunttest') {
+            this.handleHashItem('couponCode', 'PRODHUNT');
+        }
     },
 
     setKPRPCActions: function(actions) {
