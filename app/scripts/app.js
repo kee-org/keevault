@@ -23,6 +23,9 @@ const Tip = require('./util/tip');
 const ready = $;
 
 ready(() => {
+    if (FeatureDetector.isFrame) {
+        return;
+    }
     loadMixins();
 
     const appModel = new AppModel();
