@@ -9,7 +9,6 @@ const IdleTracker = require('./comp/idle-tracker');
 const PopupNotifier = require('./comp/popup-notifier');
 const MultiInstanceComms = require('./comp/multi-instance-comms');
 const Alerts = require('./comp/alerts');
-const AuthReceiver = require('./comp/auth-receiver');
 const SettingsManager = require('./comp/settings-manager');
 const FeatureTester = require('./comp/feature-tester');
 const FeatureDetector = require('./util/feature-detector');
@@ -24,7 +23,7 @@ const Tip = require('./util/tip');
 const ready = $;
 
 ready(() => {
-    if (FeatureDetector.isPopup && AuthReceiver.receive() || FeatureDetector.isFrame) {
+    if (FeatureDetector.isPopup) {
         return;
     }
     loadMixins();
