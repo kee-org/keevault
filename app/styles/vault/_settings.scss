@@ -11,6 +11,10 @@ div.settings__messages-message {
   &-at {
     float: right;
   }
+
+  &-body {
+    user-select: text;
+  }
 }
 
 label.settings__messages-label {

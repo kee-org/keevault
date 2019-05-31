@@ -27,6 +27,8 @@ const SettingsCommsView = Backbone.View.extend({
                 msg.body = (v.indexOf('<') >= 0 || v.indexOf('>') >= 0)
                     ? "There's a message here but we can't display it right now. Please use the support forum for assistance."
                     : v.replace(/\n/g, '<br>');
+                msg.body = msg.body.replace(/(\bhttps?:\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim,
+                    '<a href="$&" rel="noreferrer noopener" target="_blank">$&</a>');
                 if (msg.from !== 'me') {
                     const space = msg.from.indexOf(' ');
                     msg.from = (space > 0 ? msg.from.substring(0, space) : msg.from) + ' (Kee Vault)';
