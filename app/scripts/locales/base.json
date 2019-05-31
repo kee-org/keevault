@@ -713,7 +713,7 @@
   "customerSupportSettings": "Customer Support Settings",
   "supportPrivacy1": "Since we do not store your email address anywhere unnecessary, you will need to confirm that you are happy for your address to be shared with our support system. This enables useful features such as notifications when you receive a reply.",
   "supportPrivacy2": "There is a theoretically higher risk of your email address being exposed to the public because we will be storing it in an additional location with one less layer of protection than Kee Vault itself. This does not share your address with any third party - it is still under our protection and we will do whatever we can to mitigate the additional risk.",
-  "messagesExplainer": "You can send the Kee Vault team a secure private message here. We may not be able to respond to all messages but will try to do so for anything that we decide could not reasonably be addressed via the community forum. If we reply you will see the message here and will receive an email notification if you have permitted this.",
+  "messagesExplainer": "You can send the Kee Vault team a secure private message here. We may not be able to respond to all messages but will try to do so for anything that we decide could not reasonably be addressed via the <a href=\"{}\" rel=\"noreferrer noopener\" target=\"_blank\">community forum</a>. If we reply you will see the message here and will receive an email notification if you have permitted this.",
   "supportEnableEmails": "Enable email notifications",
   "firstName": "First name",
   "lastName": "Last name",

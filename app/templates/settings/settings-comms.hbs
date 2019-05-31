@@ -16,7 +16,7 @@
     {{/if}}
 
     <h2><i class="fa fa-envelope"></i> {{res 'messages'}}</h2>
-    <div><p>{{res 'messagesExplainer'}}</p></div>
+    <div><p>{{#res 'messagesExplainer'}}https://forum.kee.pm{{/res}}</p></div>
 
     {{#each messages as |msg|}}
         <div class="settings__messages-message">
