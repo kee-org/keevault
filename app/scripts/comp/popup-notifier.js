@@ -1,6 +1,5 @@
 const Backbone = require('backbone');
 const Alerts = require('./alerts');
-const AuthReceiver = require('./auth-receiver');
 const Links = require('../const/links');
 const Timeouts = require('../const/timeouts');
 const Locale = require('../util/locale');
@@ -33,15 +32,6 @@ const PopupNotifier = {
     isOwnUrl(url) {
         return url.lastIndexOf(Links.WebApp, 0) === 0 ||
             url.lastIndexOf(location.origin + location.pathname, 0) === 0;
-    },
-
-    processReturnToApp: function(url) {
-        const returnMessage = AuthReceiver.urlArgsToMessage(url);
-        if (Object.keys(returnMessage).length > 0) {
-            const evt = new Event('message');
-            evt.data = returnMessage;
-            window.dispatchEvent(evt);
-        }
     },
 
     deferCheckClosed: function(win) {
