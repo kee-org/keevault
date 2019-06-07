@@ -11,7 +11,7 @@
   padding: $small-spacing $base-spacing;
   text-decoration: none;
   transition: background-color border-color $base-duration $base-timing;
-  user-select: none;
+  @include user-select(none);
   vertical-align: middle;
   white-space: nowrap;
   outline: none;

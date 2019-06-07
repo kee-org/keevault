@@ -5,7 +5,7 @@
   flex-direction: column;
   justify-content: flex-start;
   width: 100%;
-  user-select: none;
+  @include user-select(none);
 
   &__space {
     flex: 1;
