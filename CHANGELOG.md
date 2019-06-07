@@ -2,6 +2,12 @@ This lists the major changes in each version of Kee Vault.
 
 Many smaller or partially complete changes will be made on a regular basis. To see all changes, look for the commit history in each of our GitHub repositories.
 
+## 0.9.8
+
+* Ignore invalid characters when importing from non-KeePass sources
+* Fix aborted load when opened in new tab by websites that do not isolate themselves from the new tab
+* Enable copying messages and clicking website links
+
 ## 0.9.7
 
 * Attempting to workaround possible buggy interaction between Chrome ad-blocker and PH link button
