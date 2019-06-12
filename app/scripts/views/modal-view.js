@@ -8,8 +8,7 @@ const ModalView = Backbone.View.extend({
     template: require('templates/modal.hbs'),
 
     events: {
-        'click .modal__buttons button': 'buttonClick',
-        'click button.vault_action': 'buttonClick',
+        'click .modal__buttons button,button.vault_action': 'buttonClick',
         'click': 'bodyClick'
     },
 
