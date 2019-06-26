@@ -20,7 +20,9 @@ const VaultOverlayView = Backbone.View.extend({
     },
 
     showTopDemoBlurb: function() {
-        this.$el[0].querySelector('#demoBlurb').classList.remove('hide');
+        const topBlurb = this.$el[0].querySelector('#demoBlurb');
+        if (!topBlurb) return; // TODO: this won't be needed if we ever configure the demo to run on all devices
+        topBlurb.classList.remove('hide');
     },
 
     ctaClick: function() {

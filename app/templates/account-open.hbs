@@ -17,13 +17,8 @@
         <div class="open__pass-warning muted-color invisible"><i class="fa fa-exclamation-triangle"></i> {{res 'openCaps'}}</div>
     </div>
     <div class="open__pass-area">
-        <div class="hide">
-            {{!-- we need these inputs to screw browsers passwords autocompletion --}}
-            <input type="text" style="display:none" name="username">
-            <input type="password" style="display:none" name="password">
-        </div>
         <div class="open__pass-field-wrap">
-            <input class="open__pass-input" type="password" autocomplete="new-password" maxlength="1024"
+            <input class="open__pass-input" type="password" autocomplete="off" maxlength="1024"
                    placeholder="{{res 'typeYourAccountPassword'}}" tabindex="13" />
         </div>
     </div>

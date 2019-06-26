@@ -11,6 +11,7 @@ module.exports = function(grunt) {
     require('load-grunt-tasks')(grunt);
 
     grunt.loadNpmTasks('grunt-string-replace');
+    grunt.loadNpmTasks('grunt-exec');
 
     require('./grunt.tasks')(grunt);
     require('./grunt.entrypoints')(grunt);
@@ -90,6 +91,20 @@ module.exports = function(grunt) {
                 expand: true,
                 nonull: true
             },
+            'sw-loader': {
+                cwd: 'app/',
+                src: ['sw-loader.js'],
+                dest: 'tmp/',
+                expand: true,
+                nonull: true
+            },
+            'dist-sw-loader': {
+                cwd: 'app/',
+                src: ['sw-loader.js'],
+                dest: 'dist/',
+                expand: true,
+                nonull: true
+            },
             fonts: {
                 src: 'node_modules/@fortawesome/fontawesome-free/webfonts/fa-*.woff2',
                 dest: 'tmp/fonts/',
@@ -141,6 +156,34 @@ module.exports = function(grunt) {
             js: {
                 keepalive: true,
                 port: 8087
+            }
+        },
+        watch: {
+            options: {
+                interrupt: true,
+                debounceDelay: 500
+            },
+            styles: {
+                files: 'app/styles/**/*.scss',
+                tasks: ['sass']
+            },
+            indexhtml: {
+                files: 'app/index.html',
+                tasks: ['copy:html']
+            }
+        },
+        'concurrent': {
+            options: {
+                logConcurrentOutput: true
+            },
+            'dev-server': [
+                'watch:styles',
+                'webpack-dev-server'
+            ]
+        },
+        exec: {
+            capCopy: {
+                cmd: 'npx cap copy'
             }
         }
     });

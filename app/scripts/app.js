@@ -19,6 +19,9 @@ const RuntimeInfo = require('./comp/runtime-info');
 const KeeFrontend = require('kee-frontend');
 const OpenProgressReporter = require('./comp/open-progress-reporter');
 const Tip = require('./util/tip');
+const Capacitor = require('@capacitor/core');
+const NativeCache = require('./comp/nativeCache');
+const NativeConfig = require('./comp/nativeConfig');
 
 const ready = $;
 
@@ -31,6 +34,7 @@ ready(() => {
     const appModel = new AppModel();
 
     Promise.resolve()
+        .then(detectDevice)
         .then(loadConfigs)
         .then(initModules)
         .then(loadConfig)
@@ -40,6 +44,11 @@ ready(() => {
         .catch(e => {
             appModel.appLogger.error('Error starting app', e);
         });
+
+    async function detectDevice() {
+        const info = await Capacitor.Plugins.Device.getInfo();
+        appModel.deviceInfo = info;
+    }
 
     function loadMixins() {
         require('./mixins/view');
@@ -62,6 +71,7 @@ ready(() => {
 
     function loadConfigs() {
         return Promise.all([
+            NativeConfig.init(),
             AppSettingsModel.instance.load(),
             UpdateModel.instance.load(),
             RuntimeDataModel.instance.load()
@@ -156,10 +166,12 @@ ready(() => {
         const appView = new AppView({ model: appModel });
         appView.render();
         window.ridMatomoStartup();
-        watchForUpdates();
+        if (appModel.deviceInfo.platform === 'web') watchForUpdates();
         KPRPCHandler.init(appView);
+        NativeCache.init(KPRPCHandler);
         Backbone.trigger('app-ready');
         if (FeatureDetector.exitsOnBack()) handleBackEvents();
+        if (appModel.deviceInfo.platform !== 'web') Capacitor.Plugins.SplashScreen.hide();
         logStartupTime();
     }
 
@@ -189,6 +201,6 @@ ready(() => {
 
     function logStartupTime() {
         const time = Math.round(performance.now());
-        appModel.appLogger.info(`Started in ${time}ms ¯\\_(ツ)_/¯`);
+        appModel.appLogger.info(`Started in ${time}ms`);
     }
 });

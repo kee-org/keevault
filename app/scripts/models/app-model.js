@@ -17,6 +17,7 @@ const Format = require('../util/format');
 const UrlUtil = require('../util/url-util');
 const EmailUtil = require('../util/email');
 const RuntimeInfo = require('../comp/runtime-info');
+const NativeCache = require('../comp/nativeCache');
 
 require('../mixins/protected-value-ex');
 
@@ -389,6 +390,7 @@ const AppModel = Backbone.Model.extend({
             const demoFile = new FileModel({ id: IdGenerator.uuid() });
             demoFile.openDemo(() => {
                 this.addFile(demoFile);
+                NativeCache.update(this);
             });
             return true;
         } else {

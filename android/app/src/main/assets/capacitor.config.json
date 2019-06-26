@@ -1,0 +1,7 @@
+{
+  "appId": "pm.kee.vault",
+  "appName": "Kee Vault N",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "dist"
+}

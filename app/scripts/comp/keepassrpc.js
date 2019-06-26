@@ -6,6 +6,7 @@ const Backbone = require('backbone'),
     EntryModel = require('../models/entry-model'),
     PSL = require('../util/psl'),
     GeneratorPresets = require('../comp/generator-presets');
+    //     NativeCache = require('../comp/nativeCache');
 
 const logger = new Logger('kprpc');
 let app;
@@ -195,6 +196,10 @@ function syncFile (file, options) {
     app.syncFile(file, options);
 }
 
+function invokeLocalGetAllDatabases (fullDetails) {
+    return kprpc.GetAllDatabases(fullDetails);
+}
+
 const integration = {
     getGroup,
     getEntry,
@@ -221,7 +226,7 @@ const integration = {
 };
 
 const KPRPCHandler = {
-    tempimp: null,
+//    tempimp: null,
 
     init: function (appV) {
         app = appV.model;
@@ -250,12 +255,16 @@ const KPRPCHandler = {
                 deferPromiseResolver();
             }
         });
+        // if (appV.model.files.hasDemoFile()) {
+        //     NativeCache.update(appV.model);
+        // }
     },
     shutdown: function () {
         kprpc.shutdown();
     },
     sendServiceAccessTokens,
-    applyAddonConfig
+    applyAddonConfig,
+    invokeLocalGetAllDatabases
 };
 
 module.exports = KPRPCHandler;

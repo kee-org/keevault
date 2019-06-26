@@ -40,7 +40,7 @@ const SettingsAccountView = Backbone.View.extend({
 
     render: function() {
         const appInfo = 'Kee Vault v' + RuntimeInfo.version + ' (' + RuntimeInfo.commit + ', ' + RuntimeInfo.buildDate + ')\n' +
-            'Environment: web\n' +
+            'Environment: ' + this.appModel.deviceInfo.platform + '\n' +
             'User-Agent: ' + RuntimeInfo.userAgent;
         const user = AccountModel.instance.get('user');
         const possiblyLoggedIn = this.appModel.account.latestTokens().length > 0;

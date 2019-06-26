@@ -6,12 +6,15 @@ module.exports = function(grunt) {
         'copy:html',
         'copy:icons',
         'copy:sw',
+        'copy:sw-loader',
         'copy:fonts',
         'webpack',
         'inline',
         'htmlmin',
         'copy:dist-icons',
         'copy:dist-sw',
-        'string-replace'
+        'copy:dist-sw-loader',
+        'string-replace',
+        'exec:capCopy'
     ]);
 };
