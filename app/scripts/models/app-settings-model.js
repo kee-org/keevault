@@ -38,6 +38,7 @@ const AppSettingsModel = Backbone.Model.extend({
             },
             default: 'High'
         },
+        generatorHidePassword: false,
         cacheConfigSettings: false,
 
         canOpen: true,
