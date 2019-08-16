@@ -1,9 +1,12 @@
-@import "../node_modules/normalize.css/normalize";
-@import "../node_modules/@fortawesome/fontawesome-free/scss/fontawesome";
-@import "../node_modules/@fortawesome/fontawesome-free/scss/brands";
-@import "../node_modules/@fortawesome/fontawesome-free/scss/regular";
-@import "../node_modules/@fortawesome/fontawesome-free/scss/solid";
-@import "../node_modules/pikaday/scss/pikaday";
+$fa-font-path: '~@fortawesome/fontawesome-free/webfonts';
+
+@import "~normalize.css/normalize";
+//@import "~font-awesome/scss/font-awesome";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/brands";
+@import "~@fortawesome/fontawesome-free/scss/regular";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+@import "~pikaday/scss/pikaday";
 @import "bourbon";
 
 @import "themes/all-themes";

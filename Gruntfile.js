@@ -3,10 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const sass = require('node-sass');
-
 const webpackConfig = require('./webpack.config');
-const postCssReplaceFont = require('./build/util/postcss-replace-font');
 const pkg = require('./package.json');
 
 module.exports = function(grunt) {
@@ -14,7 +11,6 @@ module.exports = function(grunt) {
     require('load-grunt-tasks')(grunt);
 
     grunt.loadNpmTasks('grunt-string-replace');
-    grunt.loadNpmTasks('grunt-postcss');
 
     require('./grunt.tasks')(grunt);
     require('./grunt.entrypoints')(grunt);
@@ -106,31 +102,6 @@ module.exports = function(grunt) {
             app: ['app/scripts/**/*.js'],
             grunt: ['Gruntfile.js', 'grunt/**/*.js']
         },
-        sass: {
-            options: {
-                sourceMap: false,
-                includePaths: ['./node_modules', ...require('bourbon').includePaths],
-                implementation: sass
-            },
-            dist: {
-                files: {
-                    'tmp/css/main.css': 'app/styles/main.scss'
-                }
-            }
-        },
-        postcss: {
-            options: {
-                processors: [
-                    postCssReplaceFont,
-                    require('autoprefixer')({overrideBrowserslist: 'Firefox >= 60, Chrome >= 67, Edge >= 17, iOS >= 12, ChromeAndroid >= 67'}),
-                    require('cssnano')({discardComments: {removeAll: true}})
-                ]
-            },
-            dist: {
-                src: 'tmp/css/main.css',
-                dest: 'tmp/css/main.css'
-            }
-        },
         inline: {
             app: {
                 src: 'tmp/index.html',
@@ -153,9 +124,9 @@ module.exports = function(grunt) {
         },
         'webpack-dev-server': {
             options: {
-                webpack: webpackConfig.devServerConfig(grunt),
-                contentBase: path.join(__dirname, 'tmp'),
-                publicPath: '/js',
+                webpack: webpackConfig.config(grunt, 'development'),
+                publicPath: '/',
+                contentBase: path.resolve(__dirname, 'tmp'),
                 progress: false,
                 https: fs.existsSync('cert/server.key')
                     ? {
@@ -177,23 +148,10 @@ module.exports = function(grunt) {
                 interrupt: true,
                 debounceDelay: 500
             },
-            styles: {
-                files: 'app/styles/**/*.scss',
-                tasks: ['sass']
-            },
             indexhtml: {
                 files: 'app/index.html',
                 tasks: ['copy:html']
             }
-        },
-        'concurrent': {
-            options: {
-                logConcurrentOutput: true
-            },
-            'dev-server': [
-                'watch:styles',
-                'webpack-dev-server'
-            ]
         }
     });
 };
