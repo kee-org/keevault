@@ -51,11 +51,16 @@ const ListSearchView = Backbone.View.extend({
         }, this);
         this.views = {};
         this.advancedSearch = {
-            user: true, other: true,
-            url: true, protect: false,
-            notes: true, pass: false,
-            cs: false, regex: false,
-            history: false, title: true
+            user: true,
+            other: true,
+            url: true,
+            protect: false,
+            notes: true,
+            pass: false,
+            cs: false,
+            regex: false,
+            history: false,
+            title: true
         };
         this.setLocale();
         KeyHandler.onKey(Keys.DOM_VK_F, this.findKeyPress, this, KeyHandler.SHORTCUT_ACTION);
