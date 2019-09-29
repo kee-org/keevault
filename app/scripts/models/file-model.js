@@ -846,7 +846,7 @@ const FileModel = Backbone.Model.extend({
         if (enabled) {
             this.db.createRecycleBin();
         }
-        this.set('setRecycleBinEnabled', enabled);
+        this.set('recycleBinEnabled', enabled);
         this.setModified();
     },
 
