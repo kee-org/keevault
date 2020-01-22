@@ -9,6 +9,12 @@
     "type": "git",
     "url": "https://github.com/kee-org/keevault"
   },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": "Firefox >= 60, Chrome >= 67, Edge >= 17, iOS >= 12, ChromeAndroid >= 67",
   "dependencies": {
     "@babel/runtime": "^7.7.7",
     "backgrid": "^0.3.8",
@@ -56,23 +62,24 @@
     "handlebars": "4.5.3",
     "handlebars-loader": "1.7.1",
     "html-minifier": "4.0.0",
+    "ignore-loader": "^0.1.2",
     "jquery": "3.4.1",
+    "json-loader": "^0.5.4",
     "jsqrcode": "github:antelle/jsqrcode#0.1.3",
     "kdbxweb": "1.5.7",
     "load-grunt-tasks": "5.1.0",
     "mime-types": "^2.1.25",
-    "node-sass": "^4.13.0",
-    "ignore-loader": "^0.1.2",
-    "json-loader": "^0.5.4",
     "mini-css-extract-plugin": "^0.8.0",
+    "node-sass": "^4.13.0",
     "normalize.css": "8.0.1",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "pikaday": "1.8.0",
     "pkcs15-smartcard-sign": "^1.0.0",
+    "postcss-loader": "^3.0.0",
     "punycode": "^2.1.1",
     "raw-loader": "4.0.0",
-    "source-map-loader": "^0.2.4",
     "sass-loader": "^7.2.0",
+    "source-map-loader": "^0.2.4",
     "stats-webpack-plugin": "0.7.0",
     "string-replace-webpack-plugin": "0.1.3",
     "strip-sourcemap-loader": "0.0.1",
