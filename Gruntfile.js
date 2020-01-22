@@ -14,6 +14,7 @@ module.exports = function(grunt) {
     require('load-grunt-tasks')(grunt);
 
     grunt.loadNpmTasks('grunt-string-replace');
+    grunt.loadNpmTasks('grunt-postcss');
 
     require('./grunt.tasks')(grunt);
     require('./grunt.entrypoints')(grunt);
@@ -108,7 +109,7 @@ module.exports = function(grunt) {
         sass: {
             options: {
                 sourceMap: false,
-                includePaths: ['./node_modules'],
+                includePaths: ['./node_modules', ...require('bourbon').includePaths],
                 implementation: sass
             },
             dist: {
@@ -121,6 +122,7 @@ module.exports = function(grunt) {
             options: {
                 processors: [
                     postCssReplaceFont,
+                    require('autoprefixer')({overrideBrowserslist: 'Firefox >= 60, Chrome >= 67, Edge >= 17, iOS >= 12, ChromeAndroid >= 67'}),
                     require('cssnano')({discardComments: {removeAll: true}})
                 ]
             },

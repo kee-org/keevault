@@ -73,12 +73,12 @@ body.enable_native_scroll {
         justify-content: space-between;
         height: 100px;
         @include th { border-bottom: 1px solid th(light-border-color); }
-        @include animation(fadeinheader 1000ms linear forwards);
+        animation: fadeinheader 1000ms linear forwards;
       }
       &_full {
         overflow: hidden;
         @include th { border-bottom: 1px solid th(light-border-color); }
-        @include animation(shrinkaway 1000ms ease-in-out forwards);
+        animation: shrinkaway 1000ms ease-in-out forwards;
       }
     }
   }
@@ -147,7 +147,7 @@ body.enable_native_scroll {
   }
 }
 
-@include keyframes(shrinkaway) {
+@keyframes shrinkaway {
   0% {
     opacity: 1;
     top: 0%;
@@ -162,7 +162,7 @@ body.enable_native_scroll {
   }
 }
 
-@include keyframes(fadeinheader) {
+@keyframes fadeinheader {
   0% {
     opacity: 0;
   }
@@ -196,7 +196,7 @@ body.enable_native_scroll {
   }
 }
 
-@include keyframes(introduceMask) {
+@keyframes introduceMask {
   0% {
     opacity: 0;
   }
@@ -209,7 +209,7 @@ body.enable_native_scroll {
 .vault_mask {
   @include position(absolute, 0 0 0 0);
   @include th { background-color: th(background-color); }
-  @include animation(introduceMask 150ms linear forwards);
+  animation: introduceMask 150ms linear forwards;
 
   &_transparent {
     @include position(absolute, 0 0 0 0);
@@ -234,7 +234,7 @@ body.enable_native_scroll {
     align-items: stretch;
     flex-direction: column;
     justify-content: center;
-    @include animation(growModal 250ms cubic-bezier(0,0,.62,1.43) forwards);
+    animation: growModal 250ms cubic-bezier(0,0,.62,1.43) forwards;
     @include th { background-color: th(modal-background-color); }
     @include th { border: 2px solid th(light-border-color); }
     font-size: 1.25em;
@@ -247,7 +247,7 @@ body.enable_native_scroll {
 
   &.modal--hidden {
     .vault_modal__content {
-      @include animation(shrinkModal 150ms ease-in forwards);
+      animation: shrinkModal 150ms ease-in forwards;
     }
   }
 }
@@ -266,7 +266,7 @@ body.enable_native_scroll {
     align-items: stretch;
     flex-direction: column;
     justify-content: center;
-    @include animation(growModal 250ms cubic-bezier(0,0,.62,1.43) forwards);
+    animation: growModal 250ms cubic-bezier(0,0,.62,1.43) forwards;
     @include th { background-color: th(modal-background-color); }
     font-size: 1.25em;
 
@@ -278,7 +278,7 @@ body.enable_native_scroll {
 
   &.modal--hidden {
     .vault_modal__content {
-      @include animation(shrinkModal 150ms ease-in forwards);
+      animation: shrinkModal 150ms ease-in forwards;
     }
   }
 }

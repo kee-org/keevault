@@ -6,7 +6,7 @@
   justify-content: flex-start;
   @include scrollbar-on-hover;
   width: 100%;
-  @include user-select(none);
+  user-select: none;
   overflow: hidden;
   position: relative;
 
@@ -21,12 +21,12 @@
 
   &__sample {
     font-weight: normal;
-    @include user-select(text);
+    user-select: text;
     @include th { color: th(muted-color); }
   }
 
   &__example {
-    @include user-select(text);
+    user-select: text;
     font-family: $monospace-font-family;
     margin-top: 0;
     white-space: pre-wrap;

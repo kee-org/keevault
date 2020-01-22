@@ -4,7 +4,7 @@ html {
 
 body {
   @include size(100%);
-  @include user-select(none);
+  user-select: none;
   @include th {
     color: th(text-color);
     background-color: th(background-color);
@@ -78,7 +78,7 @@ img {
 }
 
 body:not(.edge) * { // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/12132854/
-  @include selection(true) {
+  &::selection {
     @include th {
       background-color: th(text-selection-bg-color);
     }

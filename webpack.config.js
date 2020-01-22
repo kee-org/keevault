@@ -44,7 +44,7 @@ function config(grunt) {
                 baron: 'baron/baron.min.js',
                 pikaday: 'pikaday/pikaday.js',
                 qrcode: 'jsqrcode/dist/qrcode.min.js',
-                argon2: 'argon2-browser/dist/argon2.min.js',
+                argon2: 'argon2-browser/dist/argon2.js',
                 hbs: 'handlebars/runtime.js',
                 'argon2-wasm': 'argon2-browser/dist/argon2.wasm',
                 templates: path.join(__dirname, 'app/templates')
