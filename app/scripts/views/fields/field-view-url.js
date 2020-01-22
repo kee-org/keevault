@@ -11,7 +11,7 @@ const FieldViewUrl = FieldViewText.extend({
     },
 
     fixUrl: function(url) {
-        return this.displayUrlRegex.test(url) ? url : 'http://' + url;
+        return this.displayUrlRegex.test(url) ? url : 'https://' + url;
     },
 
     displayUrl: function(url) {
