@@ -19,17 +19,18 @@ const GrpView = Backbone.View.extend({
 
     render: function() {
         this.removeSubView();
-        if (this.model) {
-            this.renderTemplate({
+        this.renderTemplate(
+            {
                 title: this.model.get('title'),
                 icon: this.model.get('icon') || 'folder',
                 customIcon: this.model.get('customIcon'),
                 enableSearching: this.model.getEffectiveEnableSearching(),
                 readonly: this.model.get('top')
-            }, true);
-            if (!this.model.get('title')) {
-                this.$el.find('#grp__field-title').focus();
-            }
+            },
+            true
+        );
+        if (!this.model.get('title')) {
+            this.$el.find('#grp__field-title').focus();
         }
         this.createScroll({
             root: this.$el.find('.grp')[0],
@@ -45,11 +46,6 @@ const GrpView = Backbone.View.extend({
             this.views.sub.remove();
             delete this.views.sub;
         }
-    },
-
-    showGroup: function(group) {
-        this.model = group;
-        this.render();
     },
 
     changeTitle: function(e) {

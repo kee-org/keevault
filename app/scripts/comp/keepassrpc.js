@@ -125,13 +125,6 @@ function openOrUnlockOrFocusFile (dbFileId) {
         appView.showOpenFile();
         appView.views.open.showOpenFileInfo(fileInfo);
         requestHostBrowserFocus();
-    } else {
-        // The file is already open so lets just focus the main group.
-        // TODO: This doesn't work. Not a massive priority but would be handy to
-        // fix eventually. This whole function needs a rethink in terms of account login, etc. anyway
-        const group = file.db.getDefaultGroup().uuid;
-        appView.grp.showGroup(group);
-        // We don't focus the entire browser on the app at this point because we do not necessarily require any user attention.
     }
 }
 
