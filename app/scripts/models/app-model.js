@@ -434,48 +434,19 @@ const AppModel = Backbone.Model.extend({
             this.openFileFromCache(params, callback, fileInfo);
         } else if (fileInfo && fileInfo.get('openDate') && fileInfo.get('rev') === params.rev && fileInfo.get('storage') !== 'file') {
             logger.info('Open file from cache because it is latest');
-            this.openFileFromCache(params, callback, fileInfo);
-        } else if (!fileInfo || !fileInfo.get('openDate') || params.storage === 'file') {
-            logger.info('Open file from storage', params.storage);
-            const storage = Storage[params.storage];
-            const storageLoad = () => {
-                logger.info('Load from storage');
-                storage.load(params.path, params.opts, (err, data, stat) => {
+            this.openFileFromCache(
+                params,
+                (err, file) => {
                     if (err) {
-                        if (fileInfo && fileInfo.get('openDate')) {
-                            logger.warn('Open file from cache because of storage load error', err);
-                            this.openFileFromCache(params, callback, fileInfo);
-                        } else {
-                            logger.error('Storage load error', err);
-                            callback(err);
-                        }
+                        logger.warn('Load from cache failed. Probably Private browsing mode is enabled? Loading from storage instead');
+                        this.openFileFromStorage(params, callback, fileInfo, logger, true);
                     } else {
-                        logger.info('Opening file with content loaded from storage');
-                        params.fileData = data;
-                        params.rev = stat && stat.rev || null;
-                        const needSaveToCache = storage.name !== 'file';
-                        this.openFileWithData(params, callback, fileInfo, data, needSaveToCache);
+                        callback(err, file);
                     }
-                });
-            };
-            const cacheRev = fileInfo && fileInfo.get('rev') || null;
-            if (cacheRev && storage.stat) {
-                logger.info('Stat file');
-                storage.stat(params.path, params.opts, (err, stat) => {
-                    if (fileInfo && storage.name !== 'file' && (err || stat && stat.rev === cacheRev)) {
-                        logger.info('Open file from cache because ' + (err ? 'stat error' : 'it is latest'), err);
-                        this.openFileFromCache(params, callback, fileInfo);
-                    } else if (stat) {
-                        logger.info('Open file from storage (' + stat.rev + ', local ' + cacheRev + ')');
-                        storageLoad();
-                    } else {
-                        logger.error('Stat error', err);
-                        callback(err);
-                    }
-                });
-            } else {
-                storageLoad();
-            }
+                },
+                fileInfo);
+        } else if (!fileInfo || !fileInfo.get('openDate') || params.storage === 'file') {
+            this.openFileFromStorage(params, callback, fileInfo, logger);
         } else {
             logger.info('Open file from cache, will sync after load', params.storage);
             this.openFileFromCache(params, (err, file) => {
@@ -486,25 +457,8 @@ const AppModel = Backbone.Model.extend({
                     _.defer(() => this.syncFile(file, remotePassword));
                     callback(err);
                 } else {
-                    // Try to load from storage. Minimal effort (no cache fallback, etc.) in order to avoid loops
-                    // Possibly need to storage.stat(params.path, params.opts, (err, stat) => { too?
-                    const storage = Storage[params.storage];
                     logger.warn('Load from cache failed. Probably Private browsing mode is enabled? Loading from storage instead');
-                    storage.load(params.path, params.opts, (err, data, stat) => {
-                        if (err) {
-                            logger.error('Storage load error', err);
-                            callback(err);
-                        } else {
-                            logger.info('Opening file with content loaded from storage');
-                            params.fileData = data;
-                            params.rev = stat && stat.rev || null;
-
-                            // Attempts to update cache. Even in Private browsing mode this
-                            // might work, but only until the window is closed.
-                            const needSaveToCache = storage.name !== 'file';
-                            this.openFileWithData(params, callback, fileInfo, data, needSaveToCache);
-                        }
-                    });
+                    this.openFileFromStorage(params, callback, fileInfo, logger, true);
                 }
             }, fileInfo);
         }
@@ -512,6 +466,9 @@ const AppModel = Backbone.Model.extend({
 
     openFileFromCache: function(params, callback, fileInfo) {
         Storage.cache.load(fileInfo.id, null, (err, data) => {
+            if (!data) {
+                err = 'Load from cache failed. Probably Private browsing mode is enabled? Loading from storage instead';
+            }
             new Logger('open', params.name).info('Loaded file from cache', err);
             if (err) {
                 callback(err);
@@ -519,6 +476,52 @@ const AppModel = Backbone.Model.extend({
                 this.openFileWithData(params, callback, fileInfo, data);
             }
         });
+    },
+
+    openFileFromStorage(params, callback, fileInfo, logger, noCache) {
+        logger.info('Open file from storage', params.storage);
+        const storage = Storage[params.storage];
+        const storageLoad = () => {
+            logger.info('Load from storage');
+            storage.load(params.path, params.opts, (err, data, stat) => {
+                if (err) {
+                    if (fileInfo && fileInfo.get('openDate')) {
+                        logger.warn('Open file from cache because of storage load error', err);
+                        this.openFileFromCache(params, callback, fileInfo);
+                    } else {
+                        logger.error('Storage load error', err);
+                        callback(err);
+                    }
+                } else {
+                    logger.info('Opening file with content loaded from storage');
+                    params.fileData = data;
+                    params.rev = stat && stat.rev || null;
+
+                    // Attempts to update cache. Even in Private browsing mode this
+                    // might work, but only until the window is closed.
+                    const needSaveToCache = storage.name !== 'file';
+                    this.openFileWithData(params, callback, fileInfo, data, needSaveToCache);
+                }
+            });
+        };
+        const cacheRev = fileInfo && fileInfo.get('rev') || null;
+        if (cacheRev && storage.stat) {
+            logger.info('Stat file');
+            storage.stat(params.path, params.opts, (err, stat) => {
+                if (!noCache && fileInfo && storage.name !== 'file' && (err || (stat && stat.rev === cacheRev))) {
+                    logger.info('Open file from cache because ' + (err ? 'stat error' : 'it is latest'), err);
+                    this.openFileFromCache(params, callback, fileInfo);
+                } else if (stat) {
+                    logger.info('Open file from storage (' + stat.rev + ', local ' + cacheRev + ')');
+                    storageLoad();
+                } else {
+                    logger.error('Stat error', err);
+                    callback(err);
+                }
+            });
+        } else {
+            storageLoad();
+        }
     },
 
     openFileWithData: function(params, callback, fileInfo, data, updateCacheOnSuccess) {
