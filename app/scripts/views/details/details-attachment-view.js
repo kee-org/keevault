@@ -6,10 +6,11 @@ const DetailsAttachmentView = Backbone.View.extend({
     template: require('templates/details/details-attachment.hbs'),
 
     events: {
+        'click .details__attachment-preview-download-btn': 'downloadAttachment'
     },
 
     render: function(complete) {
-        this.renderTemplate({}, true);
+        this.renderTemplate({ isMobile: FeatureDetector.isMobile}, true);
         const shortcut = this.$el.find('.details__attachment-preview-download-text-shortcut');
         shortcut.html(FeatureDetector.actionShortcutSymbol(false));
         const blob = new Blob([this.model.getBinary()], {type: this.model.mimeType});
@@ -32,6 +33,10 @@ const DetailsAttachmentView = Backbone.View.extend({
         this.$el.find('.details__attachment-preview-icon').addClass('fa-' + this.model.icon);
         complete();
         return this;
+    },
+
+    downloadAttachment: function() {
+        this.trigger('download');
     }
 });
 

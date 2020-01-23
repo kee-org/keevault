@@ -419,6 +419,8 @@ const DetailsView = Backbone.View.extend({
         const subView = new DetailsAttachmentView({ el: this.scroller, model: attachment });
         subView.attId = id;
         subView.render(this.pageResized.bind(this));
+        subView.on('download', () => this.downloadAttachment(attachment));
+        this.views.sub = subView;
         this.views.sub = subView;
         attBtn.addClass('details__attachment--active');
     },
