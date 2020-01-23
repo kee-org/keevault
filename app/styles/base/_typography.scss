@@ -84,3 +84,7 @@ body:not(.edge) * { // https://developer.microsoft.com/en-us/microsoft-edge/plat
     }
   }
 }
+
+code {
+  font-family: $monospace-font-family;
+}
