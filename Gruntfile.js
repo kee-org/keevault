@@ -142,16 +142,6 @@ module.exports = function(grunt) {
                 keepalive: true,
                 port: 8087
             }
-        },
-        watch: {
-            options: {
-                interrupt: true,
-                debounceDelay: 500
-            },
-            indexhtml: {
-                files: 'app/index.html',
-                tasks: ['copy:html']
-            }
         }
     });
 };
