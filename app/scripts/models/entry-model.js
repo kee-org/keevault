@@ -211,25 +211,25 @@ const EntryModel = Backbone.Model.extend({
     matchesAdv: function(filter) {
         const adv = filter.advanced;
         let search,
-            match;
+            comparer;
         if (adv.regex) {
             try {
                 search = new RegExp(filter.text, adv.cs ? '' : 'i');
             } catch (e) { return false; }
-            match = this.matchRegex;
+            comparer = this.matchRegex;
         } else if (adv.cs) {
             search = filter.text;
-            match = this.matchString;
+            comparer = this.matchString;
         } else {
             search = filter.textLower;
-            match = this.matchStringLower;
+            comparer = this.matchStringLower;
         }
-        if (this.matchEntry(this.entry, adv, match, search)) {
+        if (this.matchEntry(this.entry, adv, comparer, search)) {
             return true;
         }
         if (adv.history) {
             for (let i = 0, len = this.entry.history.length; i < len; i++) {
-                if (this.matchEntry(this.entry.history[0], adv, match, search)) {
+                if (this.matchEntry(this.entry.history[0], adv, comparer, search)) {
                     return true;
                 }
             }
