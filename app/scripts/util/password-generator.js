@@ -35,14 +35,14 @@ const PasswordGenerator = {
         if (!ranges.length) {
             return '';
         }
+        const pool = ranges.join('');
         const randomBytes = kdbxweb.Random.getBytes(opts.length);
         const chars = [];
         for (let i = 0; i < opts.length; i++) {
-            const range = ranges[i % ranges.length];
             const rand = Math.round(Math.random() * 1000) + randomBytes[i];
-            chars.push(range[rand % range.length]);
+            chars.push(pool[rand % pool.length]);
         }
-        return _.shuffle(chars).join('');
+        return chars.join('');
     },
 
     generateMac: function() {
