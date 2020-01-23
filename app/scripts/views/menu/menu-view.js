@@ -15,6 +15,7 @@ const MenuView = Backbone.View.extend({
 
     minWidth: 130,
     maxWidth: 300,
+    autoWidth: 150,
 
     initialize: function () {
         this.listenTo(this.model, 'change:sections', this.menuChanged);
