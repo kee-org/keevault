@@ -49,12 +49,12 @@
   &.tip--left:after {
     @include position(absolute, 50% null null 100%);
     transform: translate(0, -50%);
-    @include th { @include triangle('right', nth($arrow-size-small, 1), nth($arrow-size-small, 2), th(background-color)); }
+    @include th { @include triangle('right', nth($arrow-size-small, 2), nth($arrow-size-small, 1), th(background-color)); }
   }
   &.tip--right:after {
     @include position(absolute, 50% null null (- nth($arrow-size-small, 2)));
     transform: translate(0, -50%);
-    @include th { @include triangle('left', nth($arrow-size-small, 1), nth($arrow-size-small, 2), th(background-color)); }
+    @include th { @include triangle('left', nth($arrow-size-small, 2), nth($arrow-size-small, 1), th(background-color)); }
   }
 
   &.tip--bottom:before {
@@ -75,12 +75,12 @@
   &.tip--left:before {
     @include position(absolute, 50% null null 100%);
     transform: translate(0, -50%);
-    @include th { @include triangle('right', nth($arrow-size-large, 1), nth($arrow-size-large, 2), th(light-border-color)); }
+    @include th { @include triangle('right', nth($arrow-size-large, 2), nth($arrow-size-large, 1), th(light-border-color)); }
   }
   &.tip--right:before {
     @include position(absolute, 50% null null (- nth($arrow-size-large, 2)));
     transform: translate(0, -50%);
-    @include th { @include triangle('left', nth($arrow-size-large, 1), nth($arrow-size-large, 2), th(light-border-color)); }
+    @include th { @include triangle('left', nth($arrow-size-large, 2), nth($arrow-size-large, 1), th(light-border-color)); }
   }
 }
 
