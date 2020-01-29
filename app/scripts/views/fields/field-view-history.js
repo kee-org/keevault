@@ -2,7 +2,7 @@ const FieldView = require('./field-view');
 const Locale = require('../../util/locale');
 
 const FieldViewHistory = FieldView.extend({
-    renderValue: function(value) {
+    getHistoryDescription: function(value) {
         if (!value.length) {
             return Locale.detHistoryEmpty;
         }
@@ -10,7 +10,15 @@ const FieldViewHistory = FieldView.extend({
         if (value.unsaved) {
             text += ' (' + Locale.detHistoryModified + ')';
         }
-        return '<a class="details__history-link">' + text + '</a>';
+        return text;
+    },
+
+    renderValue: function(value) {
+        return '<a class="details__history-link">' + this.getHistoryDescription(value) + '</a>';
+    },
+
+    getClipboardValue: function () {
+        return this.getHistoryDescription(this.getValue());
     },
 
     readonly: true

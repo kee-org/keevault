@@ -16,6 +16,10 @@ const FieldView = Backbone.View.extend({
         return typeof this.model.value === 'function' ? this.model.value() : this.model.value;
     },
 
+    getClipboardValue: function () {
+        return this.getValue();
+    },
+
     getValueSource: function () {
         return 'KdbxFieldOnly';
     },
@@ -63,33 +67,23 @@ const FieldView = Backbone.View.extend({
             return;
         }
         const field = this.model.name;
-        let copyRes;
         if (field) {
-            const value = this.value || '';
+            const value = this.getClipboardValue();
+            let text;
+
             if (value && value.isProtected) {
-                const text = value.getText();
-                if (!text) {
-                    return;
-                }
-                if (!CopyPaste.simpleCopy) {
-                    CopyPaste.createHiddenInput(text);
-                }
-                copyRes = CopyPaste.copy(text);
-                this.trigger('copy', { source: this, copyRes: copyRes });
+                text = value.getText();
+            } else if (value) {
+                text = value;
+            }
+
+            if (!text) {
                 return;
             }
-        }
-        if (!this.value) {
-            return;
-        }
-        const selection = window.getSelection();
-        const range = document.createRange();
-        range.selectNodeContents(this.valueEl[0]);
-        selection.removeAllRanges();
-        selection.addRange(range);
-        copyRes = CopyPaste.copy(this.valueEl[0].innerText || this.valueEl.text());
-        if (copyRes) {
-            selection.removeAllRanges();
+            if (!CopyPaste.simpleCopy) {
+                CopyPaste.createHiddenInput(text);
+            }
+            const copyRes = CopyPaste.copy(text);
             this.trigger('copy', { source: this, copyRes: copyRes });
         }
     },

@@ -24,6 +24,10 @@ const FieldViewOtp = FieldViewText.extend({
         return this.otpValue;
     },
 
+    getClipboardValue: function () {
+        return this.renderValue(this.getValue());
+    },
+
     getEditValue: function(value) {
         return value && value.url;
     },
