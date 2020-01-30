@@ -272,6 +272,12 @@
       }
       >input {
         .chrome & { padding-bottom: 1px; } // TODO: find a better cross-browser way to do it
+        .details__field--protected.details__field--edit &,
+        .details__field.details__field--editable.details__field--protect.details__field--protected.details__field--edit:hover &,
+        .details__field--can-edit-title.details__field--edit &,
+        .details__field--can-edit-title.details__field--edit:hover & {
+          padding-right: 2.5em;
+        }
       }
       >textarea {
         display: block;
