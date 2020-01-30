@@ -67,11 +67,19 @@ const FooterView = Backbone.View.extend({
                 InputFx.shake(fsb);
             });
         } else if (modified) {
-            setImmediate(() => {
-                fsb[0].removeAttribute('disabled');
-                fsb[0].classList.remove('minified');
-                fsb[0].classList.remove('active');
-            });
+            if (this.model.get('readOnly')) {
+                setImmediate(() => {
+                    fsb[0].setAttribute('disabled', 'disabled');
+                    fsb[0].classList.remove('minified');
+                    fsb[0].classList.remove('active');
+                });
+            } else {
+                setImmediate(() => {
+                    fsb[0].removeAttribute('disabled');
+                    fsb[0].classList.remove('minified');
+                    fsb[0].classList.remove('active');
+                });
+            }
         } else {
             setImmediate(() => {
                 fsb[0].removeAttribute('disabled');
