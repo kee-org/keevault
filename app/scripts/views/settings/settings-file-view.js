@@ -105,7 +105,8 @@ const SettingsFileView = Backbone.View.extend({
             extensionLink: FeatureDetector.getExtensionInstallURL(),
             extensionAvailable: !!browserName,
             extensionEnabled: window.keeAddonEnabled,
-            browserName: browserName
+            browserName: browserName,
+            modified: this.model.get('modified')
         });
         if (!this.model.get('created')) {
             this.$el.find('.settings__file-master-pass-warning').toggle(this.model.get('passwordChanged'));
