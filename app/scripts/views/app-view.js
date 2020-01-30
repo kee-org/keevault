@@ -675,7 +675,7 @@ const AppView = Backbone.View.extend({
     },
 
     lockWorkspace: function(autoInit) {
-        if (Alerts.alertDisplayed) {
+        if (Alerts.alertDisplayed || !this.model.files.hasOpenFiles()) {
             return;
         }
         if (this.model.files.hasUnsavedFiles()) {

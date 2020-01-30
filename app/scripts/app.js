@@ -69,7 +69,7 @@ ready(() => {
 
     function initModules() {
         KeyHandler.init();
-        IdleTracker.init(() => appModel.files.hasOpenFiles() && !appModel.files.hasDemoFile());
+        IdleTracker.init(() => !appModel.files.hasDemoFile());
         OpenProgressReporter.init();
         PopupNotifier.init();
         KdbxwebInit.init();

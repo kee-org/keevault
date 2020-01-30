@@ -59,6 +59,7 @@ const OpenView = Backbone.View.extend({
         KeyHandler.onKey(Keys.DOM_VK_TAB, this.tabKeyPress, this);
         KeyHandler.onKey(Keys.DOM_VK_ENTER, this.enterKeyPress, this);
         KeyHandler.onKey(Keys.DOM_VK_RETURN, this.enterKeyPress, this);
+        this.listenTo(Backbone, 'user-idle', this.userIdle);
     },
 
     render: function () {
@@ -1037,6 +1038,12 @@ const OpenView = Backbone.View.extend({
             this.params.fileData = null;
             this.displayOpenFile();
         }
+    },
+
+    userIdle: function() {
+        this.passwordInput.reset();
+        this.inputEl.val('');
+        this.passwordInput.setElement(this.inputEl);
     }
 });
 
