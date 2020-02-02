@@ -10,101 +10,70 @@ pipelines:
         type: configrepo
       keeFrontendDependency:
         pipeline: keeFrontend
-        stage: publish
+        stage: installBuildTestAndPublish
       kprpcDependency:
         pipeline: kprpc
-        stage: publish
+        stage: installBuildTestAndPublish
     stages:
-      - installDeps:
-          #clean_workspace: true
-          jobs:
-            defaultJob:
-              tasks:
-                - exec:
-                    command: npm
-                    arguments:
-                      - "ci"
-      - build:
-          jobs:
-            defaultJob:
-              tasks:
-                - exec:
-                    command: npm
-                    arguments:
-                      - "run"
-                      - "prod"
-      - publish:
-          jobs:
-            defaultJob:
-              tasks:
-                - exec:
-                    command: /bin/bash
-                    arguments:
-                      - "-c"
-                      - "aws s3 sync dist/ s3://app-beta.kee.pm"
-                - exec:
-                    command: /bin/bash
-                    arguments:
-                      - "-c"
-                      - "aws cloudfront create-invalidation --distribution-id E3FJWMTO2ETM37 --paths /\\*"
+      - installBuildTestAndPublish:
+          tasks:
+            - exec:
+                command: npm
+                arguments:
+                    - "ci"
+            - exec:
+                command: npm
+                arguments:
+                    - "run"
+                    - "prod"
+            - exec:
+                command: /bin/bash
+                arguments:
+                    - "-c"
+                    - "aws s3 sync dist/ s3://app-beta.kee.pm"
+            - exec:
+                command: /bin/bash
+                arguments:
+                    - "-c"
+                    - "aws cloudfront create-invalidation --distribution-id E3FJWMTO2ETM37 --paths /\\*"
   appkeepmProduction:
     environment_variables:
       AWS_PROFILE: "keeProd"
       AWS_REGION: "eu-west-2"
-    # secure_variables:
-    #  AZURE_SAS: "AES:QoEhOHrSCRzO6i57EcQAsQ==:UDASdNfjlpqQPIP1puOgPUB9iNmeLZiey6OZ3YgJ8q2+Op1PhWUsgDHnJPIgf0UzUGTNWGtPWXrIDr/WenS/sJpd84grgH59XGLgcbEZhPxlbiPpUWZbnGqmIwwsE+fVAmQWfKmMYj8Z16UrIg3q0ywRrpUmWOKpPtsSETHcVwVrCMIJAU1csCxhXaFnu2ODE8yog0KYQe9ot2iM6L1e+gCPgsb8IOWqybJrtZgOPtI="
     group: frontend
     materials:
       mygit:
         type: configrepo
       appkeepmDependency:
         pipeline: appkeepm
-        stage: publish
+        stage: installBuildTestAndPublish
     stages:
-      - installDeps:
-          #clean_workspace: true
-          jobs:
-            defaultJob:
-              tasks:
-                - exec:
-                    command: npm
-                    arguments:
-                      - "ci"
-      - build:
-          jobs:
-            defaultJob:
-              tasks:
-                - exec:
-                    command: npm
-                    arguments:
-                      - "run"
-                      - "prod"
-      - publish:
+      - pause:
+          tasks:
+            - exec:
+                command: pwd
+      - installBuildTestAndPublish:
           approval: manual
-          jobs:
-            defaultJob:
-              tasks:
-                - exec:
-                    command: /bin/bash
-                    arguments:
-                      - "-c"
-                      - "aws s3 sync dist/ s3://keevault.pm"
-                - exec:
-                    command: /bin/bash
-                    arguments:
-                      - "-c"
-                      - "aws cloudfront create-invalidation --distribution-id E2RDOCYD2M73CI --paths /\\*"
-        # - publish:
-        #   approval: manual
-        #   jobs:
-        #     defaultJob:
-        #       tasks:
-        #         - exec:
-        #             command: npm
-        #             arguments:
-        #               - "run"
-        #               - "prod-deploy"
-        #               - "keevault"
+          tasks:
+            - exec:
+                command: npm
+                arguments:
+                  - "ci"
+            - exec:
+                command: npm
+                arguments:
+                    - "run"
+                    - "prod"
+            - exec:
+                command: /bin/bash
+                arguments:
+                    - "-c"
+                    - "aws s3 sync dist/ s3://keevault.pm"
+            - exec:
+                command: /bin/bash
+                arguments:
+                    - "-c"
+                    - "aws cloudfront create-invalidation --distribution-id E2RDOCYD2M73CI --paths /\\*"
 
 # Encrypted vars in GoCD are very clunky. Recreate as needed by using this hack:
 # curl 'https://cd.kee.pm:8154/go/api/admin/encrypt' --insecure -u 'username:password' -H 'Accept: application/vnd.go.cd.v1+json' -H 'Content-Type: application/json' -X POST -d '{"value": "badger"}'
