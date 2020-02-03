@@ -1,5 +1,4 @@
-const BroadcastChannel = require('broadcast-channel').default;
-const LeaderElection = require('broadcast-channel/leader-election');
+const { BroadcastChannel, createLeaderElection } = require('broadcast-channel');
 const Locale = require('../util/locale');
 const Alerts = require('./alerts');
 const RuntimeInfo = require('../comp/runtime-info');
@@ -17,7 +16,7 @@ const MultiInstanceComms = {
 
         channel.onmessage = msg => MultiInstanceComms.handleMessage(msg);
         leadershipTimeout = setTimeout(MultiInstanceComms.otherLeaderExists, 1000);
-        elector = LeaderElection.create(channel);
+        elector = createLeaderElection(channel);
         window.addEventListener('unload', MultiInstanceComms.abdicate);
         await elector.awaitLeadership();
         clearTimeout(leadershipTimeout);

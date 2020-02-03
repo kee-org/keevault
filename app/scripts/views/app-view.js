@@ -174,7 +174,8 @@ const AppView = Backbone.View.extend({
         this.$el.html(this.template({
             beta: this.model.isBeta,
             titlebarStyle: this.titlebarStyle
-        }));
+        },
+        {allowProtoPropertiesByDefault: true}));
         this.panelEl = this.$el.find('.app__panel:first');
         this.views.listWrap.setElement(this.$el.find('.app__list-wrap')).render();
         this.views.menu.setElement(this.$el.find('.app__menu')).render();

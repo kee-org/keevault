@@ -50,12 +50,12 @@ _.extend(Backbone.View.prototype, {
     renderTemplate: function(model, replace) {
         Tip.hideTips(this.$el);
         if (replace && replace.plain) {
-            this.$el.html(this.template(model));
+            this.$el.html(this.template(model, {allowProtoPropertiesByDefault: true}));
         } else {
             if (replace) {
                 this.$el.html('');
             }
-            const el = $(this.template(model));
+            const el = $(this.template(model, {allowProtoPropertiesByDefault: true}));
             if (!this._elAppended || replace) {
                 this.$el.append(el);
                 this._elAppended = true;

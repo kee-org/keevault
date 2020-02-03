@@ -119,16 +119,16 @@ const DetailsView = Backbone.View.extend({
                     extensionAvailable: !!browserName,
                     extensionEnabled: window.keeAddonEnabled,
                     browserName: browserName
-                }));
+                }, {allowProtoPropertiesByDefault: true}));
             return;
         }
         if (this.model instanceof GroupModel) {
-            this.$el.html(this.groupTemplate());
+            this.$el.html(this.groupTemplate({}, {allowProtoPropertiesByDefault: true}));
             Tip.createTips(this.$el);
             return;
         }
         const model = $.extend({ deleted: this.appModel.filter.trash }, this.model);
-        this.$el.html(this.template(model));
+        this.$el.html(this.template(model, {allowProtoPropertiesByDefault: true}));
         Tip.createTips(this.$el);
         this.setSelectedColor(this.model.color);
         this.model.initOtpGenerator();

@@ -67,7 +67,7 @@ const ListView = Backbone.View.extend({
 
     render: function () {
         if (!this.itemsEl) {
-            this.$el.html(this.template());
+            this.$el.html(this.template({}, {allowProtoPropertiesByDefault: true}));
             this.itemsEl = this.$el.find('.list__items>.scroller');
             this.views.search.setElement(this.$el.find('.list__header')).render();
             this.setTableView();
@@ -93,13 +93,13 @@ const ListView = Backbone.View.extend({
             let itemsHtml = '';
             this.items.forEach(item => {
                 presenter.present(item);
-                itemsHtml += itemTemplate(presenter);
+                itemsHtml += itemTemplate(presenter, {allowProtoPropertiesByDefault: true});
             }, this);
-            const html = itemsTemplate({ items: itemsHtml, columns: this.tableColumns });
+            const html = itemsTemplate({ items: itemsHtml, columns: this.tableColumns }, {allowProtoPropertiesByDefault: true});
             this.itemsEl.html(html);
         } else {
             const showAllEntriesLink = this.model && this.model.files && this.model.files.hasAtLeastOneEntry();
-            this.itemsEl.html(this.emptyTemplate({showAllEntriesLink}));
+            this.itemsEl.html(this.emptyTemplate({showAllEntriesLink}, {allowProtoPropertiesByDefault: true}));
         }
         this.pageResized();
         return this;

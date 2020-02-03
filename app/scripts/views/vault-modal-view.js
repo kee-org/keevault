@@ -32,7 +32,7 @@ const VaultModalView = Backbone.View.extend({
 
     render: function () {
         const parent = this.$el;
-        this.setElement($(this.template(this.model)));
+        this.setElement($(this.template(this.model, {allowProtoPropertiesByDefault: true})));
         parent.append(this.$el);
         const el = this.$el;
         if (this.model.view) {

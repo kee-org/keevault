@@ -31,7 +31,7 @@ const MenuView = Backbone.View.extend({
     },
 
     render: function () {
-        this.$el.html(this.template());
+        this.$el.html(this.template({}, {allowProtoPropertiesByDefault: true}));
         const sectionsEl = this.$el.find('.menu');
         this.model.get('sections').forEach(function(section) {
             const sectionView = new MenuSectionView({ el: sectionsEl, model: section });

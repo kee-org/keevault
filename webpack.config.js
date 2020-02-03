@@ -109,10 +109,30 @@ function config(grunt, mode = 'production') {
                     ]
                 },
                 {
-                    test: /fonts\/.*\.(woff2|ttf|eot|svg)/,
-                    use: ['url-loader', 'ignore-loader']
+                    test: /webfonts\/.*\.(woff|ttf|eot|svg)$/,
+                    use: [
+                        {
+                            loader: 'url-loader',
+                            options: {
+                                esModule: false
+                            }
+                        },
+                        {
+                            loader: 'ignore-loader'
+                        }
+                    ]
                 },
-                { test: /\.woff$/, loader: 'url-loader' }
+                {
+                    test: /webfonts\/.*\.(woff2)/,
+                    use: [
+                        {
+                            loader: 'url-loader',
+                            options: {
+                                esModule: false
+                            }
+                        }
+                    ]
+                }
             ]
         },
         optimization: {
