@@ -2,6 +2,23 @@ This lists the major changes in each version of Kee Vault.
 
 Many smaller or partially complete changes will be made on a regular basis. To see all changes, look for the commit history in each of our GitHub repositories.
 
+## 0.9.9
+
+* Additional idle lock timeout durations
+* Added checkbox to hide/show password in the generator
+* Enable downloading attachments on mobile
+* Treat Website field links as https if no scheme defined
+* Copying URL field now includes the scheme
+* Clear master password box after auto-lock timeout
+* Save button improvements
+* Improved OTP support (7-digit Authy and tolerant of spaces)
+* Fixed multi-line fields display in history
+* Changing recycle bin setting now correctly represented in the UI
+* Various minor layout and style fixes for specific browsers/devices
+* Improved password generation entropy
+* Improved resilience against local storage failures, browser crashes, etc.
+* Improved monospace font on some devices
+
 ## 0.9.8
 
 * Ignore invalid characters when importing from non-KeePass sources

@@ -1,6 +1,6 @@
 {
   "name": "keevault",
-  "version": "0.9.8",
+  "version": "0.9.9",
   "description": "Open source, multi-device, browser hosted password manager compatible with KeePass",
   "main": "Gruntfile.js",
   "private": true,
