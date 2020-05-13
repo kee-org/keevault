@@ -11,7 +11,6 @@ const GridView = Backbone.View.extend({
         this.newRowConfig = options.newRowConfig;
         this.collection = options.collection;
         this.columns = options.columns;
-        this.newRowConfig = options.newRowConfig;
     },
 
     render: function() {
