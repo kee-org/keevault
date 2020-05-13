@@ -83,11 +83,11 @@ const ListSearchView = Backbone.View.extend({
     },
 
     setLocale: function() {
-        this.sortOptions.forEach(opt => { opt.text = opt.loc(); });
+        this.sortOptions.forEach(opt => { opt.html = opt.loc(); });
         const entryDesc = FeatureDetector.isMobile ? '' : (' <span class="muted-color">(' + Locale.searchShiftClickOr + ' ' +
         FeatureDetector.altShortcutSymbol(true) + 'N)</span>');
         this.createOptions = [
-            { value: 'entry', icon: 'key', text: Format.capFirst(Locale.entry) + entryDesc },
+            { value: 'entry', icon: 'key', html: Format.capFirst(Locale.entry) + entryDesc },
             { value: 'group', icon: 'folder', text: Format.capFirst(Locale.group) }
         ];
         this.render();
