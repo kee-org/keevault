@@ -2,6 +2,10 @@ This lists the major changes in each version of Kee Vault.
 
 Many smaller or partially complete changes will be made on a regular basis. To see all changes, look for the commit history in each of our GitHub repositories.
 
+## 0.9.10
+
+* SECURITY: Addresses the social engineering attack risks identified on 13th May 2020 in KeeWeb
+
 ## 0.9.9
 
 * Additional idle lock timeout durations
