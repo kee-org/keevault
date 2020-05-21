@@ -35,7 +35,7 @@ const FieldViewBrowser = FieldViewText.extend({
     prepareBrowserIntegrationSettings: function() {
         if (!this.browserFieldModel) {
             this.browserFieldModel = new BrowserFieldModel({
-                displayName: this.getBrowserFieldDisplayName(),
+                displayName: this.getBrowserFieldDisplayNameDefault(),
                 name: '',
                 type: this.getBrowserFieldTypeDefault(),
                 fieldId: '',
@@ -59,7 +59,7 @@ const FieldViewBrowser = FieldViewText.extend({
         return true;
     },
 
-    getBrowserFieldDisplayName: function() {
+    getBrowserFieldDisplayNameDefault: function() {
         if (this.model.name === '$Password') return 'KeePass password';
         else if (this.model.name === '$UserName') return 'KeePass username';
         else return '';
