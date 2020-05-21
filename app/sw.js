@@ -22,9 +22,9 @@ function stripFragment(urlString) {
 
 self.addEventListener('install', (event) => {
     event.waitUntil(
-      caches.open(cacheName).then((cache) => {
-          return cache.addAll(cacheFiles);
-      })
+        caches.open(cacheName).then((cache) => {
+            return cache.addAll(cacheFiles);
+        })
     );
 });
 
@@ -32,15 +32,15 @@ self.addEventListener('activate', (event) => {
     const cacheWhitelist = [cacheName];
 
     event.waitUntil(
-      caches.keys().then((cacheNames) => {
-          return Promise.all(
-          cacheNames.map((cacheName) => {
-              if (cacheWhitelist.indexOf(cacheName) === -1) {
-                  return caches.delete(cacheName);
-              }
-          })
-        );
-      })
+        caches.keys().then((cacheNames) => {
+            return Promise.all(
+                cacheNames.map((cacheName) => {
+                    if (cacheWhitelist.indexOf(cacheName) === -1) {
+                        return caches.delete(cacheName);
+                    }
+                })
+            );
+        })
     );
 });
 
@@ -99,8 +99,8 @@ function fromCache(request) {
 let latestMainPageEtag = '';
 let latestMainPageModifiedDate = new Date();
 
-  // Update consists in opening the cache, performing a network request and
-  // storing the new response data.
+// Update consists in opening the cache, performing a network request and
+// storing the new response data.
 function update(request) {
     // https://bugs.chromium.org/p/chromium/issues/detail?id=823392
     if (request.cache === 'only-if-cached' && request.mode !== 'same-origin') return;
@@ -151,7 +151,7 @@ self.addEventListener('message', (event) => {
             self.skipWaiting();
             break;
         default:
-      // NOOP
+            // NOOP
             break;
     }
 });
