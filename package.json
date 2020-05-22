@@ -23,7 +23,7 @@
     "kdbx-import": "^1.2.2",
     "kdbx-placeholders": "^1.1.14",
     "kee-frontend": "^1.0.34",
-    "kprpc": "^1.0.19",
+    "kprpc": "^1.1.1",
     "secure-remote-password": "^0.3.1",
     "superagent": "^5.2.2",
     "zxcvbn": "^4.4.2"
