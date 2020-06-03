@@ -191,6 +191,10 @@ function launchBuiltInPasswordGenerator () {
     Backbone.trigger('show-password-generator');
 }
 
+function syncFile (file, options) {
+    app.syncFile(file, options);
+}
+
 const integration = {
     getGroup,
     getEntry,
@@ -212,7 +216,8 @@ const integration = {
     updateAddonSettings,
     readAddonSettings,
     delayUntilIntegrationReady,
-    launchBuiltInPasswordGenerator
+    launchBuiltInPasswordGenerator,
+    syncFile
 };
 
 const KPRPCHandler = {
@@ -221,7 +226,6 @@ const KPRPCHandler = {
     init: function (appV) {
         app = appV.model;
         appView = appV;
-        integration.syncFile = app.syncFile;
         kprpc = new KPRPC();
 
         kprpc.init(integration, logger, 'Kee Vault ' + RuntimeInfo.version);
