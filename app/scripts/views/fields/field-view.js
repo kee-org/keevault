@@ -17,7 +17,12 @@ const FieldView = Backbone.View.extend({
     },
 
     getClipboardValue: function () {
-        return this.getValue();
+        const value = this.getValue();
+
+        if (value && value.isProtected) {
+            return value.getText();
+        }
+        return value;
     },
 
     getValueSource: function () {
@@ -68,14 +73,7 @@ const FieldView = Backbone.View.extend({
         }
         const field = this.model.name;
         if (field) {
-            const value = this.getClipboardValue();
-            let text;
-
-            if (value && value.isProtected) {
-                text = value.getText();
-            } else if (value) {
-                text = value;
-            }
+            const text = this.getClipboardValue();
 
             if (!text) {
                 return;
@@ -104,7 +102,7 @@ const FieldView = Backbone.View.extend({
             return;
         }
         const dt = e.originalEvent.dataTransfer;
-        const txtval = this.value.isProtected ? this.value.getText() : this.value;
+        const txtval = this.getClipboardValue();
         if (this.valueEl[0].tagName.toLowerCase() === 'a') {
             dt.setData('text/uri-list', txtval);
         }
