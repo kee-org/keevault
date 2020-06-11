@@ -84,9 +84,15 @@ const FieldViewText = FieldView.extend({
             this.hideGenerator();
         } else {
             const fieldRect = this.input[0].getBoundingClientRect();
-            const right = document.body.getBoundingClientRect().right - fieldRect.right;
+            const pos = { right: document.body.getBoundingClientRect().right - fieldRect.right };
             const top = fieldRect.bottom;
-            this.gen = new GeneratorView({model: {pos: {right, top}, password: this.value}}).render();
+            const windowHeight = document.documentElement.clientHeight;
+            if (top > windowHeight / 2 && top > 200) {
+                pos.bottom = windowHeight - fieldRect.top;
+            } else {
+                pos.top = top;
+            }
+            this.gen = new GeneratorView({model: {pos, password: this.value}}).render();
             this.gen.once('remove', this.generatorClosed.bind(this));
             this.gen.once('result', this.generatorResult.bind(this));
         }
