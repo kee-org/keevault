@@ -67,6 +67,7 @@ const FileModel = Backbone.Model.extend({
                     if (keyFileData) {
                         kdbxweb.ByteUtils.zeroBuffer(keyFileData);
                     }
+                    this.fixVersion();
                     logger.info('Opened file ' + this.get('name') + ': ' + logger.ts(ts) + ', ' +
                         this.kdfArgsToString(db.header) + ', ' + Math.round(fileData.byteLength / 1024) + ' kB');
                     callback();
@@ -82,6 +83,17 @@ const FileModel = Backbone.Model.extend({
         } catch (e) {
             logger.error('Error opening file', e, e.code, e.message, e);
             callback(e);
+        }
+    },
+
+    fixVersion: function() {
+        if (
+            this.db.meta.generator === 'KdbxWeb' &&
+            this.db.header.versionMajor === 4 &&
+            this.db.header.versionMinor === 1
+        ) {
+            this.db.header.versionMinor = 0;
+            logger.info('Fixed file version: 4.1 => 4.0');
         }
     },
 
