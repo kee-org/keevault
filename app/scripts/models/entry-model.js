@@ -419,9 +419,10 @@ const EntryModel = Backbone.Model.extend({
 
     sanitizeFieldValue: function(val) {
         if (val && !val.isProtected && val.indexOf('\x1A') >= 0) {
-            // https://github.com/keeweb/keeweb/issues/910
             // eslint-disable-next-line no-control-regex
-            val = val.replace(/\x1A/g, '');
+            const invalidCharsRegex = /((?:[\0-\x08\x0B\f\x0E-\x1F\uFFFE\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]))/g;
+            // https://github.com/keeweb/keeweb/issues/910
+            val = val.replace(invalidCharsRegex, '');
         }
         return val;
     },
