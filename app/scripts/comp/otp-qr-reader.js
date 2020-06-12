@@ -16,11 +16,11 @@ const OtpQrReader = {
     read: function() {
         let screenshotKey = FeatureDetector.screenshotToClipboardShortcut();
         if (screenshotKey) {
-            screenshotKey = Locale.detSetupOtpAlertBodyWith.replace('{}', '<code>' + screenshotKey + '</code>');
+            screenshotKey = Locale.detSetupOtpAlertBodyWith.replace('{}', screenshotKey);
         }
         const pasteKey = FeatureDetector.isMobile ? ''
             : Locale.detSetupOtpAlertBodyWith.replace('{}',
-                '<code>' + FeatureDetector.actionShortcutSymbol() + 'V</code>');
+                FeatureDetector.actionShortcutSymbol() + 'V');
         OtpQrReader.startListenClipoard();
         const buttons = [{result: 'manually', title: Locale.detSetupOtpManualButton, silent: true},
             Alerts.buttons.cancel];

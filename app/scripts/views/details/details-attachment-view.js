@@ -12,7 +12,7 @@ const DetailsAttachmentView = Backbone.View.extend({
     render: function(complete) {
         this.renderTemplate({ isMobile: FeatureDetector.isMobile}, true);
         const shortcut = this.$el.find('.details__attachment-preview-download-text-shortcut');
-        shortcut.html(FeatureDetector.actionShortcutSymbol(false));
+        shortcut.text(FeatureDetector.actionShortcutSymbol());
         const blob = new Blob([this.model.getBinary()], {type: this.model.mimeType});
         const dataEl = this.$el.find('.details__attachment-preview-data');
         switch ((this.model.mimeType || '').split('/')[0]) {

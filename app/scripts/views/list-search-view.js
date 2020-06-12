@@ -91,7 +91,7 @@ const ListSearchView = Backbone.View.extend({
                 text: Format.capFirst(Locale.entry),
                 hint: FeatureDetector.isMobile
                     ? null
-                    : `(${Locale.searchShiftClickOr} ${FeatureDetector.altShortcutSymbol(false)}N)`
+                    : `(${Locale.searchShiftClickOr} ${FeatureDetector.altShortcutSymbol()}N)`
             },
             { value: 'group', icon: 'folder', text: Format.capFirst(Locale.group) }
         ];

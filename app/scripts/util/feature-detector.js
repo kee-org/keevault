@@ -19,14 +19,18 @@ const FeatureDetector = {
     isSelfHosted: !isDesktop && !/^http(s?):\/\/((app-dev.kee.pm:8087)|((app|app-beta)\.kee\.pm))/.test(location.href),
     needFixClicks: /Edge\/14/.test(navigator.appVersion),
 
-    actionShortcutSymbol: function(formatting) {
-        return this.isMac ? '⌘' : formatting ? '<span class="thin">ctrl + </span>' : 'ctrl-';
+    formatShortcut: function(shortcut, minified) {
+        return minified ? `${shortcut}+` : `${shortcut} + `;
     },
-    altShortcutSymbol: function(formatting) {
-        return this.isMac ? '⌥' : formatting ? '<span class="thin">alt + </span>' : 'alt-';
+
+    actionShortcutSymbol: function(minified) {
+        return this.isMac ? '⌘' : this.formatShortcut('ctrl', minified);
     },
-    globalShortcutSymbol: function(formatting) {
-        return this.isMac ? '⌃⌥' : formatting ? '<span class="thin">shift+alt+</span>' : 'shift-alt-';
+    altShortcutSymbol: function(minified) {
+        return this.isMac ? '⌥' : this.formatShortcut('alt', minified);
+    },
+    globalShortcutSymbol: function() {
+        return this.isMac ? '⌃⌥' : this.formatShortcut('shift+alt', true);
     },
     globalShortcutIsLarge: function() {
         return !this.isMac;
