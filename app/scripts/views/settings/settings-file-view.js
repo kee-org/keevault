@@ -333,7 +333,7 @@ const SettingsFileView = Backbone.View.extend({
                 if (existingFile) {
                     Alerts.yesno({
                         header: Locale.setFileAlreadyExists,
-                        body: Locale.setFileAlreadyExistsBody.replace('{}', this.model.escape('name')),
+                        body: Locale.setFileAlreadyExistsBody.replace('{}', this.model.name),
                         success: () => {
                             this.model.set('syncing', true);
                             storage.remove(existingFile.path, err => {
@@ -594,7 +594,8 @@ const SettingsFileView = Backbone.View.extend({
                 if (err) {
                     Alerts.error({
                         title: Locale.setFileBackupError,
-                        body: Locale.setFileBackupErrorDescription + '<pre class="modal__pre">' + _.escape(err.toString()) + '</pre>'
+                        body: Locale.setFileBackupErrorDescription,
+                        pre: err.toString()
                     });
                 }
             });

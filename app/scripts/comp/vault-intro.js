@@ -124,7 +124,7 @@ const VaultIntro = {
         // Display just a single intro message for mobile users and let them work it out themselves.
 
         this.display({
-            body: `<p>${Locale.introPutSecretsHere}</p>
+            bodyUnescaped: `<p>${Locale.introPutSecretsHere}</p>
             <p>${Locale.introExploreMobile}</p>`,
             buttons: [this.buttons.continue],
             esc: '',
@@ -142,7 +142,7 @@ const VaultIntro = {
         // start a chain reaction of modals for training/intro/etc.
 
         this.display({
-            body: `<p>${Locale.introPutSecretsHere}</p>
+            bodyUnescaped: `<p>${Locale.introPutSecretsHere}</p>
             <p>${Locale.introEnterMasterPasswordLater}</p>`,
             buttons: [this.buttons.continue],
             esc: '',
@@ -158,7 +158,7 @@ const VaultIntro = {
 
     layout1: function() {
         this.display({
-            body: `<p>${Locale.introEntry}</p>
+            bodyUnescaped: `<p>${Locale.introEntry}</p>
             <p>${Locale.introEntryDetail}</p>`,
             buttons: [this.buttons.continue],
             esc: '',
@@ -174,7 +174,7 @@ const VaultIntro = {
 
     layout2: function() {
         this.display({
-            body: `<p>${Locale.introList}</p>
+            bodyUnescaped: `<p>${Locale.introList}</p>
             <p>${Locale.introListDetail}</p>`,
             buttons: [this.buttons.continue],
             esc: '',
@@ -190,7 +190,7 @@ const VaultIntro = {
 
     layout3: function() {
         this.display({
-            body: `<p>${Locale.introMenuDetail}</p>`,
+            bodyUnescaped: `<p>${Locale.introMenuDetail}</p>`,
             buttons: [this.buttons.continue],
             esc: '',
             enter: 'continue',
@@ -205,7 +205,7 @@ const VaultIntro = {
 
     layout4: function() {
         this.display({
-            body: `<p>${Locale.introFooter}</p>
+            bodyUnescaped: `<p>${Locale.introFooter}</p>
             <p>${Locale.introFooterDetail}</p>`,
             buttons: [this.buttons.continue],
             esc: '',
@@ -245,7 +245,7 @@ const VaultIntro = {
 
     layout5: function(installURL) {
         this.display({
-            body: `<p id="pendingKeeExtensionMessage">${Locale.introInstallExtension}<br/><br/>${Locale.introInstallExtensionRequiresV3}</p>`,
+            bodyUnescaped: `<p id="pendingKeeExtensionMessage">${Locale.introInstallExtension}<br/><br/>${Locale.introInstallExtensionRequiresV3}</p>`,
             buttons: [Object.assign(this.buttons.demoWithoutExtension, {silent: true}), this.buttons.installTheExtension],
             esc: false,
             enter: false,
@@ -274,7 +274,7 @@ const VaultIntro = {
 
     layout6a: function() {
         this.display({
-            body: `<p id="pendingKeeExtensionMessage">${Locale.introExtensionStartExisting}</p>`,
+            bodyUnescaped: `<p id="pendingKeeExtensionMessage">${Locale.introExtensionStartExisting}</p>`,
             buttons: [this.buttons.launchTutorial],
             esc: false,
             enter: false,
@@ -292,7 +292,7 @@ const VaultIntro = {
 
     layout6b: function() {
         this.display({
-            body: `<p id="pendingKeeExtensionMessage">${Locale.introExtensionStartNew}<br/><br/>${Locale.introExtensionMaybeOldVersion}</p>`,
+            bodyUnescaped: `<p id="pendingKeeExtensionMessage">${Locale.introExtensionStartNew}<br/><br/>${Locale.introExtensionMaybeOldVersion}</p>`,
             buttons: [Object.assign(this.buttons.demoWithoutExtension, {silent: true}), this.buttons.launchTutorialDisabled],
             esc: 'demo',
             enter: false,

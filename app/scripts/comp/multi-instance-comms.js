@@ -125,15 +125,15 @@ const MultiInstanceComms = {
     showAlertVerify: function(success) {
         Alerts.error({
             header: Locale.emailVerification, icon: success ? 'check-circle' : 'exclamation-circle', esc: false, enter: false, click: false,
-            body: (success ? Locale.verificationSuccess : Locale.verificationFailure) + '<br/><br/>' +
-                Locale.isOpenInOtherTab + ' ' + Locale.pleaseUseOtherTab + '<br/><br/>' + Locale.disableOtherTabSecondary,
+            body: (success ? Locale.verificationSuccess : Locale.verificationFailure) + '\n\n' +
+                Locale.isOpenInOtherTab + ' ' + Locale.pleaseUseOtherTab + '\n\n' + Locale.disableOtherTabSecondary,
             buttons: [
                 {result: '', title: Locale.disableOtherTab, error: true}
             ],
             complete: () => {
                 leadershipTimeout = setTimeout(MultiInstanceComms.demandIgnored, 1000, {
                     header: Locale.appUnsavedWarn, esc: false, enter: false, click: false, buttons: [],
-                    body: Locale.disableOtherTabFailure + '<br/><br/>' + Locale.pleaseUseOtherTab
+                    body: Locale.disableOtherTabFailure + '\n\n' + Locale.pleaseUseOtherTab
                 });
                 MultiInstanceComms.demand();
             }
@@ -143,14 +143,14 @@ const MultiInstanceComms = {
     showAlertDemo: function() {
         Alerts.error({
             header: Locale.appTabWarn, icon: 'clone', esc: false, enter: false, click: false,
-            body: Locale.isOpenInOtherTab + ' ' + Locale.closeOtherTabDemo + '<br/><br/>' + Locale.disableOtherTabSecondary,
+            body: Locale.isOpenInOtherTab + ' ' + Locale.closeOtherTabDemo + '\n\n' + Locale.disableOtherTabSecondary,
             buttons: [
                 {result: '', title: Locale.disableOtherTab, error: true}
             ],
             complete: () => {
                 leadershipTimeout = setTimeout(MultiInstanceComms.demandIgnored, 1000, {
                     header: Locale.appUnsavedWarn, esc: false, enter: false, click: false, buttons: [],
-                    body: Locale.disableOtherTabFailure + '<br/><br/>' + Locale.closeOtherTabDemo
+                    body: Locale.disableOtherTabFailure + '\n\n' + Locale.closeOtherTabDemo
                 });
                 MultiInstanceComms.demand();
             }
@@ -160,14 +160,14 @@ const MultiInstanceComms = {
     showAlertRegister: function() {
         Alerts.error({
             header: Locale.appTabWarn, icon: 'clone', esc: false, enter: false, click: false,
-            body: Locale.isOpenInOtherTab + ' ' + Locale.closeOtherTabRegister + '<br/><br/>' + Locale.disableOtherTabSecondary,
+            body: Locale.isOpenInOtherTab + ' ' + Locale.closeOtherTabRegister + '\n\n' + Locale.disableOtherTabSecondary,
             buttons: [
                 {result: '', title: Locale.disableOtherTab, error: true}
             ],
             complete: () => {
                 leadershipTimeout = setTimeout(MultiInstanceComms.demandIgnored, 1000, {
                     header: Locale.appUnsavedWarn, esc: false, enter: false, click: false, buttons: [],
-                    body: Locale.disableOtherTabFailure + '<br/><br/>' + Locale.closeOtherTabRegister
+                    body: Locale.disableOtherTabFailure + '\n\n' + Locale.closeOtherTabRegister
                 });
                 MultiInstanceComms.demand();
             }
@@ -177,14 +177,14 @@ const MultiInstanceComms = {
     showAlertSSO: function() {
         Alerts.error({
             header: Locale.appTabWarn, icon: 'clone', esc: false, enter: false, click: false,
-            body: Locale.isOpenInOtherTab + ' ' + Locale.closeOtherTabSignIn + '<br/><br/>' + Locale.disableOtherTabPrimary,
+            body: Locale.isOpenInOtherTab + ' ' + Locale.closeOtherTabSignIn + '\n\n' + Locale.disableOtherTabPrimary,
             buttons: [
                 {result: '', title: Locale.disableOtherTab, error: false}
             ],
             complete: () => {
                 leadershipTimeout = setTimeout(MultiInstanceComms.demandIgnored, 1000, {
                     header: Locale.appUnsavedWarn, esc: false, enter: false, click: false, buttons: [],
-                    body: Locale.disableOtherTabFailure + '<br/><br/>' + Locale.closeOtherTabSignIn
+                    body: Locale.disableOtherTabFailure + '\n\n' + Locale.closeOtherTabSignIn
                 });
                 MultiInstanceComms.demand();
             }
@@ -194,14 +194,14 @@ const MultiInstanceComms = {
     showAlertDefault: function() {
         Alerts.error({
             header: Locale.appTabWarn, icon: 'clone', esc: false, enter: false, click: false,
-            body: Locale.isOpenInOtherTab + ' ' + Locale.pleaseUseOtherTab + '<br/><br/>' + Locale.disableOtherTabSecondary,
+            body: Locale.isOpenInOtherTab + ' ' + Locale.pleaseUseOtherTab + '\n\n' + Locale.disableOtherTabSecondary,
             buttons: [
                 {result: '', title: Locale.disableOtherTab, error: true}
             ],
             complete: () => {
                 leadershipTimeout = setTimeout(MultiInstanceComms.demandIgnored, 1000, {
                     header: Locale.appUnsavedWarn, esc: false, enter: false, click: false, buttons: [],
-                    body: Locale.disableOtherTabFailure + '<br/><br/>' + Locale.pleaseUseOtherTab
+                    body: Locale.disableOtherTabFailure + '\n\n' + Locale.pleaseUseOtherTab
                 });
                 MultiInstanceComms.demand();
             }

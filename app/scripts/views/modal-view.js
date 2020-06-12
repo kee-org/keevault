@@ -38,7 +38,10 @@ const ModalView = Backbone.View.extend({
 
     render: function () {
         const parent = this.$el;
-        this.setElement($(this.template(this.model, {allowProtoPropertiesByDefault: true})));
+        this.setElement($(this.template({
+            ...this.model,
+            body: this.model.body ? this.model.body.toString().split('\n') : ''
+        }, {allowProtoPropertiesByDefault: true})));
         parent.append(this.$el);
         const el = this.$el;
         el.addClass('modal--hidden');
@@ -55,7 +58,7 @@ const ModalView = Backbone.View.extend({
 
     change: function(config) {
         if (config.header) {
-            this.$el.find('.modal__header').html(config.header);
+            this.$el.find('.modal__header').text(config.header);
         }
     },
 

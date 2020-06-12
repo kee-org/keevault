@@ -439,8 +439,8 @@ const OpenView = Backbone.View.extend({
             // yet to have cached a local copy of their vault
             Alerts.error({
                 header: Locale.connectionRequired,
-                body: Locale.connectionRequiredLine1 + '<br/><br/>' +
-                    Locale.connectionRequiredLine2 + '<br/><br/>' +
+                body: Locale.connectionRequiredLine1 + '\n\n' +
+                    Locale.connectionRequiredLine2 + '\n\n' +
                     Locale.connectionRequiredLine3,
                 esc: false, enter: false, click: false,
                 success: () => {
@@ -456,8 +456,8 @@ const OpenView = Backbone.View.extend({
                 setTimeout(() => Backbone.trigger('lock-workspace'), 180000);
                 Alerts.error({
                     header: Locale.subscriptionRequired,
-                    body: Locale.subscriptionRequiredLine1 + '<br/><br/>' +
-                        Locale.subscriptionRequiredLine2 + '<br/><br/>' +
+                    body: Locale.subscriptionRequiredLine1 + '\n\n' +
+                        Locale.subscriptionRequiredLine2 + '\n\n' +
                         Locale.subscriptionRequiredLine3.replace('{}', localCacheFileInfo.get('syncDate')),
                     buttons: [
                         { result: 'reload', title: Locale.reloadApp },
@@ -827,7 +827,8 @@ const OpenView = Backbone.View.extend({
                 }
                 Alerts.error({
                     header: Locale.openError,
-                    body: Locale.openErrorDescription + '<pre class="modal__pre">' + _.escape(err.toString()) + '</pre>'
+                    body: Locale.openErrorDescription,
+                    pre: err.toString()
                 });
             }
         } else {
@@ -878,7 +879,8 @@ const OpenView = Backbone.View.extend({
                 if (err.lastIndexOf('OAuth', 0) !== 0 && !Alerts.alertDisplayed) {
                     Alerts.error({
                         header: Locale.openError,
-                        body: Locale.openListErrorBody + '<pre class="modal__pre">' + _.escape(err.toString()) + '</pre>'
+                        body: Locale.openListErrorBody,
+                        pre: err
                     });
                 }
                 return;

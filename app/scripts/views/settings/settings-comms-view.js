@@ -48,7 +48,7 @@ const SettingsCommsView = Backbone.View.extend({
     privacyAlert: function(e) {
         Alerts.info({
             header: Locale.privacy,
-            body: Locale.supportPrivacy1 + '<br/><br/>' + Locale.supportPrivacy2
+            body: Locale.supportPrivacy1 + '\n\n' + Locale.supportPrivacy2
         });
     },
 

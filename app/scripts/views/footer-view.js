@@ -157,9 +157,9 @@ const FooterView = Backbone.View.extend({
                 esc: false,
                 enter: false,
                 click: false,
-                body: `${Locale.saveExplainerAlert1}<br/><br/>
-                ${Locale.saveExplainerAlert2}<br/><br/>
-                ${Locale.saveExplainerAlert3}<br/><br/>
+                body: `${Locale.saveExplainerAlert1}
+                ${Locale.saveExplainerAlert2}
+                ${Locale.saveExplainerAlert3}
                 ${Locale.saveExplainerAlert4}`,
                 checkbox: Locale.dontShowAgainOnDevice,
                 success: (result, checked) => {

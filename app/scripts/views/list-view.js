@@ -174,7 +174,7 @@ const ListView = Backbone.View.extend({
             Alerts.yesno({
                 icon: 'stamp',
                 header: Locale.listAddTemplateHeader,
-                body: Locale.listAddTemplateBody1.replace('{}', '<i class="fa fa-plus"></i>') + '<br/>' +
+                body: Locale.listAddTemplateBody1.replace('{}', '+') + '\n' +
                     Locale.listAddTemplateBody2.replace('{}', 'Templates'),
                 buttons: [Alerts.buttons.ok, Alerts.buttons.cancel],
                 success: () => {

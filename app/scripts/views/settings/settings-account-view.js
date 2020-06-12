@@ -94,8 +94,8 @@ const SettingsAccountView = Backbone.View.extend({
         newPassword = '';
 
         Alerts.warn({
-            body: Locale.savedOnAllDevicesQuestion + '<br><br>' +
-                Locale.unsavedChangesOnOtherDevicesMayBeLost + '<br><br>' +
+            body: Locale.savedOnAllDevicesQuestion + '\n\n' +
+                Locale.unsavedChangesOnOtherDevicesMayBeLost + '\n\n' +
                 Locale.readyToChangePassword,
             buttons: [
                 { result: 'cancel', title: Locale.alertCancel, error: true },

@@ -39,7 +39,7 @@ const OtpQrReader = {
                 Locale.detSetupOtpAlertBody2.replace('{}', screenshotKey || ''),
                 line3,
                 Locale.detSetupOtpAlertBody4
-            ].join('<br/>'),
+            ].join('\n'),
             esc: '',
             click: '',
             enter: '',
@@ -129,7 +129,8 @@ const OtpQrReader = {
                     logger.error('Error parsing QR code', err);
                     Alerts.error({
                         header: Locale.detOtpQrWrong,
-                        body: Locale.detOtpQrWrongBody + '<pre class="modal__pre">' + _.escape(err.toString()) + '</pre>'
+                        body: Locale.detOtpQrWrongBody,
+                        pre: err.toString()
                     });
                 }
             } catch (e) {

@@ -1,7 +1,7 @@
 <div class="vault_modal{{#if target}}_fixed{{/if}} {{#if opaque}}modal--opaque{{/if}}">
     <div class="vault_modal__content">
         <div class="modal__body">
-            {{{body}}}
+            {{{bodyUnescaped}}}
         </div>
         <div class="modal__buttons">
             {{#each buttons as |btn|}}
