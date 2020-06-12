@@ -95,7 +95,7 @@ const ListView = Backbone.View.extend({
                 presenter.present(item);
                 itemsHtml += itemTemplate(presenter, {allowProtoPropertiesByDefault: true});
             }, this);
-            const html = itemsTemplate({ items: itemsHtml, columns: this.tableColumns }, {allowProtoPropertiesByDefault: true});
+            const html = itemsTemplate({ itemsUnescaped: itemsHtml, columns: this.tableColumns }, {allowProtoPropertiesByDefault: true});
             this.itemsEl.html(html);
         } else {
             const showAllEntriesLink = this.model && this.model.files && this.model.files.hasAtLeastOneEntry();
@@ -113,8 +113,8 @@ const ListView = Backbone.View.extend({
         }
     },
 
-    renderPlainItems: function(itemsHtml) {
-        return itemsHtml.items;
+    renderPlainItems: function(data) {
+        return data.itemsUnescaped;
     },
 
     getItemTemplate: function() {

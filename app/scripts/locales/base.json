@@ -730,7 +730,7 @@
   "demoExplainer": "We offer an interactive demo during registration where you can experiment before signing up for an account. If you would like to play around with this demo vault again, ensure your database is saved and click the button below.",
   "launchDemo": "Close vault and launch the demo",
   "offlineConfirmation": "Offline confirmation",
-  "offlineConfirmationBody": "We will load your Kee Vault in offline mode.<br/><br/>The vault was last updated on this device at {}.<br/><br/>To ensure data consistency, don't make changes to multiple offline devices at the same time. Alternatively, refresh this page when you have a connection.",
+  "offlineConfirmationBody": "We will load your Kee Vault in offline mode.\n\nThe vault was last updated on this device at {}.\n\nTo ensure data consistency, don't make changes to multiple offline devices at the same time. Alternatively, refresh this page when you have a connection.",
   "accessOffline": "Access offline",
   "continueReadOnly": "Continue with temporary read-only access",
   "subscriptionRequiredLine1": "The information on this device indicates that you no longer have an active Kee Vault account. This may be because this device has not connected to the internet for a very long time or your Kee Vault subscription may have expired.",

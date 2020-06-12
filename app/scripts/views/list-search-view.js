@@ -83,11 +83,16 @@ const ListSearchView = Backbone.View.extend({
     },
 
     setLocale: function() {
-        this.sortOptions.forEach(opt => { opt.html = opt.loc(); });
-        const entryDesc = FeatureDetector.isMobile ? '' : (' <span class="muted-color">(' + Locale.searchShiftClickOr + ' ' +
-        FeatureDetector.altShortcutSymbol(true) + 'N)</span>');
+        this.sortOptions.forEach(opt => { opt.text = opt.loc(); });
         this.createOptions = [
-            { value: 'entry', icon: 'key', html: Format.capFirst(Locale.entry) + entryDesc },
+            {
+                value: 'entry',
+                icon: 'key',
+                text: Format.capFirst(Locale.entry),
+                hint: FeatureDetector.isMobile
+                    ? null
+                    : `(${Locale.searchShiftClickOr} ${FeatureDetector.altShortcutSymbol(false)}N)`
+            },
             { value: 'group', icon: 'folder', text: Format.capFirst(Locale.group) }
         ];
         this.render();
@@ -340,7 +345,7 @@ const ListSearchView = Backbone.View.extend({
     },
 
     addArrow(str) {
-        return str.replace('{}', '&rarr;');
+        return str.replace('{}', '→');
     }
 });
 
