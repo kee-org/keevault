@@ -96,7 +96,7 @@ const GeneratorView = Backbone.View.extend({
         const val = this.valuesMap[e.target.value];
         if (val !== this.gen.length) {
             this.gen.length = val;
-            this.$el.find('.gen__length-range-val').html(val);
+            this.$el.find('.gen__length-range-val').text(val);
             this.optionChanged('length');
             this.generate();
         }

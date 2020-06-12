@@ -1,6 +1,7 @@
 const FieldViewText = require('./field-view-text');
 
 const FieldViewTags = FieldViewText.extend({
+    tagsTemplate: require('templates/details/tags.hbs'),
     renderValue: function(value) {
         return value ? _.escape(value.join(', ')) : '';
     },
@@ -63,9 +64,10 @@ const FieldViewTags = FieldViewText.extend({
 
     setTags: function() {
         const availableTags = this.getAvailableTags();
-        const tagsHtml = availableTags.map(tag => {
-            return '<div class="details__field-autocomplete-item">' + _.escape(tag) + '</div>';
-        }).join('');
+        const tagsHtml = this.tagsTemplate(
+            {
+                tags: availableTags
+            }, {allowProtoPropertiesByDefault: true});
         this.tagsAutocomplete.html(tagsHtml);
         this.tagsAutocomplete.toggle(!!tagsHtml);
     },

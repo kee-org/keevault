@@ -2,6 +2,8 @@ const FieldViewBrowser = require('./field-view-browser');
 const Keys = require('../../const/keys');
 
 const FieldViewAutocomplete = FieldViewBrowser.extend({
+    completionsTemplate: require('templates/details/completions.hbs'),
+
     endEdit: function(newVal, extra) {
         if (this.autocomplete) {
             this.autocomplete.remove();
@@ -71,10 +73,11 @@ const FieldViewAutocomplete = FieldViewBrowser.extend({
 
     updateAutocomplete: function() {
         const completions = this.model.getCompletions(this.input.val());
-        const completionsHtml = completions.map((item, ix) => {
-            const sel = ix === this.selectedCompletionIx ? 'details__field-autocomplete-item--selected' : '';
-            return '<div class="details__field-autocomplete-item ' + sel + '">' + _.escape(item) + '</div>';
-        }).join('');
+        const completionsHtml = this.completionsTemplate(
+            {
+                completions,
+                selectedIx: this.selectedCompletionIx
+            }, {allowProtoPropertiesByDefault: true});
         this.autocomplete.html(completionsHtml);
         this.autocomplete.toggle(!!completionsHtml);
         const height = $('.details__field-autocomplete').height();

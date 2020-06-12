@@ -73,7 +73,7 @@ const FieldViewBrowser = FieldViewText.extend({
 
     // NEVER call this after initial edit rendering has begun. Directly call renderCheckbox or FieldViewText.prototype.renderInput instead.
     renderInput: function(text, isProtected) {
-        this.valueEl.html('');
+        this.valueEl.empty();
         if (this.browserFieldModel && this.browserFieldModel.get('type') === 'FFTcheckbox') {
             const checked = text === 'KEEFOX_CHECKED_FLAG_TRUE';
             this.renderCheckbox(checked);

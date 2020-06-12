@@ -62,7 +62,7 @@ const KeyChangeView = Backbone.View.extend({
     //     if (this.keyFileName) {
     //         this.keyFileName = null;
     //         this.keyFile = null;
-    //         this.$el.find('.key-change__keyfile-name').html('');
+    //         this.$el.find('.key-change__keyfile-name').empty();
     //     }
     //     this.$el.find('.key-change__file').val(null).click();
     //     this.inputEl.focus();
@@ -82,7 +82,7 @@ const KeyChangeView = Backbone.View.extend({
     //         };
     //         reader.readAsArrayBuffer(file);
     //     } else {
-    //         this.$el.find('.key-change__keyfile-name').html('');
+    //         this.$el.find('.key-change__keyfile-name').empty();
     //     }
     //     this.inputEl.focus();
     // },

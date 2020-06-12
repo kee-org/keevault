@@ -53,7 +53,7 @@ _.extend(Backbone.View.prototype, {
             this.$el.html(this.template(model, {allowProtoPropertiesByDefault: true}));
         } else {
             if (replace) {
-                this.$el.html('');
+                this.$el.empty();
             }
             const el = $(this.template(model, {allowProtoPropertiesByDefault: true}));
             if (!this._elAppended || replace) {

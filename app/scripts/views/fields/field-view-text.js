@@ -34,7 +34,7 @@ const FieldViewText = FieldView.extend({
     },
 
     startEdit: function() {
-        this.valueEl.html('');
+        this.valueEl.empty();
         const text = this.getEditValue(this.value);
         const isProtected = !!(this.value && this.value.isProtected);
         this.renderInput(text, isProtected);

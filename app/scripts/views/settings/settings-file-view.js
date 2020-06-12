@@ -171,7 +171,7 @@ const SettingsFileView = Backbone.View.extend({
         const oldKeyFileName = this.model.get('oldKeyFileName');
         const keyFileChanged = this.model.get('keyFileChanged');
         const sel = this.$el.find('#settings__file-key-file');
-        sel.html('');
+        sel.empty();
         if (keyFileName && keyFileChanged) {
             const text = keyFileName !== 'Generated' ? Locale.setFileUseKeyFile + ' ' + keyFileName : Locale.setFileUseGenKeyFile;
             $('<option/>').val('ex').text(text).appendTo(sel);

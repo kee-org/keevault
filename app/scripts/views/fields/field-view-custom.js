@@ -100,7 +100,7 @@ const FieldViewCustom = FieldViewBrowser.extend({
     startEditTitle: function(emptyTitle) {
         const text = emptyTitle ? '' : this.model.title || '';
         this.labelInput = $('<input/>');
-        this.labelEl.html('').append(this.labelInput);
+        this.labelEl.empty().append(this.labelInput);
         this.labelInput.attr({ autocomplete: 'off', spellcheck: 'false' })
             .val(text).focus()[0].setSelectionRange(text.length, text.length);
         this.labelInput.bind({
