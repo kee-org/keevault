@@ -640,9 +640,12 @@ EntryModel.fromEntry = function(entry, group, file) {
     return model;
 };
 
-EntryModel.newEntry = function(group, file) {
+EntryModel.newEntry = function(group, file, opts) {
     const model = new EntryModel();
     const entry = file.db.createEntry(group.group);
+    if (opts && opts.tag) {
+        entry.tags = [opts.tag];
+    }
     model.setEntry(entry, group, file);
     model.entry.times.update();
     model.unsaved = true;

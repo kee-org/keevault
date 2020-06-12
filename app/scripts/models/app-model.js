@@ -367,7 +367,9 @@ const AppModel = Backbone.Model.extend({
             newEntry.copyFromTemplate(templateEntry);
             return newEntry;
         } else {
-            return EntryModel.newEntry(sel.group, sel.file);
+            return EntryModel.newEntry(sel.group, sel.file, {
+                tag: this.filter.tag
+            });
         }
     },
 
