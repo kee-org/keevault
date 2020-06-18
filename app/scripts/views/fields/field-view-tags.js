@@ -2,12 +2,18 @@ const FieldViewText = require('./field-view-text');
 
 const FieldViewTags = FieldViewText.extend({
     tagsTemplate: require('templates/details/tags.hbs'),
-    renderValue: function(value) {
-        return value ? _.escape(value.join(', ')) : '';
+    renderValue: function(tags) {
+        return tags ? _.escape(tags.join(', ')) : '';
     },
 
-    getEditValue: function(value) {
-        return value ? value.join(', ') : '';
+    getEditValue: function(tags) {
+        return tags ? tags.join(', ') : '';
+    },
+
+    getClipboardValue: function () {
+        const tags = this.getValue();
+
+        return this.getEditValue(tags);
     },
 
     valueToTags: function(val) {
