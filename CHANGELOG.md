@@ -2,6 +2,17 @@ This lists the major changes in each version of Kee Vault.
 
 Many smaller or partially complete changes will be made on a regular basis. To see all changes, look for the commit history in each of our GitHub repositories.
 
+## 0.9.11
+
+* Enable autocomplete of username and tags fields
+* When the view is filtered by tag, new entries now inherit that tag by default
+* Fields with browser integration enabled are now displayed in the entry history viewer
+* The small font size setting now actually reduces the font size
+* The password generator is now shown above the field when there is no space below
+* Various fixes to drag/drop and clipboard copying of fields
+* Improved export kdbx compatibility
+* Further code quality improvements to protect against accidentally introducing similar risks to those we fixed in 0.9.10
+
 ## 0.9.10
 
 * SECURITY: Addresses the social engineering attack risks identified on 13th May 2020 in KeeWeb
