@@ -75,7 +75,20 @@ function config(grunt, mode = 'production') {
                         ]
                     })
                 },
-                {test: /baron(\.min)?\.js$/, loader: 'exports-loader?baron; delete window.baron;'},
+                {
+                    test: /baron(\.min)?\.js$/,
+                    use: [
+                        StringReplacePlugin.replace({
+                            replacements: [
+                                { pattern: /\([01],\s*eval\)\(['"]this['"]\)/g, replacement: () => 'window' }
+                            ]
+                        }),
+                        {
+                            loader: 'exports-loader',
+                            options: { type: 'commonjs', exports: 'single baron' }
+                        }
+                    ]
+                },
                 // {test: /pikaday\.js$/, loader: 'uglify-loader'},
                 {test: /handlebars/, loader: 'strip-sourcemap-loader'},
                 {
