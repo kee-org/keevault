@@ -40,7 +40,7 @@ const FieldViewTags = FieldViewText.extend({
     startEdit: function() {
         FieldViewText.prototype.startEdit.call(this);
         const fieldRect = this.input[0].getBoundingClientRect();
-        const shadowSpread = parseInt(this.input.css('--focus-shadow-spread'));
+        const shadowSpread = parseInt(this.input.css('--focus-shadow-spread')) || 0;
         this.tagsAutocomplete = $('<div class="details__field-autocomplete"></div>').appendTo(
             'body'
         );

@@ -16,7 +16,7 @@ const FieldViewAutocomplete = FieldViewBrowser.extend({
     startEdit: function() {
         FieldViewBrowser.prototype.startEdit.call(this);
         const fieldRect = this.input[0].getBoundingClientRect();
-        const shadowSpread = parseInt(this.input.css('--focus-shadow-spread'));
+        const shadowSpread = parseInt(this.input.css('--focus-shadow-spread')) || 0;
         this.autocomplete = $('<div class="details__field-autocomplete"></div>').appendTo('body');
         this.autocomplete.css({
             top: fieldRect.bottom + shadowSpread,
