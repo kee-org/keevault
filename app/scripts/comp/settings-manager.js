@@ -54,7 +54,7 @@ const SettingsManager = {
     },
 
     setFontSize: function(fontSize) {
-        document.documentElement.style.fontSize = fontSize ? (12 + fontSize * 2) + 'px' : '';
+        document.documentElement.style.fontSize = fontSize >= 0 ? (12 + fontSize * 2) + 'px' : '';
     },
 
     setLocale(loc) {
