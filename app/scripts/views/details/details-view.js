@@ -198,24 +198,24 @@ const DetailsView = Backbone.View.extend({
             value: function() { return Format.dtStr(model.updated); } } }));
         this.fieldViews.push(new FieldViewHistory({ model: { name: 'History', title: Format.capFirst(Locale.history),
             value: function() { return { length: model.historyLength, unsaved: model.unsaved }; } } }));
-        _.forEach(model.fields, function(value, field) {
-            if (field === 'otp' && this.model.otpGenerator) {
-                this.fieldViews.push(new FieldViewOtp({ model: { name: '$' + field, title: field,
+        _.forEach(model.fields, function(value, fieldName) {
+            if (fieldName === 'otp' && this.model.otpGenerator) {
+                this.fieldViews.push(new FieldViewOtp({ model: { name: '$' + fieldName, title: fieldName,
                     value: function() { return model.otpGenerator; } } }));
             } else {
                 this.fieldViews.push(new FieldViewCustom({
                     model: {
-                        name: '$' + field,
-                        title: field,
-                        value: function() { return model.fields[field]; }
+                        name: '$' + fieldName,
+                        title: fieldName,
+                        value: function() { return model.fields[fieldName]; }
                     },
                     browserFieldModel: undefined,
                     displayGlobalPlaceholderOption: model.file.get('browserExtensionSettings').get('displayGlobalPlaceholderOption')
                 }));
             }
         }, this);
-        _.forEach(model.get('browserSettings').get('formFieldList').toArray(), function(value, field) {
-            const browserFieldModel = this.browserFieldAt(field);
+        _.forEach(model.get('browserSettings').get('formFieldList').toArray(), function(value, fieldIndex) {
+            const browserFieldModel = model.browserFieldAt(fieldIndex);
             const displayName = browserFieldModel.get('displayName');
             if (displayName === 'KeePass password' || displayName === 'KeePass username') return;
             this.fieldViews.push(new FieldViewCustom({
@@ -252,12 +252,6 @@ const DetailsView = Backbone.View.extend({
         this.moreView.setElement(fieldsMainEl).render();
         this.moreView.on('add-field', this.addNewField.bind(this));
         this.moreView.on('more-click', this.toggleMoreOptions.bind(this));
-    },
-
-    browserFieldAt: function(index) {
-        const collection = this.model.get('browserSettings').get('formFieldList');
-        const ffModel = collection.at(index);
-        return ffModel;
     },
 
     browserFieldFor: function(displayName) {

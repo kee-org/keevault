@@ -632,6 +632,12 @@ const EntryModel = Backbone.Model.extend({
         this.entry.times.creationTime = this.entry.times.lastModTime;
         this.entry.fields.Title = '';
         this._fillByEntry();
+    },
+
+    browserFieldAt: function(index) {
+        const collection = this.get('browserSettings').get('formFieldList');
+        const ffModel = collection.at(index);
+        return ffModel;
     }
 });
 

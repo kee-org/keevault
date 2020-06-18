@@ -101,6 +101,18 @@ const DetailsHistoryView = Backbone.View.extend({
         _.forEach(this.record.fields, function(value, field) {
             this.fieldViews.push(new FieldViewReadOnly({ model: { name: '$' + field, title: field, value: value } }));
         }, this);
+        _.forEach(this.record.get('browserSettings').get('formFieldList').toArray(), function(value, fieldIndex) {
+            const browserFieldModel = this.record.browserFieldAt(fieldIndex);
+            const displayName = browserFieldModel.get('displayName');
+            if (displayName === 'KeePass password' || displayName === 'KeePass username') return;
+            this.fieldViews.push(new FieldViewReadOnly({
+                model: {
+                    name: '$' + displayName,
+                    title: displayName,
+                    value: browserFieldModel.get('value')
+                }
+            }));
+        }, this);
         if (this.record.attachments.length) {
             this.fieldViews.push(new FieldViewReadOnly({ model: { name: 'Attachments', title: Locale.detAttachments,
                 value: this.record.attachments.map(att => att.title).join(', ') } }));
