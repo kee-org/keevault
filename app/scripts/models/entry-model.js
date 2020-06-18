@@ -476,6 +476,7 @@ const EntryModel = Backbone.Model.extend({
         this.entry.copyFrom(historyEntry);
         this._entryModified();
         this._fillByEntry();
+        this.set('browserSettings', this._readBrowserExtensionSettings());
     },
 
     discardUnsaved: function() {
