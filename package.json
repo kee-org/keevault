@@ -17,9 +17,9 @@
   "browserslist": "Firefox >= 60, Chrome >= 67, Edge >= 17, iOS >= 12, ChromeAndroid >= 67",
   "dependencies": {
     "@babel/runtime": "^7.10.2",
-    "@capacitor/android": "^1.1.0",
-    "@capacitor/cli": "^1.1.0",
-    "@capacitor/core": "^1.1.0",
+    "@capacitor/android": "^2.4.0",
+    "@capacitor/cli": "^2.4.0",
+    "@capacitor/core": "^2.4.0",
     "backgrid": "^0.3.8",
     "bowser": "^2.9.0",
     "broadcast-channel": "^3.1.0",
