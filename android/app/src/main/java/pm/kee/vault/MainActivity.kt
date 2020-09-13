@@ -1,20 +1,39 @@
 package pm.kee.vault
 
-import com.getcapacitor.BridgeActivity
-import android.os.Bundle
-import pm.kee.vault.capacitor.NativeCache
-import pm.kee.vault.R
+import android.app.AlertDialog
+import android.app.KeyguardManager
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.view.View
+import com.getcapacitor.BridgeActivity
 import com.getcapacitor.Plugin
+import pm.kee.vault.capacitor.NativeCache
 import pm.kee.vault.capacitor.NativeConfig
-import java.util.ArrayList
+import pm.kee.vault.util.Util.logd
+import pm.kee.vault.util.Util.loge
+import java.util.*
+
 
 //import com.getcapacitor.PluginHandle;
 //import static pm.kee.vault.util.Util.loge;
 class MainActivity : BridgeActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val kgManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+        if (!kgManager.isKeyguardSecure) {
+            //TODO: Find some way to notify the user that this is the reason the app does not start
+            loge("Secure lock screen not enabled.")
+            logd("Startup checks failed.")
+            finish()
+        }
+
+        logd("Startup checks complete.")
 
         // Initializes the Bridge
         this.init(savedInstanceState, object : ArrayList<Class<out Plugin?>?>() {
@@ -33,6 +52,7 @@ class MainActivity : BridgeActivity() {
     }
 
     public override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
 //    loge("onNewIntent");
 //    this.bridge.triggerWindowJSEvent("capacitorConfigUpdated", "{ 'message': 'onNewIntent1' }");
         setIntent(intent)

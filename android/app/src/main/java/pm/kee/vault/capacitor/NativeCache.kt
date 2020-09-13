@@ -40,7 +40,7 @@ class NativeCache : Plugin() {
         val storageAuth = EncryptedDataStorage("auth", AccessRestrictions(
                 Date(Date().time + model.config.auth.interactiveExpiry * 1000),
                 true,
-                -1
+                30  //TODO: is 30 seconds OK as a default? Could try -1 if we detect biometrics are valid at startup
         ), localAfDataSourceSharedPrefs)
         storageAuth.setString(id, gson.toJson(model.config.auth))
         call.resolve()

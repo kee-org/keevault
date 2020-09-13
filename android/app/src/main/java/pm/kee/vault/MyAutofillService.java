@@ -313,7 +313,7 @@ public class MyAutofillService extends AutofillService {
         SharedPreferences localAfDataSourceSharedPrefs =
                 getSharedPreferences(ESPAutofillDataSource.SHARED_PREF_KEY, Context.MODE_PRIVATE);
         EncryptedDataStorage storage = new EncryptedDataStorage("cache",
-                new AccessRestrictions(new Date(), true, -1),
+                new AccessRestrictions(new Date(), true, 30), //TODO: is 30 seconds OK as a default? Could try -1 if we detect biometrics are valid at startup
                 localAfDataSourceSharedPrefs);
         mESPAutofillDataSource = ESPAutofillDataSource.getInstance(storage,
                 new AppExecutors());

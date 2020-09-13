@@ -3,5 +3,12 @@
   "appName": "Kee Vault N",
   "bundledWebRuntime": false,
   "npmClient": "npm",
-  "webDir": "dist"
+  "webDir": "dist",
+  "server": {
+    "hostname": "dev-keevault-cors-protection.localhost"
+  },
+  "appendUserAgent": "KeeVaultNative",
+  "android": {
+    "webContentsDebuggingEnabled": true
+  }
 }
