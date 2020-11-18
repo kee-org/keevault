@@ -46,3 +46,10 @@ npm start
 # License
 
 [AGPL3 with permitted extra clauses](https://github.com/kee-org/keevault/blob/master/LICENSE)
+
+
+# Android
+
+npm start
+ctrl-c
+npx cap sync
