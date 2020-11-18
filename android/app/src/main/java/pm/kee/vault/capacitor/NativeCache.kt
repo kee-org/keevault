@@ -43,6 +43,10 @@ class NativeCache : Plugin() {
                 30  //TODO: is 30 seconds OK as a default? Could try -1 if we detect biometrics are valid at startup
         ), localAfDataSourceSharedPrefs)
         storageAuth.setString(id, gson.toJson(model.config.auth))
+        //TODO:
+        // check for intent.autofill flag. if true...
+        // "complete" the AuthIntent.... somehow.
+        // modify the intent using setIntent once we're done
         call.resolve()
     }
 
