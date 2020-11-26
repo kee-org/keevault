@@ -53,3 +53,5 @@ npm start
 npm start
 ctrl-c
 npx cap sync
+
+black screen suggests phone has locked, NOT that app has failed to run. default unlock code: 1234

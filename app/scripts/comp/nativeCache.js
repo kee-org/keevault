@@ -1,6 +1,7 @@
-
+const kdbxweb = require('kdbxweb');
 const Capacitor = require('@capacitor/core');
 const Logger = require('../util/logger');
+const Hex = require('../util/hex');
 const logger = new Logger('nativeCache');
 
 const deferInitPromiseResolvers = [];
@@ -16,6 +17,7 @@ NativeCacheClass.prototype.mapModel = async function(model) {
     }
 
     const id = (model.account.get('user') && model.account.get('user').emailHashed) ? model.account.get('user').emailHashed : 'demo';
+    const secretKey = (model.account.get('user') && model.account.get('user').secretKey) ? model.account.get('user').secretKey : Hex.byteArrayToBase64(kdbxweb.Random.getBytes(32));
     const state = {
         id,
         config: {
@@ -26,7 +28,7 @@ NativeCacheClass.prototype.mapModel = async function(model) {
             auth: {
                 expiry: 300,
                 interactiveExpiry: 900,
-                secretKey: 'base64encodedblah'
+                secretKey
             }
         },
         vault: await this.KPRPCHandler.invokeLocalGetAllDatabases(true)

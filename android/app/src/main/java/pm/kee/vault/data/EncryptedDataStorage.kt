@@ -105,7 +105,6 @@ class EncryptedDataStorage(private val label: String, private val accessRestrict
 
     private lateinit var wrapper: SecretKeyWrapper
 
-    private var keyId: String? = null
 //
 //    private fun useMostRecentKey() {
 //        keyId = prefs.getString(PREF_KEY_ID_PREFIX + label, null)
@@ -126,8 +125,8 @@ class EncryptedDataStorage(private val label: String, private val accessRestrict
 //
 //    }
 
-    private fun getKey(wrapper: SecretKeyWrapper) : SecretKey {
-        val encryptedKey = prefs.getString("$PREF_ENCRYPTED_KEY_PREFIX$label.$keyId", null)
+    private fun getKey(wrapper: SecretKeyWrapper, id: String) : SecretKey {
+        val encryptedKey = prefs.getString("$PREF_ENCRYPTED_KEY_PREFIX$label.$id", null)
         val ba = encryptedKey?.toByteArray(Charsets.ISO_8859_1)
         ba ?: throw Exception("Secret key not found. Data forcibly removed recently?")
         return wrapper.unwrap(ba)
@@ -145,19 +144,19 @@ class EncryptedDataStorage(private val label: String, private val accessRestrict
 //        return temp
 //        useMostRecentKey()
 
-        keyId = prefs.getString(PREF_KEY_ID_PREFIX + label, null)
-        keyId ?: throw Exception("Key not found. Save data before reading it please.")
-        wrapper = SecretKeyWrapper("pm.kee.vault.$label.$keyId", accessRestrictions)
-        val secretKey = getKey(wrapper)
+        val id = prefs.getString(PREF_KEY_ID_PREFIX + label, null)
+        id ?: throw Exception("Key not found. Save data before reading it please.")
+        wrapper = SecretKeyWrapper("pm.kee.vault.$label.$id", accessRestrictions)
+        val secretKey = getKey(wrapper, id)
         val plainBytes = decryptStorage(secretKey)
         plainBytes.let { return String(it, Charsets.UTF_8) }
         return null
     }
-    fun setString(keyId: String, value: String) {
-        wrapper = SecretKeyWrapper("pm.kee.vault.$label.$keyId", accessRestrictions)
+    fun setString(id: String, value: String) {
+        wrapper = SecretKeyWrapper("pm.kee.vault.$label.$id", accessRestrictions)
         val secretKey = createKey(wrapper)
         val plainBytes = value.toByteArray(Charsets.UTF_8)
-        encryptStorage(keyId, secretKey, plainBytes)
+        encryptStorage(id, secretKey, plainBytes)
     }
     private fun decryptStorage(secretKey: SecretKey) : ByteArray {
         try {
@@ -176,7 +175,7 @@ class EncryptedDataStorage(private val label: String, private val accessRestrict
         val str = String(cipherBytes, Charsets.ISO_8859_1)
         with (prefs.edit()) {
             putString(PREF_KEY_ID_PREFIX + label, id)
-            putString("$PREF_ENCRYPTED_KEY_PREFIX$label.$keyId", String(wrapper.wrap(secretKey), Charsets.ISO_8859_1))
+            putString("$PREF_ENCRYPTED_KEY_PREFIX$label.$id", String(wrapper.wrap(secretKey), Charsets.ISO_8859_1))
             putString(PREF_ENCRYPTED_STATE_PREFIX + label, str)
             commit()
         }

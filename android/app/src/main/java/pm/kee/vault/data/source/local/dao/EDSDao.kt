@@ -118,7 +118,7 @@ class EDSDao(private val eds: EncryptedDataStorage) {
     fun getMatchingEntries(url: String, isHTTPS: Boolean?): List<Entry> {
         try {
             var gson = Gson()
-            val json = eds.getString()
+            val json = eds.getString() //TODO: same try/catch for all
             var model = gson.fromJson(json, Vault::class.java)
 
 //        model ?: throw SecurityException()

@@ -1,5 +1,6 @@
 package pm.kee.vault
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.KeyguardManager
 import android.content.Context
@@ -9,6 +10,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
+import android.security.keystore.UserNotAuthenticatedException
 import android.view.View
 import com.getcapacitor.BridgeActivity
 import com.getcapacitor.Plugin
@@ -22,6 +24,11 @@ import java.util.*
 //import com.getcapacitor.PluginHandle;
 //import static pm.kee.vault.util.Util.loge;
 class MainActivity : BridgeActivity() {
+
+    private var pendingRunnable: Runnable? = null
+    private var successRunnable: Runnable? = null
+    private var failureRunnable: Runnable? = null
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -90,4 +97,52 @@ class MainActivity : BridgeActivity() {
     //    NativeCachePlugin myPlugin = (NativeCachePlugin) handle.getInstance();
     //    return myPlugin;
     //  }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == AUTHENTICATE_FOR_ENCRYPTION) {
+            if (resultCode == Activity.RESULT_OK) {
+                try {
+                    pendingRunnable?.run()
+                    successRunnable?.run()
+                } catch (e: Exception){
+                    failureRunnable?.run()
+                }
+            } else {
+                failureRunnable?.run()
+            }
+            pendingRunnable = null
+            failureRunnable = null
+            successRunnable = null
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
+    companion object {
+        const val AUTHENTICATE_FOR_ENCRYPTION = 23 //TODO: Why this number?
+    }
+
+    public fun safeExecuteWithKeystore(action: Runnable, onSuccess: Runnable?, onFailure: Runnable?) {
+        try {
+            action.run()
+            onSuccess?.run()
+        } catch (e: SecurityException) {
+            if (e.cause is UserNotAuthenticatedException) {
+                pendingRunnable = action
+                successRunnable = onSuccess
+                failureRunnable = onFailure
+                showAuthenticationScreen(this, AUTHENTICATE_FOR_ENCRYPTION)
+            } else {
+                onFailure?.run()
+            }
+        } catch (e: Exception) {
+            onFailure?.run()
+        }
+    }
+
+    private fun showAuthenticationScreen(activity: Activity, requestCode: Int) {
+        val mKeyguardManager = activity.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+        val intent: Intent? = mKeyguardManager.createConfirmDeviceCredentialIntent("Authorization required", "")
+        activity.startActivityForResult(intent, requestCode)
+    }
 }

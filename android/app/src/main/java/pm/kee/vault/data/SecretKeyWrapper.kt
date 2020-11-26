@@ -1,11 +1,14 @@
 package pm.kee.vault.data
 
 import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyInfo
 import android.security.keystore.KeyProperties
 import java.io.IOException
+import java.security.*
+import java.security.spec.InvalidKeySpecException
+import java.util.*
 import javax.crypto.Cipher
 import javax.crypto.SecretKey
-import java.security.*
 
 
 /**
@@ -28,7 +31,7 @@ class SecretKeyWrapper
 @Throws(GeneralSecurityException::class, IOException::class)
 constructor(alias: String, accessRestrictions: AccessRestrictions) {
     private val mCipher: Cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding")
-    private val mPair: KeyPair
+    private lateinit var mPair: KeyPair
 
     init {
         val keyStore = KeyStore.getInstance("AndroidKeyStore")
@@ -38,11 +41,25 @@ constructor(alias: String, accessRestrictions: AccessRestrictions) {
         }
         // Even if we just generated the key, always read it back to ensure we
         // can read it successfully.
-//        val entry = keyStore.getEntry(
-//                alias, null) as KeyStore.PrivateKeyEntry
         val privateKey = keyStore.getKey(alias, null) as PrivateKey
         val publicKey = keyStore.getCertificate(alias).publicKey
-        mPair = KeyPair(publicKey, privateKey)
+        val factory = KeyFactory.getInstance(privateKey.algorithm, "AndroidKeyStore")
+        //var mPair: KeyPair;
+        try {
+            var keyInfo = factory.getKeySpec(privateKey, KeyInfo::class.java)
+            mPair = if (keyInfo.keyValidityForConsumptionEnd?.before(Date())!!) { //TODO: Check what happens when validity is null
+                generateKeyPair(alias, accessRestrictions)
+                val privateKey = keyStore.getKey(alias, null) as PrivateKey
+                val publicKey = keyStore.getCertificate(alias).publicKey
+                KeyPair(publicKey, privateKey)
+            } else {
+                KeyPair(publicKey, privateKey)
+            }
+        } catch (e: InvalidKeySpecException) {
+            // Not an Android KeyStore key.
+            //TODO: Regenerate once then visual error
+            throw e
+        }
     }
 
     @Throws(GeneralSecurityException::class)
@@ -50,7 +67,7 @@ constructor(alias: String, accessRestrictions: AccessRestrictions) {
 //        val start = GregorianCalendar()
 //        val end = GregorianCalendar()
 //        end.add(Calendar.YEAR, 100)
-        val spec = KeyGenParameterSpec.Builder(alias, KeyProperties.PURPOSE_DECRYPT )
+        val spec = KeyGenParameterSpec.Builder(alias, KeyProperties.PURPOSE_DECRYPT)
 //                .setSubject(X500Principal("CN=$alias"))
 //                .setSerialNumber(BigInteger.ONE)
 //                .setStartDate(start.time)
@@ -58,6 +75,7 @@ constructor(alias: String, accessRestrictions: AccessRestrictions) {
                 .setUserAuthenticationValidityDurationSeconds(if (accessRestrictions.presenceTimeout < 1) -1 else accessRestrictions.presenceTimeout)
                 .setUserAuthenticationRequired(accessRestrictions.presenceRequired)
                 .setKeyValidityEnd(accessRestrictions.expiresAt)
+                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_PKCS1)
                 .build()
         val gen = KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_RSA, "AndroidKeyStore")
         gen.initialize(spec)
