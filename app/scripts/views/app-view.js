@@ -196,6 +196,15 @@ const AppView = Backbone.View.extend({
             }
         }
 
+        // const secretCreds = this.model.settings.get('encryptedAccessCredentials');
+        const secretCredsKey = this.model.get('encryptedAccessCredentialsKey');
+        const magic = !!secretCredsKey; // TODO: real decryption of secret creds
+
+        if (magic) {
+            // TODO: this is a temporary hack. Will replace with an async signin operation for the correct credentials soon - e.g. like the async initialise function in account-view.js, using whatever creds we decrypt above
+            this.model.destinationFeature = 'demo';
+        }
+
         if (this.model.destinationFeature === 'intro' ||
             (!this.model.destinationFeature && !this.model.settings.get('vaultIntroCompleted'))) {
             this.model.settings.set('rememberedAccountEmail', '');
@@ -361,6 +370,7 @@ const AppView = Backbone.View.extend({
     },
 
     showDemo: function() {
+        this.model.settings.set('vaultIntroCompleted', true); // TODO: temporary hack
         this.views.vaultOverlay.model.createDemoFile();
         this.views.vaultOverlay.$el.parent().removeClass('vault_landing').addClass('vault_start');
         this.views.vaultOverlay.showTopDemoBlurb();

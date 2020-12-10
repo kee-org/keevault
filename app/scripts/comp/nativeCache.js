@@ -15,7 +15,8 @@ NativeCacheClass.prototype.mapModel = async function(model) {
         });
         await deferPromise;
     }
-
+    // TODO: Somewhere store this.model.settings.set('encryptedAccessCredentials', 'dsafdsafsdaf');
+    // Is it the same as the secretKey on the user model below?
     const id = (model.account.get('user') && model.account.get('user').emailHashed) ? model.account.get('user').emailHashed : 'demo';
     const secretKey = (model.account.get('user') && model.account.get('user').secretKey) ? model.account.get('user').secretKey : Hex.byteArrayToBase64(kdbxweb.Random.getBytes(32));
     const state = {

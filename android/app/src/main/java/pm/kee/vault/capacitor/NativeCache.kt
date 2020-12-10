@@ -1,24 +1,20 @@
 package pm.kee.vault.capacitor
 
 import android.app.Activity
-import android.app.assist.AssistStructure
 import android.content.Context
 import android.content.Intent
-import android.view.autofill.AutofillManager
 import com.getcapacitor.NativePlugin
 import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
 import com.google.gson.Gson
 import pm.kee.vault.AuthHandler
-import pm.kee.vault.ClientParser
 import pm.kee.vault.MainActivity
 import pm.kee.vault.data.AccessRestrictions
 import pm.kee.vault.data.EncryptedDataStorage
 import pm.kee.vault.data.source.local.ESPAutofillDataSource
 import pm.kee.vault.model.vault.KeeVaultState
 import pm.kee.vault.util.AppExecutors
-import pm.kee.vault.util.Util
 import pm.kee.vault.util.Util.logw
 import java.util.*
 
@@ -59,7 +55,7 @@ class NativeCache : Plugin() {
         val autofill = intent.getBooleanExtra("autofill", false)
         if (autofill) {
 
-            activity.safeExecuteWithKeystore(
+            activity.executeWithAuthenticationIfRequired(
                 action = {
 
                     // "complete" the AuthIntent.... somehow.
@@ -70,15 +66,15 @@ class NativeCache : Plugin() {
                     // the activity that this plugin runs in but needs to be verified before production use
                     intent.putExtra("autofill", false)
                     getActivity().intent = intent //TODO: is this line necessary or is the intent all done by reference anyway?
+//TODO: probably this causes warning about failing to access dead WebView                    call.resolve()
                     call.resolve()
                 },
-                onFailure = null
+                onFailure = null //TODO: At least log that something went wrong
             )
-
-
         } else {
                 call.resolve()
             }
+//        call.resolve()
     }
 
     fun dotheactivitystuff(storageState: EncryptedDataStorage, activity: Activity) {

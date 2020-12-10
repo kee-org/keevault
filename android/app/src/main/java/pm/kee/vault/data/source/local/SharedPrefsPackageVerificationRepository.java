@@ -61,7 +61,7 @@ public class SharedPrefsPackageVerificationRepository implements PackageVerifica
             PackageManager pm = mContext.getPackageManager();
             PackageInfo packageInfo = pm.getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
             hash = SecurityHelper.getFingerprint(packageInfo, packageName);
-            logd("Hash for %s: %s", packageName, hash);
+            logd("Hash for %s: %s", packageName, hash); //TODO: This gets called dozens of times. Verify it is not recalculating the same hash every time
         } catch (Exception e) {
             logw(e, "Error getting hash for %s.", packageName);
             return false;

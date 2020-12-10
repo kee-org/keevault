@@ -16,6 +16,7 @@ import com.getcapacitor.BridgeActivity
 import com.getcapacitor.Plugin
 import pm.kee.vault.capacitor.NativeCache
 import pm.kee.vault.capacitor.NativeConfig
+import pm.kee.vault.util.Util
 import pm.kee.vault.util.Util.logd
 import pm.kee.vault.util.Util.loge
 import java.util.*
@@ -98,7 +99,10 @@ class MainActivity : BridgeActivity() {
     //    return myPlugin;
     //  }
 
+    //TODO: This needs to be changed. May be as as simple as calling the super handler first so that capacitor can set up the result from the saveCall function I call in the plugin (once I work out when/where to do that.
+    // Or maybe have to duplicate this code and put it into a method in the plugin that we tell capacitor to call when we get this requestcode
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == AUTHENTICATE_FOR_ENCRYPTION) {
             if (resultCode == Activity.RESULT_OK) {
                 try {
@@ -113,8 +117,8 @@ class MainActivity : BridgeActivity() {
             pendingRunnable = null
             failureRunnable = null
             successRunnable = null
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
+//        } else {
+//            super.onActivityResult(requestCode, resultCode, data)
         }
     }
 
@@ -122,21 +126,20 @@ class MainActivity : BridgeActivity() {
         const val AUTHENTICATE_FOR_ENCRYPTION = 23 //TODO: Why this number?
     }
 
-    public fun safeExecuteWithKeystore(action: Runnable, onSuccess: Runnable?, onFailure: Runnable?) {
+    public fun executeWithAuthenticationIfRequired(action: Runnable, onSuccess: Runnable?, onFailure: Runnable?) {
         try {
             action.run()
             onSuccess?.run()
-        } catch (e: SecurityException) {
-            if (e.cause is UserNotAuthenticatedException) {
+        } catch (e: Exception) {
+            if (e is UserNotAuthenticatedException || e.cause is UserNotAuthenticatedException) {
                 pendingRunnable = action
                 successRunnable = onSuccess
                 failureRunnable = onFailure
                 showAuthenticationScreen(this, AUTHENTICATE_FOR_ENCRYPTION)
             } else {
+                Util.logw("Exception while accessing secure store: $e")
                 onFailure?.run()
             }
-        } catch (e: Exception) {
-            onFailure?.run()
         }
     }
 

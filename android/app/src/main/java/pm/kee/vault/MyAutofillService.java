@@ -207,7 +207,9 @@ public class MyAutofillService extends AutofillService {
                 intent.addFlags(FLAG_ACTIVITY_NEW_TASK); // Required - manifest declaration appears to be ignored - maybe Android system is modifying the intent on its way through the autofill code... dunno.
                 intent.putExtra("autofill", true);
                 IntentSender sender = PendingIntent.getActivity(context, 22469524, intent,
-                        PendingIntent.FLAG_UPDATE_CURRENT).getIntentSender();
+                        PendingIntent.FLAG_CANCEL_CURRENT).getIntentSender();
+//                IntentSender sender = PendingIntent.getActivity(context, 22469524, intent,
+//                    PendingIntent.FLAG_UPDATE_CURRENT).getIntentSender();
                 RemoteViews remoteViews = RemoteViewsHelper.viewsWithAuth(getPackageName(),
                         getString(R.string.autofill_sign_in_prompt));
                 FillResponse response = mResponseAdapter.buildResponse(sender, remoteViews);

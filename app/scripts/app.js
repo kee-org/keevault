@@ -36,6 +36,10 @@ ready(() => {
     Promise.resolve()
         .then(detectDevice)
         .then(loadConfigs)
+        .then(x => {
+            appModel.appLogger.debug('Authkey', x[0]);
+            appModel.set('encryptedAccessCredentialsKey', x[0]);
+        })
         .then(initModules)
         .then(loadConfig)
         .then(ensureCanRun)

@@ -72,7 +72,9 @@ public class ResponseAdapter {
                                       List<DatasetWithFilledAutofillFields> datasets, boolean datasetAuth) {
         FillResponse.Builder responseBuilder = new FillResponse.Builder();
         if (datasets != null) {
-            for (DatasetWithFilledAutofillFields datasetWithFilledAutofillFields : datasets) {
+            //for (DatasetWithFilledAutofillFields datasetWithFilledAutofillFields : datasets) {
+            //TODO: Ruling out bug with quantity of data being sent. remove this hack when done.
+            DatasetWithFilledAutofillFields datasetWithFilledAutofillFields = datasets.get(0);
                 if (datasetWithFilledAutofillFields != null) {
                     Dataset dataset;
                     String datasetName = datasetWithFilledAutofillFields.autofillDataset
@@ -94,7 +96,7 @@ public class ResponseAdapter {
                         responseBuilder.addDataset(dataset);
                     }
                 }
-            }
+            //}
         }
         int saveType = mClientViewMetadata.getSaveType();
         AutofillId[] autofillIds = mClientViewMetadata.getAutofillIds();
@@ -118,6 +120,7 @@ public class ResponseAdapter {
             return responseBuilder.build();
         } else {
             return null;
+            //TODO: Always return a "Pick a different entry" item? Same as the "Tap to sign in" but without the "autofill" flag to auto-return after authentication?......
         }
     }
 

@@ -38,7 +38,7 @@
                         if (appSettings.theme && appSettings.theme.length > 0) {
                             document.body.className = "th-" + appSettings.theme;
                         }
-                        if (appSettings.vaultIntroCompleted) {
+                        if (appSettings.vaultIntroCompleted) { //TODO: may need to check for stored credentials too so we don't flash up the initial screen while loading the app after native authentication. maybe setting this flag after a successful sign-in will be enough though (currently hacked so that this gets set when the demo is launched)
                             firstLoad = false;
                         }
                     }
