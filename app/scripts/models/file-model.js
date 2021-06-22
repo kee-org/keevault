@@ -102,6 +102,7 @@ const FileModel = Backbone.Model.extend({
             return header.kdfParameters.keys().map(key => {
                 const val = header.kdfParameters.get(key);
                 if (val instanceof ArrayBuffer) {
+                    /* eslint-disable-next-line array-callback-return */
                     return;
                 }
                 return key + '=' + val;
@@ -173,6 +174,7 @@ const FileModel = Backbone.Model.extend({
 
     importKPRPCSettings: function(importSourceDB) {
         this.db.meta.customData['KeePassRPC.Config'] = importSourceDB.meta.customData['KeePassRPC.Config'];
+        this.db.meta.settingsChanged = new Date();
         this.reload();
         const settings = this.get('browserExtensionSettings');
         settings.set('rootUUID', this.db.getDefaultGroup().uuid.toString());
@@ -433,6 +435,7 @@ const FileModel = Backbone.Model.extend({
 
         this.listenTo(settings, 'change', () => {
             this.db.meta.customData['KeePassRPC.Config'] = this.get('browserExtensionSettings').toJSON();
+            this.db.meta.settingsChanged = new Date();
             this.setModified();
         });
         return settings;
@@ -466,6 +469,7 @@ const FileModel = Backbone.Model.extend({
             const latestConfig = this.get('keeVaultEmbeddedConfig').toJSON();
             if (this.db.meta.customData['KeeVault.Config'] !== latestConfig) {
                 this.db.meta.customData['KeeVault.Config'] = latestConfig;
+                this.db.meta.settingsChanged = new Date();
                 this.setModified();
             }
         });

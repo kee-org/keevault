@@ -26,7 +26,9 @@
         "quote-props": "off",
         "no-case-declarations": "off",
         "dot-notation": "off",
-        "no-prototype-builtins": "off"
+        "no-prototype-builtins": "off",
+        "multiline-ternary":"off",
+        "node/no-callback-literal": "off"
     },
     "parserOptions": {
         "sourceType": "module",

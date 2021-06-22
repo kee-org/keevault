@@ -14,6 +14,7 @@ class KeeVaultEmbeddedConfig {
     },
     vault: {
         prefs: VaultPreferences
+        updatedAt: Map<String,int>
     }
 }
 
@@ -27,7 +28,7 @@ const KeeVaultEmbeddedConfigModel = Backbone.Model.extend({
         return {
             version: CURRENT_VERSION,
             addon: { prefs: {}, version: -1 },
-            vault: { prefs: {} },
+            vault: { prefs: {}, updatedAt: {} },
             randomId: IdGenerator.uuid()
         };
     },
@@ -70,18 +71,38 @@ const KeeVaultEmbeddedConfigModel = Backbone.Model.extend({
         // One day, if we load from an older config format, we may need to transform individual
         // Kee Vault or addon settings before passing them to their specific handlers
 
-        this.applyVaultConfig(this.get('vault').prefs);
+        this.applyVaultConfig(this.get('vault').prefs, this.get('vault').updatedAt);
         const addonConfig = this.get('addon');
         KPRPCHandler.applyAddonConfig({settings: addonConfig.prefs, version: addonConfig.version});
         return true;
     },
 
-    applyVaultConfig: function (settings) {
-        AppSettingsModel.instance.set(settings);
+    applyVaultConfig: function (settings, incomingUpdatedAtList) {
+        const ourUpdatedAtList = AppSettingsModel.instance.get('vaultConfigUpdatedAt') ?? {};
+        const now = Date.now();
+        for (const key in settings) {
+            if (Object.hasOwnProperty.call(settings, key)) {
+                const setting = settings[key];
+                let settingUpdatedAt = incomingUpdatedAtList ? incomingUpdatedAtList[key] : null;
+                const ourUpdatedAt = ourUpdatedAtList[key];
+                if (!settingUpdatedAt) {
+                    // We have to assume that this was the most recent change to the setting. Should only happen when someone first loads the new version of the PWA that inspects and creates these values.
+                    settingUpdatedAt = now;
+                }
+                // ourUpdatedAt may be falsy if we have never run this version of the code before, or if it relates to a newly created setting key. In any case, we must assume that our stored data for that key is out of date.
+                if (!ourUpdatedAt || settingUpdatedAt > ourUpdatedAt) {
+                    AppSettingsModel.instance.set(key, setting);
+                    ourUpdatedAtList[key] = settingUpdatedAt;
+                }
+            }
+        }
+        AppSettingsModel.instance.set('vaultConfigUpdatedAt', ourUpdatedAtList);
+        AppSettingsModel.instance.save();
     },
 
     updateSetting: function (target, key, value) {
         this.get(target).prefs[key] = value;
+        this.get(target).updatedAt[key] = Date.now();
         this.trigger('change');
     },
 

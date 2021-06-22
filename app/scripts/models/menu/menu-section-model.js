@@ -32,6 +32,7 @@ const MenuSectionModel = Backbone.Model.extend({
                 items.remove(item);
                 return true;
             }
+            return false;
         });
         this.trigger('change-items');
     },
@@ -44,6 +45,7 @@ const MenuSectionModel = Backbone.Model.extend({
                 items.add(newItem, { at: ix });
                 return true;
             }
+            return false;
         });
         this.trigger('change-items');
     },

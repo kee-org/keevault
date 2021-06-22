@@ -318,6 +318,7 @@ const EntryModel = Backbone.Model.extend({
                 resolvedField = entryField;
                 return true;
             }
+            return false;
         });
         if (resolvedField) {
             let fieldValue = this.entry.fields[resolvedField];

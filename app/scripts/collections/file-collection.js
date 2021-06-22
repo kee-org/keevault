@@ -42,6 +42,7 @@ const FileCollection = Backbone.Collection.extend({
                     return true;
                 }
             }
+            return false;
         });
     }
 });
