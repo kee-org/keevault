@@ -101,8 +101,12 @@ const KeeVaultEmbeddedConfigModel = Backbone.Model.extend({
     },
 
     updateSetting: function (target, key, value) {
-        this.get(target).prefs[key] = value;
-        this.get(target).updatedAt[key] = Date.now();
+        const tgt = this.get(target);
+        tgt.prefs[key] = value;
+        if (!tgt.updatedAt) {
+            tgt.updatedAt = {};
+        }
+        tgt.updatedAt[key] = Date.now();
         this.trigger('change');
     },
 
