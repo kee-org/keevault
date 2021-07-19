@@ -252,6 +252,45 @@ const FileModel = Backbone.Model.extend({
                     this.db.remove(importedRecycleBin);
                 }
             }
+
+            const customIcons = {};
+
+            // TODO: Support importing binaries. Need to track binaries as independent map between index in source file and index in dest file (which in most cases will be a newly incremented index number). Otherwise, newly imported entries will end up referencing existing binaries in the destination vault.
+
+            group.entries.forEach((en) => {
+                en.history.concat(en).forEach((e) => {
+                    if (e.customIcon) {
+                        customIcons[e.customIcon] = e.customIcon;
+                    }
+                    // Object.values(e.binaries).forEach((binary) => {
+                    //     if (binary.ref) {
+                    //         binaries[binary.ref] = binary;
+                    //     }
+                    // });
+                });
+            });
+
+            Object.values(customIcons).forEach(function (customIconId) {
+                const customIcon = importSourceDB.meta.customIcons[customIconId];
+                if (customIcon) {
+                    this.db.meta.customIcons[customIconId] = customIcon;
+                }
+            }, this);
+
+            // this.binaries = {};
+            // Object.keys(entry.binaries).forEach(function (name) {
+            //     if (entry.binaries[name] instanceof ProtectedValue) {
+            //         this.binaries[name] = entry.binaries[name].clone();
+            //     } else if (entry.binaries[name] && entry.binaries[name].ref) {
+            //         this.binaries[name] = { ref: entry.binaries[name].ref };
+            //         if (entry.binaries[name].value) {
+            //             this.binaries[name].value = entry.binaries[name].value;
+            //         }
+            //     } else {
+            //         this.binaries[name] = entry.binaries[name];
+            //     }
+            // }, this);
+
             this.set({ open: true, dirty: true, modified: true });
 
             if (group === this.db.getDefaultGroup()) {
@@ -268,42 +307,6 @@ const FileModel = Backbone.Model.extend({
             return e;
         }
     },
-
-    // deprecated. Remove in 2020 if no use case found.
-    // importNewFromData: async function(fileData, password) {
-    //     let delayWarning;
-    //     try {
-    //         const ts = logger.ts();
-    //         const protectedPassword = kdbxweb.ProtectedValue.fromString(password);
-    //         password = undefined;
-    //         const existingPasswordHash = this.db.credentials.passwordHash;
-    //         const existingPasswordLength = this.get('passwordLength');
-    //         const credentials = new kdbxweb.Credentials(protectedPassword);
-    //         delayWarning = setTimeout(() => Alerts.info({ body: Locale.slowImport, icon: 'exclamation-triangle' }), 3000);
-    //         const db = await kdbxweb.Kdbx.load(fileData, credentials);
-    //         clearTimeout(delayWarning);
-
-    //         // Make sure the imported kdbx file password matches the user's login password
-    //         this.db = db;
-    //         this.db.meta.keyChanged = new Date();
-    //         this.set({ passwordLength: existingPasswordLength, passwordChanged: true });
-    //         this.db.credentials.passwordHash = existingPasswordHash;
-    //         this.set({ open: true, dirty: true, modified: true });
-
-    //         // Convert the imported kdbx file to v4 with suitable argon2 params
-    //         this.db.upgrade();
-    //         this.configureArgon2ParamsAuto(protectedPassword, emailAddrParts);
-
-    //         this.reload();
-    //         logger.info('Imported file to ' + this.get('name') + ': ' + logger.ts(ts));
-    //         Backbone.trigger('save-all');
-    //         return;
-    //     } catch (e) {
-    //         logger.error('Error importing file', e, e.code, e.message, e);
-    //         clearTimeout(delayWarning);
-    //         return e;
-    //     }
-    // },
 
     importFromDataRows: async function(dataRows, fieldMapping) {
         try {

@@ -2,6 +2,10 @@ This lists the major changes in each version of Kee Vault.
 
 Many smaller or partially complete changes will be made on a regular basis. To see all changes, look for the commit history in each of our GitHub repositories.
 
+## 1.0.0
+
+* Support importing custom icons from KDBX files
+
 ## 0.9.14
 
 * Improved settings synchronisation reliability by comparing the time that you last made a change to the relevant part of your vault
