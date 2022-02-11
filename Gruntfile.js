@@ -1,12 +1,9 @@
 /* eslint-env node */
 
-const fs = require('fs');
-const path = require('path');
-
 const webpackConfig = require('./webpack.config');
 const pkg = require('./package.json');
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
     require('time-grunt')(grunt);
     require('load-grunt-tasks')(grunt);
 
@@ -123,25 +120,11 @@ module.exports = function(grunt) {
             js: webpackConfig.config(grunt)
         },
         'webpack-dev-server': {
-            options: {
-                webpack: webpackConfig.config(grunt, 'development'),
-                publicPath: '/',
-                contentBase: path.resolve(__dirname, 'tmp'),
-                progress: false,
-                https: fs.existsSync('cert/server.key')
-                    ? {
-                        key: fs.readFileSync('cert/server.key'),
-                        cert: fs.readFileSync('cert/server.crt')
-                    }
-                    : true,
-                public: 'app-dev.kee.pm',
-                host: '0.0.0.0',
-                disableHostCheck: true
-            },
-            js: {
-                keepalive: true,
-                port: 8087
-            }
+            // options: {
+            //     webpack: webpackConfig.config(grunt, 'development'),
+
+            // },
+            js: webpackConfig.config(grunt, 'development')
         }
     });
 };
