@@ -151,6 +151,9 @@ const StorageVault = StorageBase.extend({
         }
 
         list.sort((a, b) => a.primary ? -1 : 0);
+        // we sort by primary here, suggesting we expect server to return non-primary items sometimes. check that is acceptable.
+        // Err, actually the StorageItem class in keefrontend doesn't even have this property so this sort is moot.
+        // TODO:f: stop sorting for no reason
 
         const fileList = list.map(f => {
             this.items.set(f.id, {urls: f.urls});

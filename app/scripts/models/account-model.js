@@ -110,6 +110,12 @@ const AccountModel = Backbone.Model.extend({
         return userSIOrError;
     },
 
+    async restartTrial () {
+        const user = this.get('user');
+        if (!user) throw new Error('User not set - can\'t restart the subscription trial');
+        return Account.restartTrial(user);
+    },
+
     async changePassword (hashedMasterKey, onChangeStarted) {
         const user = this.get('user');
         if (!user) throw new Error('User not set - can\'t change password');

@@ -1,9 +1,8 @@
+/* eslint-disable no-console */
 const path = require('path');
-
+const fs = require('fs');
 const webpack = require('webpack');
 
-const StringReplacePlugin = require('string-replace-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
@@ -18,6 +17,29 @@ function config(grunt, mode = 'production') {
     const dt = date.toISOString().replace(/T.*/, '');
     const year = date.getFullYear();
     return {
+        devServer: {
+            port: 8087,
+            static: {
+                publicPath: '/',
+                directory: path.resolve(__dirname, 'tmp')
+            },
+            https: fs.existsSync('cert/server.key')
+                ? {
+                    key: fs.readFileSync('cert/server.key'),
+                    cert: fs.readFileSync('cert/server.crt')
+                }
+                : true,
+            // webSocketURL: {
+            //     hostname: "0.0.0.0",
+            //     pathname: "/ws",
+            //     port: 8087,
+            //   },
+            host: '0.0.0.0',
+            allowedHosts: 'all'
+        },
+        experiments: {
+            syncWebAssembly: true
+        },
         mode,
         entry: {
             app: ['app', 'main.scss'],
@@ -56,41 +78,77 @@ function config(grunt, mode = 'production') {
                 hbs: 'handlebars/runtime.js',
                 'argon2-wasm': 'argon2-browser/dist/argon2.wasm',
                 templates: path.join(__dirname, 'app/templates')
+            },
+            fallback: {
+                timers: require.resolve('timers-browserify')
             }
         },
         module: {
             rules: [
                 {
-                    test: /\.hbs$/, loader: StringReplacePlugin.replace('handlebars-loader', {
-                        replacements: [{ pattern: /\r?\n\s*/g, replacement: () => '\n' }]
-                    })
+                    test: /\.hbs$/,
+                    use: [
+                        {
+                            loader: 'string-replace-loader',
+                            options: {
+                                search: /\r?\n\s*/g,
+                                replace: '\n'
+                            }
+                        },
+                        'handlebars-loader'
+                    ]
                 },
                 {
-                    test: /runtime-info\.js$/, loader: StringReplacePlugin.replace({
-                        replacements: [
-                            { pattern: /@@VERSION/g, replacement: () => pkg.version + (grunt.option('beta') ? '-beta' : '') },
-                            { pattern: /@@BETA/g, replacement: () => grunt.option('beta') ? '1' : '' },
-                            { pattern: /@@DATE/g, replacement: () => dt },
-                            { pattern: /@@COMMIT/g, replacement: () => grunt.config.get('gitinfo.local.branch.current.shortSHA') }
+                    test: /runtime-info\.js$/,
+                    loader: 'string-replace-loader',
+                    options: {
+                        multiple: [
+                            {
+                                search: /@@VERSION/g,
+                                replace(match, p1, offset, string) {
+                                    console.log(`Replace "${match}" in file "${this.resource}".`);
+                                    return pkg.version + (grunt.option('beta') ? '-beta' : '');
+                                }
+                            },
+                            {
+                                search: /@@BETA/g,
+                                replace(match, p1, offset, string) {
+                                    console.log(`Replace "${match}" in file "${this.resource}".`);
+                                    return grunt.option('beta') ? '1' : '';
+                                }
+                            },
+                            {
+                                search: /@@DATE/g,
+                                replace(match, p1, offset, string) {
+                                    return dt;
+                                }
+                            },
+                            {
+                                search: /@@COMMIT/g,
+                                replace(match, p1, offset, string) {
+                                    return grunt.config.get('gitinfo.local.branch.current.shortSHA');
+                                }
+                            }
                         ]
-                    })
+                    }
                 },
                 {
                     test: /baron(\.min)?\.js$/,
                     use: [
-                        StringReplacePlugin.replace({
-                            replacements: [
-                                { pattern: /\([01],\s*eval\)\(['"]this['"]\)/g, replacement: () => 'window' }
-                            ]
-                        }),
+                        {
+                            loader: 'string-replace-loader',
+                            options: {
+                                search: /\([01],\s*eval\)\(['"]this['"]\)/g,
+                                replace: 'window'
+                            }
+                        },
                         {
                             loader: 'exports-loader',
                             options: { type: 'commonjs', exports: 'single baron' }
                         }
                     ]
                 },
-                // {test: /pikaday\.js$/, loader: 'uglify-loader'},
-                {test: /handlebars/, loader: 'strip-sourcemap-loader'},
+                { test: /handlebars/, loader: 'strip-sourcemap-loader' },
                 {
                     test: /(kee-frontend|kprpc|kdbx-placeholders)\/dist\/.+\.js$/,
                     use: ['source-map-loader'],
@@ -98,20 +156,22 @@ function config(grunt, mode = 'production') {
                 },
                 {
                     test: /\.js$/, exclude: /(node_modules)/, loader: 'babel-loader',
-                    query: {presets: [['@babel/preset-env', {
-                        // 'targets': {
-                        //     'browsers': [
-                        //         'chrome >= 60'
-                        //     ]
-                        // },
-                        'useBuiltIns': false,
-                        'modules': 'cjs' // the default value is auto
-                    }]],
-                    plugins: ['@babel/plugin-transform-runtime'], cacheDirectory: true}
+                    options: {
+                        presets: [['@babel/preset-env', {
+                            // 'targets': {
+                            //     'browsers': [
+                            //         'chrome >= 60'
+                            //     ]
+                            // },
+                            'useBuiltIns': false,
+                            'modules': 'cjs' // the default value is auto
+                        }]],
+                        plugins: ['@babel/plugin-transform-runtime'], cacheDirectory: true
+                    }
                     // test: /\.js$/, exclude: /(node_modules|kee-frontend|kprpc|kdbx-placeholders)/, loader: 'babel-loader',
                 },
-                {test: /argon2\.wasm/, type: 'javascript/auto', loader: 'base64-loader'},
-                {test: /argon2(\.min)?\.js/, loader: 'raw-loader'},
+                { test: /argon2\.wasm/, type: 'javascript/auto', loader: 'base64-loader' },
+                { test: /argon2(\.min)?\.js/, loader: 'raw-loader' },
                 {
                     test: /\.s?css$/,
                     use: [
@@ -148,30 +208,31 @@ function config(grunt, mode = 'production') {
                 }
             ]
         },
+        // optimization.splitChunks.cacheGroups.vendors → optimization.splitChunks.cacheGroups.defaultVendors
         optimization: {
-            runtimeChunk: 'single',
-            splitChunks: {
-                cacheGroups: {
-                    vendor: {
-                        test: /[\\/]node_modules[\\/]/,
-                        name: 'vendor',
-                        chunks: 'all'
-                    }
-                }
-            },
+            runtimeChunk: false,
+            // splitChunks: {
+            //     cacheGroups: {
+            //         vendor: {
+            //             test: /[\\/]node_modules[\\/]/,
+            //             name: 'vendor',
+            //             chunks: 'all'
+            //         }
+            //     }
+            // },
             minimizer: [
-                new TerserPlugin({
-                    cache: true,
-                    parallel: true,
-                    terserOptions: {
-                        compress: {
-                            comparisons: false
-                        },
-                        output: {
-                            comments: false
-                        }
-                    }
-                }),
+                // new TerserPlugin({
+                //     cache: true,
+                //     parallel: true,
+                //     terserOptions: {
+                //         compress: {
+                //             comparisons: false
+                //         },
+                //         output: {
+                //             comments: false
+                //         }
+                //     }
+                // }),
                 new OptimizeCSSAssetsPlugin({
                     cssProcessorPluginOptions: {
                         preset: ['default', { discardComments: { removeAll: true } }]
@@ -189,23 +250,23 @@ function config(grunt, mode = 'production') {
         plugins: [
             new webpack.BannerPlugin('kee vault v' + pkg.version + ', (c) ' + year + ' ' + pkg.author.name +
                 ', AGPLv3 with supplemental terms'),
-            new webpack.ProvidePlugin({_: 'underscore', $: 'jquery'}),
-            new webpack.IgnorePlugin(/^(moment)$/),
-            new StringReplacePlugin(),
+            new webpack.ProvidePlugin({ _: 'underscore', $: 'jquery' }),
+            new webpack.IgnorePlugin({ resourceRegExp: /^(moment)$/ }),
+            // new StringReplacePlugin(),
             new MiniCssExtractPlugin({
                 filename: 'css/[name].css'
             })
         ],
         node: {
-            console: false,
-            process: false,
-            crypto: false,
-            Buffer: false,
+            // console: false,
+            // process: false,
+            // crypto: false,
+            // Buffer: false,
             __filename: false,
-            __dirname: false,
-            fs: false,
-            setImmediate: false,
-            path: false
+            __dirname: false
+            // fs: false,
+            // setImmediate: false,
+            // path: false
         },
         externals: {
             xmldom: 'null',
@@ -218,3 +279,34 @@ function config(grunt, mode = 'production') {
 }
 
 module.exports.config = config;
+
+// module.exports = {
+//     //...
+//     resolve: {
+//       fallback: {
+//         assert: require.resolve('assert'),
+//         buffer: require.resolve('buffer'),
+//         console: require.resolve('console-browserify'),
+//         constants: require.resolve('constants-browserify'),
+//         crypto: require.resolve('crypto-browserify'),
+//         domain: require.resolve('domain-browser'),
+//         events: require.resolve('events'),
+//         http: require.resolve('stream-http'),
+//         https: require.resolve('https-browserify'),
+//         os: require.resolve('os-browserify/browser'),
+//         path: require.resolve('path-browserify'),
+//         punycode: require.resolve('punycode'),
+//         process: require.resolve('process/browser'),
+//         querystring: require.resolve('querystring-es3'),
+//         stream: require.resolve('stream-browserify'),
+//         string_decoder: require.resolve('string_decoder'),
+//         sys: require.resolve('util'),
+//         timers: require.resolve('timers-browserify'),
+//         tty: require.resolve('tty-browserify'),
+//         url: require.resolve('url'),
+//         util: require.resolve('util'),
+//         vm: require.resolve('vm-browserify'),
+//         zlib: require.resolve('browserify-zlib'),
+//       },
+//     },
+//   };

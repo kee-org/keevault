@@ -645,35 +645,86 @@ const OpenView = Backbone.View.extend({
         if (!tokens.storage || !tokens.client || !user.features ||
             !user.features.enabled || user.features.enabled.indexOf('storage-kee') < 0) {
             // User's subscription has expired
-            Alerts.error({
-                header: Locale.subscriptionRequired,
-                body: Locale.subscriptionExpired,
-                buttons: [
-                    { result: 'manage', title: Locale.manageMySubscription }
-                ],
-                esc: false, enter: false, click: false,
-                success: (result) => {
-                    if (result === 'manage') {
-                        const otherWindow = window.open();
-                        otherWindow.opener = null;
-                        otherWindow.location = 'https://account.kee.pm/#stage=' + RuntimeInfo.stage + ',dest=manageAccount,id=' + tokens.sso;
-                        Alerts.info({
-                            header: Locale.keeAccount,
-                            icon: 'redo',
-                            body: Locale.reloadPageWhenReady,
-                            buttons: [
-                                { result: 'reload', title: Locale.reloadApp }
-                            ],
-                            esc: false, enter: false, click: false,
-                            success: (result) => {
-                                if (result === 'reload') {
-                                    window.location.reload();
-                                }
+            const newestSubExpiryAllowedForNewTrial = Math.max(Date.now() - (86400 * 548 * 1000), Date.UTC(2022, 3, 1)); // 18 months or 1st April 2022
+            const expDate = user.features.validUntil || 0;
+            if (expDate < newestSubExpiryAllowedForNewTrial) {
+                Alerts.info({
+                    header: Locale.subscriptionRequired,
+                    body: 'Welcome back to Kee Vault. You can enable a new 30 day free trial to see what has improved since you first created your Kee Vault account.',
+                    buttons: [
+                        { asyncresult: 'trial', title: 'Start free trial' }
+                    ],
+                    esc: false, enter: false, click: false,
+                    success: async (asyncResult) => {
+                        if (asyncResult === 'trial') {
+                            const trueOrError = await this.model.account.restartTrial();
+
+                            if (trueOrError === true) {
+                                Alerts.info({
+                                    header: Locale.keeAccount,
+                                    icon: 'redo',
+                                    body: 'Nearly there! Please reload this app and sign in again to start using the new trial.',
+                                    buttons: [
+                                        { result: 'reload', title: Locale.reloadApp }
+                                    ],
+                                    esc: false, enter: false, click: false,
+                                    success: (result) => {
+                                        if (result === 'reload') {
+                                            window.location.reload();
+                                        }
+                                    }
+                                });
+                            } else {
+                                Alerts.error({
+                                    header: Locale.openError,
+                                    icon: 'redo',
+                                    body: 'Sorry, we weren\'t able to restart your trial now. Please try again later and ask for help on the community forum if the problem continues.',
+                                    buttons: [
+                                        { result: 'reload', title: Locale.reloadApp }
+                                    ],
+                                    esc: false, enter: false, click: false,
+                                    success: (result) => {
+                                        if (result === 'reload') {
+                                            window.location.reload();
+                                        }
+                                    }
+                                });
                             }
-                        });
+                        }
                     }
-                }
-            });
+                });
+                return;
+            } else {
+                Alerts.error({
+                    header: Locale.subscriptionRequired,
+                    body: Locale.subscriptionExpired,
+                    buttons: [
+                        { result: 'manage', title: Locale.manageMySubscription }
+                    ],
+                    esc: false, enter: false, click: false,
+                    success: (result) => {
+                        if (result === 'manage') {
+                            const otherWindow = window.open();
+                            otherWindow.opener = null;
+                            otherWindow.location = 'https://account.kee.pm/#stage=' + RuntimeInfo.stage + ',dest=manageAccount,id=' + tokens.sso;
+                            Alerts.info({
+                                header: Locale.keeAccount,
+                                icon: 'redo',
+                                body: Locale.reloadPageWhenReady,
+                                buttons: [
+                                    { result: 'reload', title: Locale.reloadApp }
+                                ],
+                                esc: false, enter: false, click: false,
+                                success: (result) => {
+                                    if (result === 'reload') {
+                                        window.location.reload();
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            }
             return;
         }
         if (!user.initialSignin && user.verificationStatus !== 3) {
@@ -727,7 +778,7 @@ const OpenView = Backbone.View.extend({
                     this.showOfflineAccessIfAvailable();
                     abortUnlock = true;
                 } else if (err === 'storage item not found') {
-                    logger.error('No files were found. Probably something went wrong with the initial signup');
+                    logger.error('No files were found. Probably something went wrong with the initial signup or an expired account has just been restarted.');
                     try {
                         const emailAddrParts = EmailUtils.split(this.model.account.get('email'));
                         const siOrError = await this.model.account.uploadInitialVault(user, this.params.password, emailAddrParts);

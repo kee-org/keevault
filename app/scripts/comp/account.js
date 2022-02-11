@@ -101,6 +101,10 @@ const Account = {
         }
 
         return { user: userOrFalse, si: siOrError };
+    },
+
+    restartTrial: async function (user) {
+        return user.restartTrial();
     }
 };
 
