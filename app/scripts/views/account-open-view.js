@@ -645,7 +645,7 @@ const OpenView = Backbone.View.extend({
         if (!tokens.storage || !tokens.client || !user.features ||
             !user.features.enabled || user.features.enabled.indexOf('storage-kee') < 0) {
             // User's subscription has expired
-            const newestSubExpiryAllowedForNewTrial = Math.max(Date.now() - (86400 * 548 * 1000), Date.UTC(2022, 3, 1)); // 18 months or 1st April 2022
+            const newestSubExpiryAllowedForNewTrial = Math.max(Date.now() - (86400 * 548 * 1000), Date.UTC(2022, 5, 1)); // 18 months or 1st June 2022
             const expDate = user.features.validUntil || 0;
             if (expDate < newestSubExpiryAllowedForNewTrial) {
                 Alerts.info({

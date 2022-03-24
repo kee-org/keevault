@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const webpack = require('webpack');
 
+const TerserPlugin = require('terser-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
@@ -43,8 +44,6 @@ function config(grunt, mode = 'production') {
         mode,
         entry: {
             app: ['app', 'main.scss'],
-            vendor: ['jquery', 'underscore', 'backbone', 'kdbxweb', 'baron',
-                'pikaday', 'jsqrcode', 'argon2-wasm', 'argon2']
         },
         output: {
             path: path.resolve('.', 'tmp'),
@@ -221,18 +220,17 @@ function config(grunt, mode = 'production') {
             //     }
             // },
             minimizer: [
-                // new TerserPlugin({
-                //     cache: true,
-                //     parallel: true,
-                //     terserOptions: {
-                //         compress: {
-                //             comparisons: false
-                //         },
-                //         output: {
-                //             comments: false
-                //         }
-                //     }
-                // }),
+                new TerserPlugin({
+                    parallel: true,
+                    terserOptions: {
+                        compress: {
+                            comparisons: false
+                        },
+                        format: {
+                            comments: false
+                        }
+                    }
+                }),
                 new OptimizeCSSAssetsPlugin({
                     cssProcessorPluginOptions: {
                         preset: ['default', { discardComments: { removeAll: true } }]
@@ -244,7 +242,8 @@ function config(grunt, mode = 'production') {
                     reportFilename: 'stats/analyzer_report.html',
                     generateStatsFile: true,
                     statsFilename: 'stats/stats.json'
-                })
+                }),
+                '...'
             ]
         },
         plugins: [
