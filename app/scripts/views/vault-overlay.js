@@ -20,7 +20,7 @@ const VaultOverlayView = Backbone.View.extend({
     },
 
     showTopDemoBlurb: function() {
-        this.$el[0].querySelector('#demoBlurb').classList.remove('hide');
+        this.$el[0].querySelector('#demoBlurbWarning').classList.remove('hide');
     },
 
     ctaClick: function() {

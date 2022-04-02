@@ -529,6 +529,7 @@ button#demoSignUpCTAMobile {
   @media (max-width: 750px) {
     align-items: flex-end;
   }
+  @include mobile { display: none; }
 }
 
 #demoSignUpCTA {

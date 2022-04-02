@@ -6,6 +6,7 @@ const FeatureDetector = require('../util/feature-detector');
 const VaultIntro = {
 
     buttons: {
+        startTutorial: {result: 'continue', get title() { return Locale.startTutorial; }},
         continue: {result: 'continue', get title() { return Locale.continue; }},
         demoWithoutExtension: {result: 'demo', get title() { return Locale.demoWithoutExtension; }},
         installTheExtension: {result: 'install', get title() { return Locale.installTheExtension; }},
@@ -125,7 +126,8 @@ const VaultIntro = {
 
         this.display({
             bodyUnescaped: `<p>${Locale.introPutSecretsHere}</p>
-            <p>${Locale.introExploreMobile}</p>`,
+            <p>${Locale.introExploreMobile}</p>
+            <p>${Locale.introSkipIfAndroidDesired}</p>`,
             buttons: [this.buttons.continue],
             esc: '',
             enter: 'continue',
@@ -143,8 +145,9 @@ const VaultIntro = {
 
         this.display({
             bodyUnescaped: `<p>${Locale.introPutSecretsHere}</p>
-            <p>${Locale.introEnterMasterPasswordLater}</p>`,
-            buttons: [this.buttons.continue],
+            <p>${Locale.introEnterMasterPasswordLater}</p>
+            <p>${Locale.introSkipIfAndroidDesired}</p>`,
+            buttons: [this.buttons.startTutorial],
             esc: '',
             enter: 'continue',
             target: '',

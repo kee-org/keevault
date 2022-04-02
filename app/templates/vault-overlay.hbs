@@ -3,9 +3,9 @@
     <div id="vault_intro_top_mobilebutton"><button class="vault_primary_action" id="demoSignUpCTAMobile">Sign up now</button></div>
     <div id="vault_intro_top_strapline"><span id="initialPageBannerStrapline">{{res 'initialPageBannerStrapline'}}</span><span id="keeAddonBannerStrapline" class="hide"><span class="keeAddonMissing">{{#if extensionLink}}{{res 'introInstallExtensionBecauseEasier'}} <a href="{{extensionLink}}" target="keeExtensionDownload" rel="noopener">{{ res 'installTheExtension'}}</a>{{/if}}</span></span></div>
     <div id="vault_intro_top_main">
-        <div class="hide" id="demoBlurb">
+        <div id="demoBlurb">
             <button class="vault_primary_action" id="demoSignUpCTA">{{res 'signup'}}<br/>{{res 'now'}}</button>
-            <div>{{res 'initialPageBannerInstructions'}}</div>
+            <div>{{res 'initialPageBannerInstructionsPreDemo'}}<span class="hide" id="demoBlurbWarning">{{res 'initialPageBannerInstructionsWarning'}}</span></div>
         </div>
     </div>
     <div id="vault_intro_top_signin" class="existing_user"><div class="account-link-container">{{res 'existingUser'}}<br/><a class="vault_existing_user_login" id="loginLink">{{res 'signin'}}</a></div>
