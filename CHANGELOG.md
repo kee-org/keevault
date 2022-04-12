@@ -2,6 +2,12 @@ This lists the major changes in each version of Kee Vault.
 
 Many smaller or partially complete changes will be made on a regular basis. To see all changes, look for the commit history in each of our GitHub repositories.
 
+## 1.0.2
+
+* Support previous users with a retrial option
+* Make it easier to skip the demo before registration
+* Update landing page to work with new kee.pm home page and Android app
+
 ## 1.0.1
 
 * Removed "beta" labelling
