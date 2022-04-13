@@ -95,6 +95,10 @@ const Account = {
             return false;
         }
 
+        if (!userOrFalse.tokens || !userOrFalse.tokens.storage) {
+            return KeeError.MissingPrimaryDB;
+        }
+
         const siOrError = await this.uploadInitialVault(userOrFalse, emptyVault);
         if (!siOrError.emailHashed) {
             return siOrError;

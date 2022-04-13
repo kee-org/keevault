@@ -690,6 +690,7 @@
   "fileListErrorBody": "It looks like there's a temporary glitch between your device and the Kee Vault cloud. Make sure you have a reliable connection to the internet and then refresh this page to restart the Kee Vault app and try to sign in again.",
   "connectionRequired": "Connection required",
   "subscriptionRequired": "Subscription required",
+  "subscriptionRequiredForFullResetSuccess": "We have reset your account. Reload the app to sign in and re-enable your subscription.",
   "subscriptionExpired": "Your subscription or trial period has expired. Renew your subscription at https://account.kee.pm",
   "reloadPageWhenReady": "When you have updated your payment method in the account management tab that we just opened you can reload this page and sign in",
   "manageMySubscription": "Manage my account",

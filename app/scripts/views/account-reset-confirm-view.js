@@ -8,6 +8,7 @@ const EmailUtils = require('../util/email');
 const SecureInput = require('../comp/secure-input');
 const KeyHandler = require('../comp/key-handler');
 const Keys = require('../const/keys');
+const KeeError = require('../comp/kee-error');
 
 const AccountResetConfirmView = Backbone.View.extend({
     template: require('templates/account-reset-confirm.hbs'),
@@ -147,10 +148,26 @@ const AccountResetConfirmView = Backbone.View.extend({
         const si = userSIOrError.si;
 
         if (!user || !si) {
-            Alerts.error({
-                header: Locale.unexpectedError,
-                body: Locale.commsErrorBody
-            });
+            if (userSIOrError === KeeError.MissingPrimaryDB) {
+                Alerts.error({
+                    header: Locale.subscriptionRequired,
+                    body: Locale.subscriptionRequiredForFullResetSuccess,
+                    buttons: [
+                        { result: 'reload', title: Locale.reloadApp }
+                    ],
+                    esc: false, enter: false, click: false,
+                    success: (result) => {
+                        if (result === 'reload') {
+                            window.location.reload();
+                        }
+                    }
+                });
+            } else {
+                Alerts.error({
+                    header: Locale.unexpectedError,
+                    body: Locale.commsErrorBody
+                });
+            }
             return null;
         }
 
