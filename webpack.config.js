@@ -35,7 +35,7 @@ function config(grunt, mode = 'production') {
             //     pathname: "/ws",
             //     port: 8087,
             //   },
-            host: '0.0.0.0',
+            host: 'app-dev.kee.pm',
             allowedHosts: 'all'
         },
         experiments: {
