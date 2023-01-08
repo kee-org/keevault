@@ -427,8 +427,8 @@ const OpenView = Backbone.View.extend({
                     // We can safely load the cached Vault because:
                     // a) claimed email hash was at least recently correct
                     // b) user supplied master password is still required to open
-                    const emailHashed = latestClientToken.sub;
-                    await this.model.fileInfos.load(emailHashed);
+                    const userId = latestClientToken.sub;
+                    await this.model.fileInfos.load(userId);
                     localCacheFileInfo = this.model.fileInfos.models[0];
                 }
             }
@@ -759,7 +759,7 @@ const OpenView = Backbone.View.extend({
             });
             return;
         }
-        await FileInfoCollection.instance.load(user.emailHashed);
+        await FileInfoCollection.instance.load(user.userId);
 
         this.model.settings.set('vaultIntroCompleted', true);
 

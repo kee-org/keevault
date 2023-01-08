@@ -1,6 +1,6 @@
 {
   "name": "keevault",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Open source, multi-device, browser hosted password manager compatible with KeePass",
   "main": "Gruntfile.js",
   "private": true,
@@ -22,7 +22,7 @@
     "broadcast-channel": "^4.10.0",
     "kdbx-import": "^1.2.7",
     "kdbx-placeholders": "^1.1.19",
-    "kee-frontend": "^1.1.1",
+    "kee-frontend": "github:kee-org/kee-frontend#8de54b06c9d5b88e7210eff42036feba649a3087",
     "kprpc": "^1.1.8",
     "secure-remote-password": "^0.3.1",
     "superagent": "^7.1.1",

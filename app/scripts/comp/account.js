@@ -5,10 +5,14 @@ const kdbxweb = require('kdbxweb');
 const FileModel = require('../models/file-model');
 const IdGenerator = require('../util/id-generator');
 const FeatureDetector = require('../util/feature-detector');
+const AppSettingsModel = require('../models/app-settings-model');
 
 const Account = {
     loginStart: async function (email) {
         const user = await KeeService.User.User.fromEmail(email);
+        const userId = AppSettingsModel.instance.get('userEmailHashedIdLookup.' + user.emailHashed);
+        // If missing from local data due to a recent update, we fall back to old approach of userId == emailHashed
+        user.setUserId(userId || user.emailHashed);
         const loginResult = await user.loginStart();
         const result = { user };
         if (!loginResult.kms) {
@@ -27,6 +31,7 @@ const Account = {
         if (trueOrError === KeeError.LoginFailed) {
             return trueOrError;
         }
+        AppSettingsModel.instance.set('userEmailHashedIdLookup.' + user.emailHashed, user.userId);
         return trueOrError;
     },
     register: async function (email, hashedMasterKey, introEmailStatus, marketingEmailStatus, emptyVault, code) {
@@ -35,6 +40,7 @@ const Account = {
         if (trueOrError !== true) {
             return trueOrError;
         }
+        AppSettingsModel.instance.set('userEmailHashedIdLookup.' + user.emailHashed, user.userId);
 
         const siOrError = await this.uploadInitialVault(user, emptyVault);
         if (!siOrError.emailHashed) {
