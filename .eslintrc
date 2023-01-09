@@ -28,7 +28,9 @@
         "dot-notation": "off",
         "no-prototype-builtins": "off",
         "multiline-ternary":"off",
-        "node/no-callback-literal": "off"
+        "node/no-callback-literal": "off",
+        "n/no-callback-literal": "off",
+        "object-shorthand": "off"
     },
     "parserOptions": {
         "sourceType": "module",
