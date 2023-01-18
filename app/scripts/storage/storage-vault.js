@@ -30,7 +30,7 @@ const StorageVault = StorageBase.extend({
         const item = this.items.get(path) || {};
 
         let urls;
-        if (!item.urls) {
+        if (!item.urls || !item.urls.st || !item.urls.st.length) {
             const urlsOrError = await KeeService.Storage.StorageManager.refreshItemLinks(user, path);
 
             if (urlsOrError === KeeError.LoginRequired) {
