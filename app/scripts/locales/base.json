@@ -692,6 +692,7 @@
   "subscriptionRequired": "Subscription required",
   "subscriptionRequiredForFullResetSuccess": "We have reset your account. Reload the app to sign in and re-enable your subscription.",
   "subscriptionExpired": "Your subscription or trial period has expired. Renew your subscription at https://account.kee.pm",
+  "subscriptionExpiredOtherDevice": "Your subscription or trial period has expired. Renew your subscription using the device with which you created it (perhaps your iPhone or Android device?). When done, wait a few minutes and then you can reload this app to sign-in again.",
   "reloadPageWhenReady": "When you have updated your payment method in the account management tab that we just opened you can reload this page and sign in",
   "manageMySubscription": "Manage my account",
   "subscriptionManagementHeading": "Subscription, payment and email preferences",
