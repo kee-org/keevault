@@ -51,7 +51,7 @@ const SettingsAccountView = Backbone.View.extend({
             possiblyLoggedIn,
             emailVerified,
             appInfo: _.escape(appInfo),
-            uniqueUserId: user ? user.emailHashed : 'not signed in'
+            uniqueUserId: user ? user.userId : 'not signed in'
         });
         PasswordStrength.renderPasswordStrength(0, this.$el);
         if (possiblyLoggedIn && emailVerified) this.loadSupportAccountData();

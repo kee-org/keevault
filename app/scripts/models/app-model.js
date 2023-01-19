@@ -660,7 +660,7 @@ const AppModel = Backbone.Model.extend({
         }
         this.fileInfos.remove(file.id);
         this.fileInfos.unshift(fileInfo);
-        this.fileInfos.save(this.account.get('user').emailHashed);
+        this.fileInfos.save(this.account.get('user').userId);
     },
 
     getStoreOpts: function(file) {
@@ -700,7 +700,7 @@ const AppModel = Backbone.Model.extend({
     removeFileInfo: function(id) {
         Storage.cache.remove(id);
         this.fileInfos.remove(id);
-        this.fileInfos.save(this.account.get('user').emailHashed);
+        this.fileInfos.save(this.account.get('user').userId);
     },
 
     getFileInfo: function(file) {
@@ -768,7 +768,7 @@ const AppModel = Backbone.Model.extend({
             if (!this.fileInfos.get(fileInfo.id)) {
                 this.fileInfos.unshift(fileInfo);
             }
-            this.fileInfos.save(this.account.get('user').emailHashed);
+            this.fileInfos.save(this.account.get('user').userId);
             this.KPRPCActions.onSaved();
             if (callback) { callback(err); }
         };
@@ -945,7 +945,7 @@ const AppModel = Backbone.Model.extend({
                 keyFileHash: null
             });
         });
-        this.fileInfos.save(this.account.get('user').emailHashed);
+        this.fileInfos.save(this.account.get('user').userId);
     },
 
     setFileBackup: function(fileId, backup) {
@@ -953,7 +953,7 @@ const AppModel = Backbone.Model.extend({
         if (fileInfo) {
             fileInfo.set('backup', backup);
         }
-        this.fileInfos.save(this.account.get('user').emailHashed);
+        this.fileInfos.save(this.account.get('user').userId);
     },
 
     backupFile: function(file, data, callback) {

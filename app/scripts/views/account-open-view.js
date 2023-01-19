@@ -427,8 +427,8 @@ const OpenView = Backbone.View.extend({
                     // We can safely load the cached Vault because:
                     // a) claimed email hash was at least recently correct
                     // b) user supplied master password is still required to open
-                    const emailHashed = latestClientToken.sub;
-                    await this.model.fileInfos.load(emailHashed);
+                    const userId = latestClientToken.sub;
+                    await this.model.fileInfos.load(userId);
                     localCacheFileInfo = this.model.fileInfos.models[0];
                 }
             }
@@ -645,40 +645,74 @@ const OpenView = Backbone.View.extend({
         if (!tokens.storage || !tokens.client || !user.features ||
             !user.features.enabled || user.features.enabled.indexOf('storage-kee') < 0) {
             // User's subscription has expired
+            const subscriptionId = user.features?.subscriptionId ?? 'cb_';
             const newestSubExpiryAllowedForNewTrial = Math.max(Date.now() - (86400 * 548 * 1000), Date.UTC(2022, 5, 1)); // 18 months or 1st June 2022
             const expDate = user.features.validUntil || 0;
-            if (expDate < newestSubExpiryAllowedForNewTrial) {
-                Alerts.info({
-                    header: Locale.subscriptionRequired,
-                    body: 'Welcome back to Kee Vault. You can enable a new 30 day free trial to see what has improved since you first created your Kee Vault account.',
-                    buttons: [
-                        { asyncresult: 'trial', title: 'Start free trial' }
-                    ],
-                    esc: false, enter: false, click: false,
-                    success: async (asyncResult) => {
-                        if (asyncResult === 'trial') {
-                            const trueOrError = await this.model.account.restartTrial();
+            if (subscriptionId.startsWith('cb_')) {
+                if (expDate < newestSubExpiryAllowedForNewTrial) {
+                    Alerts.info({
+                        header: Locale.subscriptionRequired,
+                        body: 'Welcome back to Kee Vault. You can enable a new 30 day free trial to see what has improved since you first created your Kee Vault account.',
+                        buttons: [
+                            { asyncresult: 'trial', title: 'Start free trial' }
+                        ],
+                        esc: false, enter: false, click: false,
+                        success: async (asyncResult) => {
+                            if (asyncResult === 'trial') {
+                                const trueOrError = await this.model.account.restartTrial();
 
-                            if (trueOrError === true) {
+                                if (trueOrError === true) {
+                                    Alerts.info({
+                                        header: Locale.keeAccount,
+                                        icon: 'redo',
+                                        body: 'Nearly there! Please reload this app and sign in again to start using the new trial.',
+                                        buttons: [
+                                            { result: 'reload', title: Locale.reloadApp }
+                                        ],
+                                        esc: false, enter: false, click: false,
+                                        success: (result) => {
+                                            if (result === 'reload') {
+                                                window.location.reload();
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    Alerts.error({
+                                        header: Locale.openError,
+                                        icon: 'redo',
+                                        body: 'Sorry, we weren\'t able to restart your trial now. Please try again later and ask for help on the community forum if the problem continues.',
+                                        buttons: [
+                                            { result: 'reload', title: Locale.reloadApp }
+                                        ],
+                                        esc: false, enter: false, click: false,
+                                        success: (result) => {
+                                            if (result === 'reload') {
+                                                window.location.reload();
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    });
+                    return;
+                } else {
+                    Alerts.error({
+                        header: Locale.subscriptionRequired,
+                        body: Locale.subscriptionExpired,
+                        buttons: [
+                            { result: 'manage', title: Locale.manageMySubscription }
+                        ],
+                        esc: false, enter: false, click: false,
+                        success: (result) => {
+                            if (result === 'manage') {
+                                const otherWindow = window.open();
+                                otherWindow.opener = null;
+                                otherWindow.location = 'https://account.kee.pm/#stage=' + RuntimeInfo.stage + ',dest=manageAccount,id=' + tokens.sso;
                                 Alerts.info({
                                     header: Locale.keeAccount,
                                     icon: 'redo',
-                                    body: 'Nearly there! Please reload this app and sign in again to start using the new trial.',
-                                    buttons: [
-                                        { result: 'reload', title: Locale.reloadApp }
-                                    ],
-                                    esc: false, enter: false, click: false,
-                                    success: (result) => {
-                                        if (result === 'reload') {
-                                            window.location.reload();
-                                        }
-                                    }
-                                });
-                            } else {
-                                Alerts.error({
-                                    header: Locale.openError,
-                                    icon: 'redo',
-                                    body: 'Sorry, we weren\'t able to restart your trial now. Please try again later and ask for help on the community forum if the problem continues.',
+                                    body: Locale.reloadPageWhenReady,
                                     buttons: [
                                         { result: 'reload', title: Locale.reloadApp }
                                     ],
@@ -691,36 +725,19 @@ const OpenView = Backbone.View.extend({
                                 });
                             }
                         }
-                    }
-                });
-                return;
+                    });
+                }
             } else {
                 Alerts.error({
                     header: Locale.subscriptionRequired,
-                    body: Locale.subscriptionExpired,
+                    body: Locale.subscriptionExpiredOtherDevice,
                     buttons: [
-                        { result: 'manage', title: Locale.manageMySubscription }
+                        { result: 'reload', title: Locale.reloadApp }
                     ],
                     esc: false, enter: false, click: false,
                     success: (result) => {
-                        if (result === 'manage') {
-                            const otherWindow = window.open();
-                            otherWindow.opener = null;
-                            otherWindow.location = 'https://account.kee.pm/#stage=' + RuntimeInfo.stage + ',dest=manageAccount,id=' + tokens.sso;
-                            Alerts.info({
-                                header: Locale.keeAccount,
-                                icon: 'redo',
-                                body: Locale.reloadPageWhenReady,
-                                buttons: [
-                                    { result: 'reload', title: Locale.reloadApp }
-                                ],
-                                esc: false, enter: false, click: false,
-                                success: (result) => {
-                                    if (result === 'reload') {
-                                        window.location.reload();
-                                    }
-                                }
-                            });
+                        if (result === 'reload') {
+                            window.location.reload();
                         }
                     }
                 });
@@ -759,7 +776,7 @@ const OpenView = Backbone.View.extend({
             });
             return;
         }
-        await FileInfoCollection.instance.load(user.emailHashed);
+        await FileInfoCollection.instance.load(user.userId);
 
         this.model.settings.set('vaultIntroCompleted', true);
 

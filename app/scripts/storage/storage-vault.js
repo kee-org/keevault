@@ -30,7 +30,7 @@ const StorageVault = StorageBase.extend({
         const item = this.items.get(path) || {};
 
         let urls;
-        if (!item.urls) {
+        if (!item.urls || !item.urls.st || !item.urls.st.length) {
             const urlsOrError = await KeeService.Storage.StorageManager.refreshItemLinks(user, path);
 
             if (urlsOrError === KeeError.LoginRequired) {
@@ -151,9 +151,7 @@ const StorageVault = StorageBase.extend({
         }
 
         list.sort((a, b) => a.primary ? -1 : 0);
-        // we sort by primary here, suggesting we expect server to return non-primary items sometimes. check that is acceptable.
-        // Err, actually the StorageItem class in keefrontend doesn't even have this property so this sort is moot.
-        // TODO:f: stop sorting for no reason
+        // TODO:f: stop sorting for no reason - we don't actually have a primary property to sort by anymore and expect only one result from the list of active StorageItems
 
         const fileList = list.map(f => {
             this.items.set(f.id, {urls: f.urls});

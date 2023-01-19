@@ -6,7 +6,7 @@ const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 const pkg = require('./package.json');
 
@@ -43,7 +43,7 @@ function config(grunt, mode = 'production') {
         },
         mode,
         entry: {
-            app: ['app', 'main.scss'],
+            app: ['app', 'main.scss']
         },
         output: {
             path: path.resolve('.', 'tmp'),
@@ -231,8 +231,8 @@ function config(grunt, mode = 'production') {
                         }
                     }
                 }),
-                new OptimizeCSSAssetsPlugin({
-                    cssProcessorPluginOptions: {
+                new CssMinimizerPlugin({
+                    minimizerOptions: {
                         preset: ['default', { discardComments: { removeAll: true } }]
                     }
                 }),
