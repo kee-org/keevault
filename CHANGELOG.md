@@ -2,6 +2,11 @@ This lists the major changes in each version of Kee Vault.
 
 Many smaller or partially complete changes will be made on a regular basis. To see all changes, look for the commit history in each of our GitHub repositories.
 
+## 1.0.6
+
+* Show all entries in the Bin, even if they were previously contained within a group that had "Enable searching entries within this group" disabled
+* Hide all Bin entries from Kee, even if they were contained within a subgroup before being moved to the Bin
+
 ## 1.0.3
 
 * Show password as *s even if XML doesn't request it

@@ -123,7 +123,7 @@ const GroupModel = MenuItemModel.extend({
     },
 
     matches: function(filter) {
-        return (filter && filter.includeDisabled ||
+        return ((filter && filter.includeDisabled) || (filter && filter.trash) ||
                 this.group.enableSearching !== false &&
                 !this.group.uuid.equals(this.file.db.meta.entryTemplatesGroup)
         );
