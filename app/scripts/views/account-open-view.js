@@ -645,7 +645,14 @@ const OpenView = Backbone.View.extend({
         if (!tokens.storage || !tokens.client || !user.features ||
             !user.features.enabled || user.features.enabled.indexOf('storage-kee') < 0) {
             // User's subscription has expired
-            const subscriptionId = user.features?.subscriptionId ?? 'cb_';
+
+            // If an IAP subscription has yet to be confirmed/applied to a new user account before it
+            // is cancelled, we won't know of any previous subscription ID and thus can't be sure
+            // what subscription provider the user originally tried to sign up with. In future,
+            // we could try to recover this situation by pointing them to some way to create a
+            // new Chargebee account but until then, we just have to get them to use an IAP
+            // supporting device so they can associate their subscription with the account.
+            const subscriptionId = user.features?.subscriptionId ?? 'unknown_';
             const newestSubExpiryAllowedForNewTrial = Math.max(Date.now() - (86400 * 548 * 1000), Date.UTC(2022, 5, 1)); // 18 months or 1st June 2022
             const expDate = user.features.validUntil || 0;
             if (subscriptionId.startsWith('cb_')) {
