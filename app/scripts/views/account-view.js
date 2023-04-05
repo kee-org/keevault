@@ -147,7 +147,7 @@ const AccountView = Backbone.View.extend({
         if (!this.passwordInput2 || this.passwordInput2.length <= 0) return this.errorOnField($('#newPassword2'));
         if (!this.passwordInput1.value.equals(this.passwordInput2.value)) return this.errorOnField($('#newPassword2'));
 
-        const optinIntro = $('#accountEmailOptinIntro')[0].checked ? 1 : 0;
+        const legitimateUseIntro = 1;
         const optinMarketing = $('#accountEmailOptinMarketing')[0].checked ? 1 : 0;
         const agreed = $('#registrationAgree')[0].checked;
         if (!agreed) return this.errorOnField($('label[for=registrationAgree]'), true);
@@ -159,7 +159,7 @@ const AccountView = Backbone.View.extend({
         registerButton.classList.add('active');
         registerButton.setAttribute('disabled', 'disabled');
         const primaryFile = await this.model.account.createNewPrimaryFile(chosenPassword, emailAddrParts);
-        const userSIOrError = await this.model.account.register(email, chosenPassword, optinIntro, optinMarketing, primaryFile.db, this.model.couponCode);
+        const userSIOrError = await this.model.account.register(email, chosenPassword, legitimateUseIntro, optinMarketing, primaryFile.db, this.model.couponCode);
         registerButton.classList.remove('active');
         registerButton.removeAttribute('disabled');
 
