@@ -642,7 +642,38 @@ const OpenView = Backbone.View.extend({
         }
         this.model.destinationFeature = null;
 
-        if (!tokens.storage || !tokens.client || !user.features ||
+        if (!user.initialSignin && user.verificationStatus !== 3) {
+            Alerts.error({
+                header: Locale.emailVerification,
+                body: Locale.verificationRequest,
+                icon: 'envelope',
+                buttons: [{asyncresult: 'resend', title: Locale.resendVerification}],
+                esc: false, enter: false, click: false,
+                success: async (asyncResult) => {
+                    if (asyncResult === 'resend') {
+                        const trueOrError = await user.resendVerificationEmail();
+                        if (trueOrError !== true) {
+                            logger.error('Did not receive valid response from attempt to resend email verification. Unsure if it worked or not.', trueOrError);
+                            Alerts.error({
+                                header: Locale.unexpectedError,
+                                body: Locale.unexpectedServerResponse,
+                                buttons: [],
+                                esc: false, enter: false, click: false
+                            });
+                        } else {
+                            Alerts.info({
+                                header: Locale.emailVerification,
+                                icon: 'envelope',
+                                body: Locale.checkYourEmail,
+                                buttons: [],
+                                esc: false, enter: false, click: false
+                            });
+                        }
+                    }
+                }
+            });
+            return;
+        } else if (!tokens.storage || !tokens.client || !user.features ||
             !user.features.enabled || user.features.enabled.indexOf('storage-kee') < 0) {
             // User's subscription has expired
 
@@ -749,38 +780,6 @@ const OpenView = Backbone.View.extend({
                     }
                 });
             }
-            return;
-        }
-        if (!user.initialSignin && user.verificationStatus !== 3) {
-            Alerts.error({
-                header: Locale.emailVerification,
-                body: Locale.verificationRequest,
-                icon: 'envelope',
-                buttons: [{asyncresult: 'resend', title: Locale.resendVerification}],
-                esc: false, enter: false, click: false,
-                success: async (asyncResult) => {
-                    if (asyncResult === 'resend') {
-                        const trueOrError = await user.resendVerificationEmail();
-                        if (trueOrError !== true) {
-                            logger.error('Did not receive valid response from attempt to resend email verification. Unsure if it worked or not.', trueOrError);
-                            Alerts.error({
-                                header: Locale.unexpectedError,
-                                body: Locale.unexpectedServerResponse,
-                                buttons: [],
-                                esc: false, enter: false, click: false
-                            });
-                        } else {
-                            Alerts.info({
-                                header: Locale.emailVerification,
-                                icon: 'envelope',
-                                body: Locale.checkYourEmail,
-                                buttons: [],
-                                esc: false, enter: false, click: false
-                            });
-                        }
-                    }
-                }
-            });
             return;
         }
         await FileInfoCollection.instance.load(user.userId);
