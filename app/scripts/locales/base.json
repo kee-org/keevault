@@ -385,6 +385,7 @@
   "setFileLocalHint": "Want to work seamlessly with local files?",
   "setFileDownloadApp": "Download a desktop app",
   "setFileSave": "Save",
+  "setFileSaveVault": "Save Vault",
   "setFileSaveTo": "Export",
   "setFileClose": "Close",
   "setFileSync": "Sync",

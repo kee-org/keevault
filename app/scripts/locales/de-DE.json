@@ -416,6 +416,7 @@
   "setFileLocalHint": "Sie wollen nahtlos mit lokalen Dateien arbeiten?",
   "setFileDownloadApp": "Laden Sie die Desktop-App herunter",
   "setFileSave": "Speichern",
+  "setFileSaveVault": "Speichern Vault",
   "setFileSaveTo": "Speichern unter...",
   "setFileClose": "Sperren",
   "setFileSync": "Synchronisierung",

@@ -416,6 +416,7 @@
   "setFileLocalHint": "Voulez-vous travailler avec des fichiers locaux ?",
   "setFileDownloadApp": "Télécharger l'application",
   "setFileSave": "Enregistrer",
+  "setFileSaveVault": "Enregistrer Vault",
   "setFileSaveTo": "Enregistrer sous",
   "setFileClose": "Fermer",
   "setFileSync": "Sync",
