@@ -46,12 +46,14 @@ const SettingsAccountView = Backbone.View.extend({
         const possiblyLoggedIn = this.appModel.account.latestTokens().length > 0;
         const emailVerified = this.appModel.account.isUserEmailVerified();
         this.emailAddrParts = EmailUtils.split(this.appModel.account.get('email'));
+        const thirdPartySubscriptionProvider = this.appModel.account.subscriptionProvider();
         this.renderTemplate({
             accountEmail: this.appModel.account.get('email'),
             possiblyLoggedIn,
             emailVerified,
             appInfo: _.escape(appInfo),
-            uniqueUserId: user ? user.userId : 'not signed in'
+            uniqueUserId: user ? user.userId : 'not signed in',
+            thirdPartySubscriptionProvider
         });
         PasswordStrength.renderPasswordStrength(0, this.$el);
         if (possiblyLoggedIn && emailVerified) this.loadSupportAccountData();

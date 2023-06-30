@@ -146,6 +146,16 @@ const AccountModel = Backbone.Model.extend({
         const user = this.get('user');
         if (!user || !user.tokens) return false;
         return user.verificationStatus === 3;
+    },
+
+    subscriptionProvider () {
+        const user = this.get('user');
+        if (user && user.features && user.features.subscriptionId) {
+            if (user.features.subscriptionId.startsWith('cb_')) return undefined;
+            if (user.features.subscriptionId.startsWith('ap_')) return 'Apple';
+            if (user.features.subscriptionId.startsWith('gp_')) return 'Google';
+        }
+        return 'unknown (please sign in again and ensure you have an active subscription so we can determine your current subscription provider)';
     }
 });
 
