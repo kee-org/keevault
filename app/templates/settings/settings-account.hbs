@@ -45,18 +45,29 @@
     </div>
 
 {{#if possiblyLoggedIn}}
-    <h2><i class="fa fa-user-circle"></i> {{res 'subscriptionManagementHeading'}}</h2>
+    {{#if thirdPartySubscriptionProvider}}
+        <h2><i class="fa fa-user-circle"></i> Subscription and payment</h2>
+    {{else}}
+        <h2><i class="fa fa-user-circle"></i> {{res 'subscriptionManagementHeading'}}</h2>
+    {{/if}}
     {{#if emailVerified}}
-        <div><p>{{res 'subscriptionManagementBlurb'}}</p></div>
-        <button class="vault_action" id="manageAccountButton">
-            <div class="content">{{res 'manageMySubscription'}}</div>
-            <div class="opening-icon"><i class="fa fa-spinner fa-spin"></i></div>
-        </button>
-        <div><p>{{res 'subscriptionManagementSecurityExplainer'}}</p></div>
+        {{#if thirdPartySubscriptionProvider}}
+            <div><p>Your subscription is provided by {{thirdPartySubscriptionProvider}}. Please use your account with them to manage your Kee Vault Subscription.</p></div>
+        {{else}}
+            <div><p>{{res 'subscriptionManagementBlurb'}}</p></div>
+            <button class="vault_action" id="manageAccountButton">
+                <div class="content">{{res 'manageMySubscription'}}</div>
+                <div class="opening-icon"><i class="fa fa-spinner fa-spin"></i></div>
+            </button>
+            <div><p>{{res 'subscriptionManagementSecurityExplainer'}}</p></div>
+        {{/if}}
         <h2><i class="fa fa-id-card"></i> {{res 'customerSupportSettings'}}</h2>
         <div id="settings__messages-comms-placeholder">{{res 'loadingAccountData'}}</div>
     {{else}}
         <div>{{res 'verifyEmailBeforeManageAccount'}}</div>
     {{/if}}
+    <h2><i class="fa fa-user-times"></i> Account deletion</h2>
+    <div><p>You don't need to delete your account. If you want to cancel your subscription, just do that using the information above. We'll then automatically delete your account, but if you really want to take additional steps to request the deletion of your account, we have created a way for you to do this on our website: <a href="https://kee.pm/keevault/delete-account/">https://kee.pm/keevault/delete-account/</a></p></div>
 {{/if}}
+
 </div>
