@@ -301,7 +301,6 @@ const FileModel = Backbone.Model.extend({
 
             logger.info('Imported file to ' + this.get('name') + ': ' + logger.ts(ts));
             Backbone.trigger('save-all');
-            return;
         } catch (e) {
             logger.error('Error importing file', e, e.code, e.message, e);
             return e;
@@ -331,7 +330,6 @@ const FileModel = Backbone.Model.extend({
             this.reload();
             logger.info('Imported data rows to ' + this.get('name') + ': ' + logger.ts(ts));
             Backbone.trigger('save-all');
-            return;
         } catch (e) {
             logger.error('Error importing data rows', e, e.code, e.message, e);
             return e;
