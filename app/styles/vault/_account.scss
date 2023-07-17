@@ -135,6 +135,7 @@
   align-self: flex-start;
   overflow-y: scroll;
   height: 100vh;
+  height: -webkit-fill-available;
   justify-content: flex-start;
 
   & input[type="password"].open__pass-input,
