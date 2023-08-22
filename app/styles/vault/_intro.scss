@@ -366,13 +366,23 @@ body.enable_native_scroll {
 #home_main {
   padding: 15px;
 
+  @media (min-width: 701px) {
+    text-align: center;
+  }
   h3 {
     text-align: center;
   }
 }
 #home_side {
   padding: 10px;
-  float: right;
+  @media (min-width: 701px) {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  @media (max-width: 700px) {
+    float: right;
+  }
 }
 #home_sec_benefits {
   dl {
