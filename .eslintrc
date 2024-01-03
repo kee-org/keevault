@@ -35,6 +35,7 @@
     "parserOptions": {
         "sourceType": "module",
         "ecmaFeatures": {
+            "modules": true,
             "impliedStrict": true
         }
     },

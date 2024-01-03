@@ -2,6 +2,11 @@ This lists the major changes in each version of Kee Vault.
 
 Many smaller or partially complete changes will be made on a regular basis. To see all changes, look for the commit history in each of our GitHub repositories.
 
+## 1.1.0
+
+TODO
+Fix icon confusion for DriveWindows vs Clock
+
 ## 1.0.6
 
 * Show all entries in the Bin, even if they were previously contained within a group that had "Enable searching entries within this group" disabled

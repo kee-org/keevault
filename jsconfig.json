@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+      "target": "ES6",
+      "baseUrl": "app",
+      "paths": {
+          "templates/*": [
+              "templates/*"
+          ],
+          "*": [
+              "scripts",
+              "styles",
+              "resources"
+          ]
+      }
+  },
+  "exclude": [
+      "node_modules"
+  ]
+}
