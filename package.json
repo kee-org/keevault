@@ -66,7 +66,7 @@
     "jquery": "^3.7.1",
     "json-loader": "^0.5.7",
     "jsqrcode": "github:kee-org/jsqrcode#9f0b35a01123f97d7a64e790d053368057be5100",
-    "kdbxweb": "../kdbxweb",
+    "kdbxweb": "github:kee-org/kdbxweb#b0d2559cd4b9b6e463b5377cbb2f7b7e8a0c3568",
     "load-grunt-tasks": "5.1.0",
     "mime-types": "^2.1.35",
     "mini-css-extract-plugin": "^2.7.6",
