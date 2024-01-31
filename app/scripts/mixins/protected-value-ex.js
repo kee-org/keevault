@@ -6,8 +6,8 @@ const ExpectedFieldRefByteLength = ExpectedFieldRefChars.length;
 kdbxweb.ProtectedValue.prototype.isProtected = true;
 
 kdbxweb.ProtectedValue.prototype.forEachChar = function(fn) {
-    const value = this._value;
-    const salt = this._salt;
+    const value = this.value;
+    const salt = this.salt;
     let b,
         b1,
         b2,
@@ -108,7 +108,7 @@ kdbxweb.ProtectedValue.prototype.equals = function(other) {
         return false;
     }
     for (let i = 0; i < len; i++) {
-        if ((this._value[i] ^ this._salt[i]) !== (other._value[i] ^ other._salt[i])) {
+        if ((this.value[i] ^ this.salt[i]) !== (other.value[i] ^ other.salt[i])) {
             return false;
         }
     }

@@ -91,7 +91,7 @@ const GroupModel = MenuItemModel.extend({
     _buildCustomIcon: function() {
         this.customIcon = null;
         if (this.group.customIcon) {
-            return IconUrl.toDataUrl(this.file.db.meta.customIcons[this.group.customIcon]);
+            return IconUrl.toDataUrl(this.file.db.meta.customIcons.get(this.group.customIcon.id)?.data);
         }
         return null;
     },

@@ -86,6 +86,7 @@ const FileModel = Backbone.Model.extend({
         }
     },
 
+    // TODO: We will now support v4.1 properly so probably need to stop doing this. Also probably perform an upgrade on all existing kdbx files with an older version number to ensure cross compatibility with KV1,2, Keepass and Kee.
     fixVersion: function() {
         if (
             this.db.meta.generator === 'KdbxWeb' &&
@@ -319,9 +320,10 @@ const FileModel = Backbone.Model.extend({
                     const csvField = fieldMapping[kdbxField];
                     const value = row[csvField];
                     if (value) {
-                        entry.fields[kdbxField] = protectedFields.has(kdbxField)
+                        entry.fields.set(kdbxField, protectedFields.has(kdbxField)
                             ? kdbxweb.ProtectedValue.fromString(value)
-                            : value;
+                            : value
+                        );
                     }
                 });
             });
@@ -925,12 +927,19 @@ const FileModel = Backbone.Model.extend({
     },
 
     getCustomIcons: function() {
-        return _.mapObject(this.db.meta.customIcons, customIcon => IconUrl.toDataUrl(customIcon));
+        const customIcons = {};
+        for (const [id, icon] of this.db.meta.customIcons) {
+            customIcons[id] = IconUrl.toDataUrl(icon.data);
+        }
+        return customIcons;
     },
 
     addCustomIcon: function(iconData) {
         const uuid = kdbxweb.KdbxUuid.random();
-        this.db.meta.customIcons[uuid] = kdbxweb.ByteUtils.arrayToBuffer(kdbxweb.ByteUtils.base64ToBytes(iconData));
+        this.db.meta.customIcons[uuid] = {
+            data: kdbxweb.ByteUtils.arrayToBuffer(kdbxweb.ByteUtils.base64ToBytes(iconData)),
+            lastModified: new Date()
+        };
         return uuid.toString();
     },
 
