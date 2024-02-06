@@ -72,7 +72,7 @@ function config(grunt, mode = 'production') {
                 jquery: `jquery/dist/jquery${devMode ? '.min' : ''}.js`,
                 kdbxweb: 'kdbxweb/dist/kdbxweb.js',
                 'kdbx-import': 'kdbx-import/dist/main.js',
-                'kdbx-placeholders': 'kdbx-placeholders/dist/main.js',
+                // 'kdbx-placeholders': 'kdbx-placeholders/dist/main.js',
                 'kprpc': 'kprpc/dist/main.js',
                 baron: 'baron/baron.min.js',
                 qrcode: 'jsqrcode/dist/qrcode.min.js',
