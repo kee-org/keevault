@@ -593,7 +593,7 @@ const FileModel = Backbone.Model.extend({
                                 this.db.header.kdfParameters = remoteDb.header.kdfParameters;
                                 this.set('kdfParameters', this.readKdfParams());
                             }
-                            this.db.merge(remoteDb);
+                            this.db.merge(remoteDb, true);
                         } catch (e) {
                             logger.error('File merge error', e);
                             return callback(e);
