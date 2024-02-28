@@ -7,6 +7,9 @@ const Logger = require('../util/logger');
 const Otp = require('../util/otp');
 const kdbxweb = require('kdbxweb');
 const EntrySettingsModel = require('./browser-addon/entry-settings-model');
+const KPRPCHandler = require('../comp/keepassrpc');
+// const KPRPC = require('kprpc').KPRPC;
+// const { default: ModelMasher } = require('../../../node_modules/kprpc/model');
 
 const logger = new Logger('entry');
 
@@ -146,14 +149,29 @@ const EntryModel = Backbone.Model.extend({
 
     _readBrowserExtensionSettings: function () {
         let settings;
+        this.hasV2config = false;
         try {
-            // TODO: Load from custom data first if available
-            // const v2config = this.entry.customData?.get('KPRPC JSON');
+            const mm = KPRPCHandler.getModelMasher();
+            const v2config = mm.getEntryConfigV2Only(this.entry);
+            if (v2config) {
+                // eslint-disable-next-line no-debugger
+                debugger;
+                // TODO: try/catch protection to allow fallback to v1 if v2 config is fucked?
+                const v1obj = v2config.convertToV1();
+                const v1config = JSON.stringify(v1obj);
+                if (v1config) {
+                    settings = new EntrySettingsModel(v1config, { parse: true });
+                    // record that we loaded from v2
+                    this.hasV2config = true;
+                }
+            }
 
-            const protectedVal = this.entry.fields.get('KPRPC JSON');
-            const raw = protectedVal && protectedVal.getText();
-            if (raw) {
-                settings = new EntrySettingsModel(raw, { parse: true });
+            if (!settings) {
+                const protectedVal = this.entry.fields.get('KPRPC JSON');
+                const raw = protectedVal && protectedVal.getText();
+                if (raw) {
+                    settings = new EntrySettingsModel(raw, { parse: true });
+                }
             }
         } catch (e) {
             logger.info('Browser extension entry settings missing or invalid. Will reset to defaults now.');
@@ -165,15 +183,15 @@ const EntryModel = Backbone.Model.extend({
 
         this.listenTo(settings, 'change', () => {
             this._entryModified();
-            const settings = kdbxweb.ProtectedValue.fromString(this.get('browserSettings').toJSON());
-
-            // TODO: save to custom data instead / as well as jsonrpc - migration plan TBD
-            // if (!this.entry.customData) {
-            //     this.entry.customData = new Map();
-            // }
-            // this.entry.customData.set('KPRPC JSON', settings);
-            // this.entry.setCustomData('KPRPC JSON', settings);
-            this.entry.fields.set('KPRPC JSON', settings);
+            const configv1 = JSON.parse(this.get('browserSettings').toJSON());
+            if (this.hasV2config) {
+                // eslint-disable-next-line no-debugger
+                debugger;
+                // TODO: If this doesn't work, add a force flag to the mm.setEntryConfig function and pass that instead
+                configv1._typeDiscriminator = true;
+            }
+            const mm = KPRPCHandler.getModelMasher();
+            mm.setEntryConfig(this.entry, configv1);
         });
         return settings;
     },
@@ -184,17 +202,14 @@ const EntryModel = Backbone.Model.extend({
 
     _attachmentsToModel: function (binaries) {
         const att = [];
-        _.forEach(binaries, (data, title) => {
-            // TODO: check this still works
-            // eslint-disable-next-line no-debugger
-            debugger;
+        for (let [title, data] of binaries) {
             if (data && data.ref) {
                 data = data.value;
             }
             if (data) {
                 att.push(AttachmentModel.fromAttachment({ data: data, title: title }));
             }
-        }, this);
+        }
         return att;
     },
 
@@ -210,7 +225,7 @@ const EntryModel = Backbone.Model.extend({
         this.entry.times.update();
     },
 
-    getAllFields: function() {
+    getAllFields: function () {
         const fields = {};
         for (const [key, value] of this.entry.fields) {
             fields[key] = value;
@@ -461,14 +476,14 @@ const EntryModel = Backbone.Model.extend({
     addAttachment: function (name, data) {
         this._entryModified();
         return this.file.db.createBinary(data).then(binaryRef => {
-            this.entry.binaries[name] = binaryRef;
+            this.entry.binaries.set(name, binaryRef);
             this._fillByEntry();
         });
     },
 
     removeAttachment: function (name) {
         this._entryModified();
-        delete this.entry.binaries[name];
+        delete this.entry.binaries.delete(name);
         this._fillByEntry();
     },
 

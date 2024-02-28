@@ -71,7 +71,7 @@ function config(grunt, mode = 'production') {
                 _: `underscore/underscore${devMode ? '-min' : ''}.js`,
                 jquery: `jquery/dist/jquery${devMode ? '.min' : ''}.js`,
                 kdbxweb: 'kdbxweb/dist/kdbxweb.js',
-                'kdbx-import': 'kdbx-import/dist/main.js',
+                // 'kdbx-import': 'kdbx-import/dist/main.js',
                 // 'kdbx-placeholders': 'kdbx-placeholders/dist/main.js',
                 'kprpc': 'kprpc/dist/main.js',
                 baron: 'baron/baron.min.js',

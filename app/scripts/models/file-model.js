@@ -67,7 +67,6 @@ const FileModel = Backbone.Model.extend({
                     if (keyFileData) {
                         kdbxweb.ByteUtils.zeroBuffer(keyFileData);
                     }
-                    this.fixVersion();
                     logger.info('Opened file ' + this.get('name') + ': ' + logger.ts(ts) + ', ' +
                         this.kdfArgsToString(db.header) + ', ' + Math.round(fileData.byteLength / 1024) + ' kB');
                     callback();
@@ -83,18 +82,6 @@ const FileModel = Backbone.Model.extend({
         } catch (e) {
             logger.error('Error opening file', e, e.code, e.message, e);
             callback(e);
-        }
-    },
-
-    // TODO: We will now support v4.1 properly so probably need to stop doing this. Also probably perform an upgrade on all existing kdbx files with an older version number to ensure cross compatibility with KV1,2, Keepass and Kee.
-    fixVersion: function() {
-        if (
-            this.db.meta.generator === 'KdbxWeb' &&
-            this.db.header.versionMajor === 4 &&
-            this.db.header.versionMinor === 1
-        ) {
-            this.db.header.versionMinor = 0;
-            logger.info('Fixed file version: 4.1 => 4.0');
         }
     },
 
@@ -342,18 +329,18 @@ const FileModel = Backbone.Model.extend({
         // Probably could be more efficient by storing a map of old to new and iterating
         // that map once per entry since the detection of relevant ref placeholder text
         // likely takes up a fair amount of time.
-        importSourceDB.groups[0].forEach((entry, group) => {
+        for (const entryOrGroup of importSourceDB.groups[0].allGroupsAndEntries()) {
             const newId = kdbxweb.KdbxUuid.random();
-            if (entry) {
-                KdbxPlaceholders.changeUUID(entry, importSourceDB.groups[0], newId);
+            if (entryOrGroup instanceof kdbxweb.KdbxEntry) {
+                KdbxPlaceholders.changeUUID(entryOrGroup, importSourceDB.groups[0], newId);
             } else {
-                if (importSourceDB.meta.recycleBinUuid && group.uuid.equals(importSourceDB.meta.recycleBinUuid)) {
+                if (importSourceDB.meta.recycleBinUuid && entryOrGroup.uuid.equals(importSourceDB.meta.recycleBinUuid)) {
                     importSourceDB.meta.recycleBinUuid = newId;
-                    group.name = 'Bin imported from KeePass';
+                    entryOrGroup.name = 'Bin imported from KeePass';
                 }
-                group.uuid = newId;
+                entryOrGroup.uuid = newId;
             }
-        });
+        }
     },
 
     getGroupForImport: function() {
