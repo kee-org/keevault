@@ -8,7 +8,8 @@ const Otp = require('../util/otp');
 const kdbxweb = require('kdbxweb');
 const EntrySettingsModel = require('./browser-addon/entry-settings-model');
 const KPRPCHandler = require('../comp/keepassrpc');
-// const KPRPC = require('kprpc').KPRPC;
+// const { EntryConfigConverted, EntryConfig } = require('../../../node_modules/kprpc/EntryConfig');
+const KPRPC = require('kprpc').KPRPC;
 // const { default: ModelMasher } = require('../../../node_modules/kprpc/model');
 
 const logger = new Logger('entry');
@@ -183,12 +184,16 @@ const EntryModel = Backbone.Model.extend({
 
         this.listenTo(settings, 'change', () => {
             this._entryModified();
-            const configv1 = JSON.parse(this.get('browserSettings').toJSON());
+            const configv1Obj = JSON.parse(this.get('browserSettings').toJSON());
+            let configv1;
+            // eslint-disable-next-line no-debugger
+            debugger;
             if (this.hasV2config) {
-                // eslint-disable-next-line no-debugger
-                debugger;
+                configv1 = new KPRPC.EntryConfigConverted(configv1Obj);
                 // TODO: If this doesn't work, add a force flag to the mm.setEntryConfig function and pass that instead
-                configv1._typeDiscriminator = true;
+                // configv1._typeDiscriminator = true;
+            } else {
+                configv1 = new KPRPC.EntryConfig(configv1Obj);
             }
             const mm = KPRPCHandler.getModelMasher();
             mm.setEntryConfig(this.entry, configv1);

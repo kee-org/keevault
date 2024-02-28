@@ -23,7 +23,7 @@
     "kdbx-import": "1.3.3",
     "kdbx-placeholders": "1.2.1",
     "kee-frontend": "^1.2.2",
-    "kprpc": "github:kee-org/kprpc#61b19b97484058378c943048161fd343a74405e2",
+    "kprpc": "github:kee-org/kprpc#3b15141d46c9d6405e7b049c8c1178134a8f0a1a",
     "secure-remote-password": "^0.3.1",
     "superagent": "^8.1.2",
     "timers-browserify": "^2.0.12",

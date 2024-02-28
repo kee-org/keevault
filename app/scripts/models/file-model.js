@@ -160,8 +160,9 @@ const FileModel = Backbone.Model.extend({
         return 0;
     },
 
+    //TODO: Where do we call this from? if anywhere into an existing DB, need to look at metadata modified time for config import
     importKPRPCSettings: function(importSourceDB) {
-        this.db.meta.customData['KeePassRPC.Config'] = importSourceDB.meta.customData['KeePassRPC.Config'];
+        this.db.meta.customData.set('KeePassRPC.Config', importSourceDB.meta.customData.get('KeePassRPC.Config'));
         this.db.meta.settingsChanged = new Date();
         this.reload();
         const settings = this.get('browserExtensionSettings');
@@ -259,9 +260,9 @@ const FileModel = Backbone.Model.extend({
             });
 
             Object.values(customIcons).forEach(function (customIconId) {
-                const customIcon = importSourceDB.meta.customIcons[customIconId];
+                const customIcon = importSourceDB.meta.customIcons.get(customIconId);
                 if (customIcon) {
-                    this.db.meta.customIcons[customIconId] = customIcon;
+                    this.db.meta.customIcons.get(customIconId, customIcon);
                 }
             }, this);
 
@@ -410,7 +411,7 @@ const FileModel = Backbone.Model.extend({
     },
 
     readBrowserExtensionSettings: function() {
-        const raw = this.db.meta.customData['KeePassRPC.Config'];
+        const raw = this.db.meta.customData.get('KeePassRPC.Config')?.value;
         let settings;
         try {
             settings = new DBSettingsModel(raw, {parse: true});
@@ -424,7 +425,7 @@ const FileModel = Backbone.Model.extend({
         }
 
         this.listenTo(settings, 'change', () => {
-            this.db.meta.customData['KeePassRPC.Config'] = this.get('browserExtensionSettings').toJSON();
+            this.db.meta.customData.set('KeePassRPC.Config', { value: this.get('browserExtensionSettings').toJSON(), lastModified: new Date() });
             this.db.meta.settingsChanged = new Date();
             this.setModified();
         });
@@ -437,7 +438,7 @@ const FileModel = Backbone.Model.extend({
             return undefined;
         }
 
-        const raw = this.db.meta.customData['KeeVault.Config'];
+        const raw = this.db.meta.customData.get('KeeVault.Config')?.value;
         let config;
         try {
             config = new KeeVaultEmbeddedConfigModel(raw, {parse: true});
@@ -457,8 +458,8 @@ const FileModel = Backbone.Model.extend({
             // sometimes are told that changes have happened when they actually haven't.
             // TODO: Probably want to be deterministic based on just property names rather than creation time
             const latestConfig = this.get('keeVaultEmbeddedConfig').toJSON();
-            if (this.db.meta.customData['KeeVault.Config'] !== latestConfig) {
-                this.db.meta.customData['KeeVault.Config'] = latestConfig;
+            if (this.db.meta.customData.get('KeeVault.Config')?.value !== latestConfig) {
+                this.db.meta.customData.set('KeeVault.Config', { value: latestConfig, lastModified: new Date() });
                 this.db.meta.settingsChanged = new Date();
                 this.setModified();
             }
