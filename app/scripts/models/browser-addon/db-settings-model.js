@@ -44,13 +44,17 @@ const DBSettingsModel = Backbone.Model.extend({
             }
         }
         obj.matchedURLAccuracyOverrides = new MatchedURLAccuracyOverrides(arr.length > 0 ? arr : null);
-        obj.rootUUID = Hex.hex2base64(obj.rootUUID);
+        if (obj.rootUUID) {
+            obj.rootUUID = Hex.hex2base64(obj.rootUUID);
+        }
         return obj;
     },
 
     toJSON: function() {
         const attrs = _.clone(this.attributes);
-        attrs.rootUUID = Hex.base642hex(attrs.rootUUID);
+        if (attrs.rootUUID) {
+            attrs.rootUUID = Hex.base642hex(attrs.rootUUID);
+        }
         attrs.matchedURLAccuracyOverrides = {};
         for (const overrideModel of this.attributes.matchedURLAccuracyOverrides.toArray()) {
             attrs.matchedURLAccuracyOverrides[overrideModel.get('domain')] = overrideModel.get('method');

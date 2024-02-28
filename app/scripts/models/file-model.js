@@ -106,6 +106,12 @@ const FileModel = Backbone.Model.extend({
         const password = kdbxweb.ProtectedValue.fromString('');
         const credentials = new kdbxweb.Credentials(password);
         this.db = kdbxweb.Kdbx.create(credentials, name);
+
+        // Force use of v4.0 for a little while longer, so that older KV1 and KV2 app versions
+        // don't notice anything unusual (KV1 will assume it's an earlier bug and revert
+        // anyway but behaviour of KV2 is unknown)
+        this.db.header.versionMinor = 0;
+
         this.set('name', name);
         if (storage) this.set('storage', storage);
         this.readModel();
@@ -160,7 +166,6 @@ const FileModel = Backbone.Model.extend({
         return 0;
     },
 
-    //TODO: Where do we call this from? if anywhere into an existing DB, need to look at metadata modified time for config import
     importKPRPCSettings: function(importSourceDB) {
         this.db.meta.customData.set('KeePassRPC.Config', importSourceDB.meta.customData.get('KeePassRPC.Config'));
         this.db.meta.settingsChanged = new Date();

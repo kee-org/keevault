@@ -62,7 +62,6 @@ const Account = {
         const chosenPassword = password;
         const primaryFile = new FileModel({ id: IdGenerator.uuid() });
         primaryFile.create('My Kee Vault', 'vault');
-        primaryFile.db.upgrade();
         primaryFile.configureArgon2ParamsAuto(chosenPassword, emailAddrParts);
         primaryFile.setPassword(chosenPassword, emailAddrParts);
         return primaryFile;
