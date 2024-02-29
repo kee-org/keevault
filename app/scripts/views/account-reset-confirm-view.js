@@ -136,13 +136,20 @@ const AccountResetConfirmView = Backbone.View.extend({
         const chosenPassword = this.passwordInput1.value.clone();
 
         const resetButton = $('#resetButton')[0];
+
+        if (resetButton.classList.contains('active')) return;
         resetButton.classList.add('active');
         resetButton.setAttribute('disabled', 'disabled');
 
-        const primaryFile = await this.model.account.createNewPrimaryFile(chosenPassword, this.emailAddrParts);
-        const userSIOrError = await this.model.account.resetFinish(this.model.resetEmail, this.model.resetAuthToken, chosenPassword, primaryFile.db);
-        resetButton.classList.remove('active');
-        resetButton.removeAttribute('disabled');
+        let primaryFile;
+        let userSIOrError;
+        try {
+            primaryFile = await this.model.account.createNewPrimaryFile(chosenPassword, this.emailAddrParts);
+            userSIOrError = await this.model.account.resetFinish(this.model.resetEmail, this.model.resetAuthToken, chosenPassword, primaryFile.db);
+        } finally {
+            resetButton.classList.remove('active');
+            resetButton.removeAttribute('disabled');
+        }
 
         const user = userSIOrError.user;
         const si = userSIOrError.si;

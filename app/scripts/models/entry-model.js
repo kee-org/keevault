@@ -7,7 +7,7 @@ const Logger = require('../util/logger');
 const Otp = require('../util/otp');
 const kdbxweb = require('kdbxweb');
 const EntrySettingsModel = require('./browser-addon/entry-settings-model');
-const KPRPCHandler = require('../comp/keepassrpc');
+const ModelMasher = require('kprpc').ModelMasher;
 const { EntryConfigConverted, EntryConfig } = require('kprpc').EConfig;
 
 const logger = new Logger('entry');
@@ -150,8 +150,7 @@ const EntryModel = Backbone.Model.extend({
         let settings;
         this.hasV2config = false;
         try {
-            const mm = KPRPCHandler.getModelMasher();
-            const v2config = mm.getEntryConfigV2Only(this.entry);
+            const v2config = ModelMasher.getEntryConfigV2Only(this.entry);
             if (v2config) {
                 // TODO: try/catch protection to allow fallback to v1 if v2 config is fucked?
                 const v1obj = v2config.convertToV1();
@@ -187,8 +186,7 @@ const EntryModel = Backbone.Model.extend({
             } else {
                 configv1 = new EntryConfig(configv1Obj);
             }
-            const mm = KPRPCHandler.getModelMasher();
-            mm.setEntryConfig(this.entry, configv1);
+            ModelMasher.setEntryConfig(this.entry, configv1);
         });
         return settings;
     },

@@ -110,20 +110,23 @@ const AccountView = Backbone.View.extend({
         if (!EmailUtils.validate(email)) return null;
 
         const signinButton = $('#signinButton')[0];
+        if (signinButton.classList.contains('active')) return;
         signinButton.classList.add('active');
         signinButton.setAttribute('disabled', 'disabled');
-
         this.$el.find('#accountEmail').attr('disabled', 'disabled');
 
-        const userPromise = this.model.account.loginStart(email);
-        const rememberEmail = $('#accountRememberEmail')[0].checked;
-        if (rememberEmail) {
-            AppSettingsModel.instance.set('rememberedAccountEmail', email);
+        try {
+            const userPromise = this.model.account.loginStart(email);
+            const rememberEmail = $('#accountRememberEmail')[0].checked;
+            if (rememberEmail) {
+                AppSettingsModel.instance.set('rememberedAccountEmail', email);
+            }
+            await userPromise;
+        } finally {
+            this.$el.find('#accountEmail')[0].removeAttribute('disabled');
+            signinButton.classList.remove('active');
+            signinButton.removeAttribute('disabled');
         }
-        await userPromise;
-        this.$el.find('#accountEmail')[0].removeAttribute('disabled');
-        signinButton.classList.remove('active');
-        signinButton.removeAttribute('disabled');
     },
 
     errorOnField: function (field, noFocus) {
@@ -156,12 +159,20 @@ const AccountView = Backbone.View.extend({
         const chosenPassword = this.passwordInput1.value.clone();
 
         const registerButton = $('#registerButton')[0];
+
+        if (registerButton.classList.contains('active')) return;
         registerButton.classList.add('active');
         registerButton.setAttribute('disabled', 'disabled');
-        const primaryFile = await this.model.account.createNewPrimaryFile(chosenPassword, emailAddrParts);
-        const userSIOrError = await this.model.account.register(email, chosenPassword, legitimateUseIntro, optinMarketing, primaryFile.db, this.model.couponCode);
-        registerButton.classList.remove('active');
-        registerButton.removeAttribute('disabled');
+
+        let primaryFile;
+        let userSIOrError;
+        try {
+            primaryFile = await this.model.account.createNewPrimaryFile(chosenPassword, emailAddrParts);
+            userSIOrError = await this.model.account.register(email, chosenPassword, legitimateUseIntro, optinMarketing, primaryFile.db, this.model.couponCode);
+        } finally {
+            registerButton.classList.remove('active');
+            registerButton.removeAttribute('disabled');
+        }
 
         const user = userSIOrError.user;
         const si = userSIOrError.si;

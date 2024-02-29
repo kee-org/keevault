@@ -32,22 +32,25 @@ const ImportKeePassView = Backbone.View.extend({
     async startImport() {
         const importButton = $('#importButton')[0];
         const passwordEl = $('#importPassword');
+        if (!passwordEl) return;
+        if (importButton.classList.contains('active')) return;
         importButton.classList.add('active');
         importButton.setAttribute('disabled', 'disabled');
         passwordEl.attr('disabled', 'disabled');
 
-        const activeFile = this.model.files.first();
-
-        if (!passwordEl) return;
-        const password = passwordEl.val();
-
-        const startTime = Date.now();
-        const error = await activeFile.importFromData(this.fileData, password);
-        const time = Date.now() - startTime;
-
-        passwordEl.removeAttr('disabled');
-        importButton.classList.remove('active');
-        importButton.removeAttribute('disabled');
+        let error;
+        let time;
+        try {
+            const activeFile = this.model.files.first();
+            const password = passwordEl.val();
+            const startTime = Date.now();
+            error = await activeFile.importFromData(this.fileData, password);
+            time = Date.now() - startTime;
+        } finally {
+            passwordEl.removeAttr('disabled');
+            importButton.classList.remove('active');
+            importButton.removeAttribute('disabled');
+        }
 
         if (error) {
             passwordEl.toggleClass('input--error', true);
