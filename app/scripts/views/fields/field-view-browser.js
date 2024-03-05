@@ -45,6 +45,7 @@ const FieldViewBrowser = FieldViewText.extend({
         }
     },
 
+    // This compares against above defaults. Not sure why it doesn't compare displayName though. I guess because it might be used to define the string fields as well as KPRPC_JSON fields?
     browserIntegrationConfigured: function () {
         if (!this.browserFieldModel) {
             return false;

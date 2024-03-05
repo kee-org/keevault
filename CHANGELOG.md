@@ -6,6 +6,8 @@ Many smaller or partially complete changes will be made on a regular basis. To s
 
 TODO
 Fix icon confusion for DriveWindows vs Clock
+Support for KDBX4.1 import, export and sync with Kee Vault 2, also aiding compatibility with KeePassRPC.plgx 2
+Internal support for Entry configuration version 2, also enabling compatibility with Kee Vault version 2 and KeePassRPC.plgx 2
 
 ## 1.0.6
 
