@@ -152,13 +152,21 @@ const EntryModel = Backbone.Model.extend({
         try {
             const v2config = ModelMasher.getEntryConfigV2Only(this.entry);
             if (v2config) {
-                // TODO: try/catch protection to allow fallback to v1 if v2 config is fucked?
-                const v1obj = v2config.convertToV1();
-                const v1config = JSON.stringify(v1obj);
-                if (v1config) {
-                    settings = new EntrySettingsModel(v1config, { parse: true });
-                    // record that we loaded from v2
-                    this.hasV2config = true;
+                try {
+                    const v1obj = v2config.convertToV1();
+                    const v1config = JSON.stringify(v1obj);
+                    if (v1config) {
+                        settings = new EntrySettingsModel(v1config, { parse: true });
+                        // record that we loaded from v2
+                        this.hasV2config = true;
+                    }
+                } catch (e) {
+                    let faultyConfig = 'not stringifiable';
+                    try {
+                        faultyConfig = JSON.stringify(v2config);
+                    } finally {
+                        logger.error('Failed to convert Entry config v2 to v1 for entry ' + this.entry.uuid.id + '. We will use a potentially ancient V1 configuration if present or fall back to defaults. Saving the database now may result in some data loss. The problematic configuration is: ' + faultyConfig + '\n\nException: ' + e);
+                    }
                 }
             }
 

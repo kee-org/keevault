@@ -4,10 +4,12 @@ Many smaller or partially complete changes will be made on a regular basis. To s
 
 ## 1.1.0
 
-TODO
-Fix icon confusion for DriveWindows vs Clock
-Support for KDBX4.1 import, export and sync with Kee Vault 2, also aiding compatibility with KeePassRPC.plgx 2
-Internal support for Entry configuration version 2, also enabling compatibility with Kee Vault version 2 and KeePassRPC.plgx 2
+IMPORTANT: Upgrade to this version as soon as possible to avoid having to think about the details of the mostly hidden compatibility changes described in https://forum.kee.pm/t/upcoming-compatibility-changes/4475 (subscribe to the Project news category on the community forum if you're reading this before the linked topic is published - we're beta testing the changes for a little while before you can upgrade).
+
+* Support for KDBX 4.1 import, export and sync with Kee Vault 2, also enables compatibility with KeePassRPC.plgx 2.0
+* Internal support for new version of Entry configuration, also ensures continued compatibility with Kee Vault 2 and KeePassRPC.plgx 2.0
+* Fix bugs with the "DriveWindows" and "Clock" icons
+* Fix registration bug that could cause spurious error messages despite success
 
 ## 1.0.6
 
