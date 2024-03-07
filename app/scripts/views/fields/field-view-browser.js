@@ -45,6 +45,8 @@ const FieldViewBrowser = FieldViewText.extend({
         }
     },
 
+    // This compares against above defaults. Probably doesn't compare displayName because it
+    // might be used to define the string fields as well as KPRPC_JSON fields.
     browserIntegrationConfigured: function () {
         if (!this.browserFieldModel) {
             return false;
@@ -71,7 +73,8 @@ const FieldViewBrowser = FieldViewText.extend({
         else return 'FFTtext';
     },
 
-    // NEVER call this after initial edit rendering has begun. Directly call renderCheckbox or FieldViewText.prototype.renderInput instead.
+    // NEVER call this after initial edit rendering has begun. Directly call
+    // renderCheckbox or FieldViewText.prototype.renderInput instead.
     renderInput: function(text, isProtected) {
         this.valueEl.empty();
         if (this.browserFieldModel && this.browserFieldModel.get('type') === 'FFTcheckbox') {

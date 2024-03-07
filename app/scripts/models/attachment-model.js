@@ -64,7 +64,7 @@ const AttachmentModel = Backbone.Model.extend({
 
     getBinary: function() {
         let data = this.data;
-        if (data && data.ref) {
+        if (data && data.value) {
             data = data.value;
         }
         if (data && data.getBinary) {

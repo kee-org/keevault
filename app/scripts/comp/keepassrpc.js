@@ -255,7 +255,10 @@ const KPRPCHandler = {
         kprpc.shutdown();
     },
     sendServiceAccessTokens,
-    applyAddonConfig
+    applyAddonConfig,
+    getModelMasher: function () {
+        return kprpc.getModelMasher();
+    }
 };
 
 module.exports = KPRPCHandler;

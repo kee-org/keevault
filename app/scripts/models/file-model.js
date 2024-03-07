@@ -67,7 +67,6 @@ const FileModel = Backbone.Model.extend({
                     if (keyFileData) {
                         kdbxweb.ByteUtils.zeroBuffer(keyFileData);
                     }
-                    this.fixVersion();
                     logger.info('Opened file ' + this.get('name') + ': ' + logger.ts(ts) + ', ' +
                         this.kdfArgsToString(db.header) + ', ' + Math.round(fileData.byteLength / 1024) + ' kB');
                     callback();
@@ -83,17 +82,6 @@ const FileModel = Backbone.Model.extend({
         } catch (e) {
             logger.error('Error opening file', e, e.code, e.message, e);
             callback(e);
-        }
-    },
-
-    fixVersion: function() {
-        if (
-            this.db.meta.generator === 'KdbxWeb' &&
-            this.db.header.versionMajor === 4 &&
-            this.db.header.versionMinor === 1
-        ) {
-            this.db.header.versionMinor = 0;
-            logger.info('Fixed file version: 4.1 => 4.0');
         }
     },
 
@@ -118,6 +106,12 @@ const FileModel = Backbone.Model.extend({
         const password = kdbxweb.ProtectedValue.fromString('');
         const credentials = new kdbxweb.Credentials(password);
         this.db = kdbxweb.Kdbx.create(credentials, name);
+
+        // Force use of v4.0 for a little while longer, so that older KV1 and KV2 app versions
+        // don't notice anything unusual (KV1 will assume it's an earlier bug and revert
+        // anyway but behaviour of KV2 is unknown)
+        this.db.header.versionMinor = 0;
+
         this.set('name', name);
         if (storage) this.set('storage', storage);
         this.readModel();
@@ -173,7 +167,7 @@ const FileModel = Backbone.Model.extend({
     },
 
     importKPRPCSettings: function(importSourceDB) {
-        this.db.meta.customData['KeePassRPC.Config'] = importSourceDB.meta.customData['KeePassRPC.Config'];
+        this.db.meta.customData.set('KeePassRPC.Config', importSourceDB.meta.customData.get('KeePassRPC.Config'));
         this.db.meta.settingsChanged = new Date();
         this.reload();
         const settings = this.get('browserExtensionSettings');
@@ -271,9 +265,9 @@ const FileModel = Backbone.Model.extend({
             });
 
             Object.values(customIcons).forEach(function (customIconId) {
-                const customIcon = importSourceDB.meta.customIcons[customIconId];
+                const customIcon = importSourceDB.meta.customIcons.get(customIconId);
                 if (customIcon) {
-                    this.db.meta.customIcons[customIconId] = customIcon;
+                    this.db.meta.customIcons.get(customIconId, customIcon);
                 }
             }, this);
 
@@ -319,9 +313,10 @@ const FileModel = Backbone.Model.extend({
                     const csvField = fieldMapping[kdbxField];
                     const value = row[csvField];
                     if (value) {
-                        entry.fields[kdbxField] = protectedFields.has(kdbxField)
+                        entry.fields.set(kdbxField, protectedFields.has(kdbxField)
                             ? kdbxweb.ProtectedValue.fromString(value)
-                            : value;
+                            : value
+                        );
                     }
                 });
             });
@@ -340,18 +335,18 @@ const FileModel = Backbone.Model.extend({
         // Probably could be more efficient by storing a map of old to new and iterating
         // that map once per entry since the detection of relevant ref placeholder text
         // likely takes up a fair amount of time.
-        importSourceDB.groups[0].forEach((entry, group) => {
+        for (const entryOrGroup of importSourceDB.groups[0].allGroupsAndEntries()) {
             const newId = kdbxweb.KdbxUuid.random();
-            if (entry) {
-                KdbxPlaceholders.changeUUID(entry, importSourceDB.groups[0], newId);
+            if (entryOrGroup instanceof kdbxweb.KdbxEntry) {
+                KdbxPlaceholders.changeUUID(entryOrGroup, importSourceDB.groups[0], newId);
             } else {
-                if (importSourceDB.meta.recycleBinUuid && group.uuid.equals(importSourceDB.meta.recycleBinUuid)) {
+                if (importSourceDB.meta.recycleBinUuid && entryOrGroup.uuid.equals(importSourceDB.meta.recycleBinUuid)) {
                     importSourceDB.meta.recycleBinUuid = newId;
-                    group.name = 'Bin imported from KeePass';
+                    entryOrGroup.name = 'Bin imported from KeePass';
                 }
-                group.uuid = newId;
+                entryOrGroup.uuid = newId;
             }
-        });
+        }
     },
 
     getGroupForImport: function() {
@@ -421,7 +416,7 @@ const FileModel = Backbone.Model.extend({
     },
 
     readBrowserExtensionSettings: function() {
-        const raw = this.db.meta.customData['KeePassRPC.Config'];
+        const raw = this.db.meta.customData.get('KeePassRPC.Config')?.value;
         let settings;
         try {
             settings = new DBSettingsModel(raw, {parse: true});
@@ -435,7 +430,7 @@ const FileModel = Backbone.Model.extend({
         }
 
         this.listenTo(settings, 'change', () => {
-            this.db.meta.customData['KeePassRPC.Config'] = this.get('browserExtensionSettings').toJSON();
+            this.db.meta.customData.set('KeePassRPC.Config', { value: this.get('browserExtensionSettings').toJSON(), lastModified: new Date() });
             this.db.meta.settingsChanged = new Date();
             this.setModified();
         });
@@ -448,7 +443,7 @@ const FileModel = Backbone.Model.extend({
             return undefined;
         }
 
-        const raw = this.db.meta.customData['KeeVault.Config'];
+        const raw = this.db.meta.customData.get('KeeVault.Config')?.value;
         let config;
         try {
             config = new KeeVaultEmbeddedConfigModel(raw, {parse: true});
@@ -468,8 +463,8 @@ const FileModel = Backbone.Model.extend({
             // sometimes are told that changes have happened when they actually haven't.
             // TODO: Probably want to be deterministic based on just property names rather than creation time
             const latestConfig = this.get('keeVaultEmbeddedConfig').toJSON();
-            if (this.db.meta.customData['KeeVault.Config'] !== latestConfig) {
-                this.db.meta.customData['KeeVault.Config'] = latestConfig;
+            if (this.db.meta.customData.get('KeeVault.Config')?.value !== latestConfig) {
+                this.db.meta.customData.set('KeeVault.Config', { value: latestConfig, lastModified: new Date() });
                 this.db.meta.settingsChanged = new Date();
                 this.setModified();
             }
@@ -591,7 +586,7 @@ const FileModel = Backbone.Model.extend({
                                 this.db.header.kdfParameters = remoteDb.header.kdfParameters;
                                 this.set('kdfParameters', this.readKdfParams());
                             }
-                            this.db.merge(remoteDb);
+                            this.db.merge(remoteDb, true);
                         } catch (e) {
                             logger.error('File merge error', e);
                             return callback(e);
@@ -925,12 +920,19 @@ const FileModel = Backbone.Model.extend({
     },
 
     getCustomIcons: function() {
-        return _.mapObject(this.db.meta.customIcons, customIcon => IconUrl.toDataUrl(customIcon));
+        const customIcons = {};
+        for (const [id, icon] of this.db.meta.customIcons) {
+            customIcons[id] = IconUrl.toDataUrl(icon.data);
+        }
+        return customIcons;
     },
 
     addCustomIcon: function(iconData) {
         const uuid = kdbxweb.KdbxUuid.random();
-        this.db.meta.customIcons[uuid] = kdbxweb.ByteUtils.arrayToBuffer(kdbxweb.ByteUtils.base64ToBytes(iconData));
+        this.db.meta.customIcons[uuid] = {
+            data: kdbxweb.ByteUtils.arrayToBuffer(kdbxweb.ByteUtils.base64ToBytes(iconData)),
+            lastModified: new Date()
+        };
         return uuid.toString();
     },
 

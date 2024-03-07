@@ -2,6 +2,15 @@ This lists the major changes in each version of Kee Vault.
 
 Many smaller or partially complete changes will be made on a regular basis. To see all changes, look for the commit history in each of our GitHub repositories.
 
+## 1.1.0
+
+IMPORTANT: Upgrade to this version as soon as possible to avoid having to think about the details of the mostly hidden compatibility changes described in https://forum.kee.pm/t/upcoming-compatibility-changes/4475 (subscribe to the Project news category on the community forum if you're reading this before the linked topic is published - we're beta testing the changes for a little while before you can upgrade).
+
+* Support for KDBX 4.1 import, export and sync with Kee Vault 2, also enables compatibility with KeePassRPC.plgx 2.0
+* Internal support for new version of Entry configuration, also ensures continued compatibility with Kee Vault 2 and KeePassRPC.plgx 2.0
+* Fix bugs with the "DriveWindows" and "Clock" icons
+* Fix registration bug that could cause spurious error messages despite success
+
 ## 1.0.6
 
 * Show all entries in the Bin, even if they were previously contained within a group that had "Enable searching entries within this group" disabled

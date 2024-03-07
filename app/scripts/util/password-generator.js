@@ -36,7 +36,7 @@ const PasswordGenerator = {
             return '';
         }
         const pool = ranges.join('');
-        const randomBytes = kdbxweb.Random.getBytes(opts.length);
+        const randomBytes = kdbxweb.CryptoEngine.random(opts.length);
         const chars = [];
         for (let i = 0; i < opts.length; i++) {
             const rand = Math.round(Math.random() * 1000) + randomBytes[i];
@@ -47,7 +47,7 @@ const PasswordGenerator = {
 
     generateMac: function() {
         const segmentsCount = 6;
-        const randomBytes = kdbxweb.Random.getBytes(segmentsCount);
+        const randomBytes = kdbxweb.CryptoEngine.random(segmentsCount);
         let result = '';
         for (let i = 0; i < segmentsCount; i++) {
             let segment = randomBytes[i].toString(16).toUpperCase();
@@ -60,7 +60,7 @@ const PasswordGenerator = {
     },
 
     generateHash: function(length) {
-        const randomBytes = kdbxweb.Random.getBytes(length);
+        const randomBytes = kdbxweb.CryptoEngine.random(length);
         let result = '';
         for (let i = 0; i < length; i++) {
             result += randomBytes[i].toString(16)[0];
