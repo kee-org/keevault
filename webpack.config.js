@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable no-console */
 const path = require('path');
 const fs = require('fs');
@@ -224,10 +225,13 @@ function config(grunt, mode = 'production') {
                     parallel: true,
                     terserOptions: {
                         compress: {
-                            comparisons: false
+                            comparisons: false,
+                            defaults: false
                         },
                         format: {
-                            comments: false
+                            comments: false,
+                            max_line_len: 512,
+                            beautify: true
                         }
                     }
                 }),
