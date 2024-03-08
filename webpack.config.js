@@ -72,7 +72,6 @@ function config(grunt, mode = 'production') {
                 _: `underscore/underscore${devMode ? '-min' : ''}.js`,
                 jquery: `jquery/dist/jquery${devMode ? '.min' : ''}.js`,
                 kdbxweb: 'kdbxweb/dist/kdbxweb.js',
-                kprpc: 'kprpc/dist/main.js',
                 baron: 'baron/baron.min.js',
                 qrcode: 'jsqrcode/dist/qrcode.min.js',
                 argon2: 'argon2-browser/dist/argon2.js',
@@ -226,13 +225,11 @@ function config(grunt, mode = 'production') {
                     parallel: true,
                     terserOptions: {
                         compress: {
-                            comparisons: false,
-                            defaults: false
+                            comparisons: false
                         },
                         format: {
                             comments: false,
-                            max_line_len: 512,
-                            beautify: true
+                            max_line_len: 1024
                         }
                     }
                 }),
