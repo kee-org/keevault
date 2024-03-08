@@ -100,11 +100,11 @@ const EntryModel = Backbone.Model.extend({
 
     _buildSearchText: function () {
         let text = '';
-        _.forEach(this.entry.fields.values(), value => {
+        for (const value of this.entry.fields.values()) {
             if (typeof value === 'string') {
                 text += value.toLowerCase() + '\n';
             }
-        });
+        }
         this.entry.tags.forEach(tag => {
             text += tag.toLowerCase() + '\n';
         });
