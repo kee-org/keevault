@@ -25,12 +25,15 @@ function config(grunt, mode = 'production') {
                 publicPath: '/',
                 directory: path.resolve(__dirname, 'tmp')
             },
-            https: fs.existsSync('cert/server.key')
-                ? {
-                    key: fs.readFileSync('cert/server.key'),
-                    cert: fs.readFileSync('cert/server.crt')
-                }
-                : true,
+            server: {
+                type: 'https', // TODO: Try 'spdy'
+                options: fs.existsSync('cert/server.key')
+                    ? {
+                        key: fs.readFileSync('cert/server.key'),
+                        cert: fs.readFileSync('cert/server.crt')
+                    }
+                    : true
+            },
             // webSocketURL: {
             //     hostname: "0.0.0.0",
             //     pathname: "/ws",
