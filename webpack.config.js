@@ -181,7 +181,8 @@ function config(grunt, mode = 'production') {
                         MiniCssExtractPlugin.loader,
                         { loader: 'css-loader', options: { sourceMap: devMode } },
                         { loader: 'postcss-loader', options: { sourceMap: devMode } },
-                        { loader: 'sass-loader', options: { sourceMap: devMode } }
+                        { loader: 'sass-loader', options: { sourceMap: devMode, sassOptions:
+                            { quietDeps: true, "silenceDeprecations": ["global-builtin", "import", "slash-div", "function-units", "mixed-decls", "color-functions" ] } } }
                     ]
                 },
                 {
